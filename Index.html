@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+        <!-- Título de la pestaña -->
+    <title>Renova Institute | Bienestar y Neurociencia</title>
+    
+    <!-- Descripción para buscadores -->
+    <meta name="description" content="Renova Institute: Tu laboratorio de bienestar integral. Potenciamos tu salud mental, desempeño cognitivo y propósito de vida mediante herramientas neuropsicológicas y coaching personalizado.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/logo-renova-institute.png">
+    <!-- Meta etiquetas para previsualización en WhatsApp / Redes Sociales -->
+    <meta property="og:title" content="Renova Institute | Bienestar y Neurociencia Aplicada">
+    <meta property="og:description" content="Descubre programas personalizados y grupales diseñados para potenciar tu salud mental, desempeño y propósito. ¡Agenda tu sesión hoy!">
+    <meta property="og:image" content="URL_DE_TU_LOGO_AQUI">
+    <meta property="og:url" content="https://tu-sitio-web.github.io/index.html">
+    <meta property="og:type" content="website">
+    
+    <!-- Meta etiqueta para asegurar que la imagen se vea grande -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio - Renova Institute</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        /* Animaciones suaves para la carga de la página */
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-[#FDFBFA] text-[#54463C] font-sans antialiased overflow-x-hidden">
+
+    <!-- Navegación -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<header class="bg-white/90 backdrop-blur-md sticky top-0 z-[150] border-b border-gray-100" x-data="{ mobileMenuOpen: false }">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+        
+        <a href="index.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+            <i class="ph ph-brain text-2xl text-[#8C8660]"></i>
+            <div class="flex flex-col leading-tight">
+                <span class="text-base font-bold text-[#8C8660]">RENOVA INSTITUTE</span>
+                <span class="text-[9px] font-medium text-[#54463C]">Restauración integral • Neurociencia + Fe</span>
+                <span class="text-[10px] font-light italic text-[#54463C] whitespace-nowrap">Renovamos la mente. Restauramos la vida.</span>
+            </div>
+        </a>
+        
+        <div class="hidden lg:flex items-center gap-8 flex-1 justify-end px-8">
+            <a href="Index.html" class="text-sm text-gray-600 hover:text-[#8C8660] font-medium transition-colors">Inicio</a>
+            <a href="Index.html#nosotros" class="text-sm text-gray-600 hover:text-[#8C8660] font-medium transition-colors">Nosotros</a>
+            <a href="Index.html#recursos" class="text-sm text-gray-600 hover:text-[#8C8660] font-medium transition-colors">Servicios y Talleres</a>
+            <a href="Tienda.html" class="text-sm text-gray-600 hover:text-[#8C8660] font-medium transition-colors">Tienda</a>
+            </div>
+
+        <div class="flex items-center gap-4">
+            <button @click="mobileMenuOpen = !mobileMenuOpen" class="block lg:hidden text-[#54463C] p-2">
+                <i class="ph text-2xl" :class="mobileMenuOpen ? 'ph-x' : 'ph-list'"></i>
+            </button>
+        </div>
+    </div>
+
+    <div x-show="mobileMenuOpen" style="display: none;" class="lg:hidden bg-white border-b absolute w-full shadow-lg p-4 z-[140]">
+        <a href="Index.html" @click="mobileMenuOpen = false" class="block py-3 border-b text-gray-600 font-medium">Inicio</a>
+        <a href="Index.html#nosotros" @click="mobileMenuOpen = false" class="block py-3 border-b text-gray-600 font-medium">Nosotros</a>
+        <a href="Index.html#recursos" @click="mobileMenuOpen = false" class="block py-3 text-gray-600 font-medium">Servicios y Talleres</a>
+        <a href="Tienda.html" @click="mobileMenuOpen = false" class="block py-3 text-gray-600 font-medium">Tienda</a>
+    </div>
+</header>
+
+    <!-- Sección Hero (Basada en la imagen) -->
+    <header class="bg-[#F6F3EE] py-24 px-6 text-center relative overflow-hidden">
+        <div class="max-w-5xl mx-auto relative z-10">
+            <h1 class="text-6xl md:text-8xl font-black mb-6 tracking-tight fade-in-up">
+                <span class="text-[#54463C]">Renova</span> <span class="text-[#8C8660]">Institute</span>
+            </h1>
+            
+            <h2 class="text-2xl md:text-4xl text-[#54463C] font-medium mb-8 max-w-4xl mx-auto leading-tight fade-in-up delay-100">
+                Instituto para la restauración integral de la persona, conforme al diseño de DIOS mediante la integración de la neurociencia y la verdad bíblica
+            </h2>
+            
+            <p class="text-xl md:text-2xl text-[#8C8660] font-bold mb-8 max-w-3xl mx-auto fade-in-up delay-150" style="letter-spacing: 0.5px;">
+                Renovamos la mente. Restauramos la vida.
+            </p>
+            
+            <p class="text-lg md:text-xl text-[#54463C] max-w-4xl mx-auto mb-8 leading-relaxed fade-in-up delay-200">
+                Ofrecemos ayuda profesional y científica para la sanación de tu mente, tus emociones y tus relaciones. Además, te entrenamos para potenciar tu desempeño y éxito en áreas clave de tu vida: Académica, Laboral y Personal.
+            </p>
+            
+            <p class="text-sm md:text-base text-[#54463C] max-w-3xl mx-auto mb-10 italic font-light fade-in-up delay-200">
+                Todo nuestro trabajo se realiza con total profesionalismo científico, fundamentado en principios bíblicos. Somos un equipo profesional Cristiano practicante.
+            </p>
+            
+            <div class="fade-in-up delay-300">
+                <a href="tienda.html" class="inline-block bg-[#8C8660] text-white font-bold text-lg px-10 py-5 rounded-full shadow-lg hover:shadow-xl hover:bg-[#54463C] transform hover:-translate-y-1 transition-all duration-300">
+                    ¡Comienza tu Transformación Hoy!
+                </a>
+            </div>
+        </div>
+        
+        <!-- Elementos decorativos de fondo -->
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-10">
+            <i class="ph ph-atom absolute -top-20 -left-20 text-[300px] text-[#8C8660]"></i>
+            <i class="ph ph-cross absolute -bottom-20 -right-20 text-[300px] text-[#8C8660]"></i>
+        </div>
+    </header>
+
+    <!-- Sección Nosotros: Misión y Visión -->
+    <section id="nosotros" class="py-20 px-6 max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+            <span class="text-[#8C8660] font-bold text-sm uppercase tracking-widest">Nuestra Esencia</span>
+            <h2 class="text-4xl font-bold mt-2">¿Quiénes Somos?</h2>
+        </div>
+        
+        <div class="grid md:grid-cols-2 gap-12">
+            <!-- Misión -->
+            <div class="bg-white p-10 rounded-[32px] shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                <div class="w-16 h-16 bg-[#F7EBE5] rounded-2xl flex items-center justify-center mb-6">
+                    <i class="ph ph-target text-3xl text-[#8C8660]"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-4">Nuestra Misión</h3>
+                <p class="text-gray-600 leading-relaxed">
+                    Facilitar procesos de restauración profunda y desarrollo personal, integrando el rigor de la neurociencia con la solidez de los principios bíblicos. Proveemos herramientas prácticas y terapéuticas para que cada individuo alcance la sanidad emocional y maximice su potencial cognitivo, cumpliendo su propósito de vida.
+                </p>
+            </div>
+            
+            <!-- Visión -->
+            <div class="bg-white p-10 rounded-[32px] shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                <div class="w-16 h-16 bg-[#F7EBE5] rounded-2xl flex items-center justify-center mb-6">
+                    <i class="ph ph-eye text-3xl text-[#8C8660]"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-4">Nuestra Visión</h3>
+                <p class="text-gray-600 leading-relaxed">
+                    Ser el laboratorio de transformación humana líder a nivel global, reconocido por fusionar armónicamente la fe cristiana y el conocimiento científico. Anhelamos ver generaciones de mentes renovadas, libres de ataduras emocionales y capacitadas para liderar con excelencia en todas las esferas de la sociedad.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Especialidades -->
+    <section id="especialidades" class="bg-[#F6F3EE] py-20 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="text-[#8C8660] font-bold text-sm uppercase tracking-widest">Nuestro Enfoque Clínico</span>
+                <h2 class="text-4xl font-bold mt-2">Especialidades</h2>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Especialidad 1 -->
+                <div class="bg-white p-8 rounded-[24px] text-center group hover:-translate-y-2 transition-transform duration-300">
+                    <i class="ph ph-dna text-5xl text-[#8C8660] mb-4 group-hover:scale-110 transition-transform"></i>
+                    <h4 class="text-xl font-bold mb-3">Neurobiología Aplicada</h4>
+                    <p class="text-sm text-gray-600">
+                        Comprendemos a fondo las mecánicas del estrés y la regulación conductual. Intervenimos sobre la neuroplasticidad, analizando cómo la amígdala, la corteza prefrontal y los neurotransmisores impactan tu bienestar diario.
+                    </p>
+                </div>
+
+                <!-- Especialidad 2 -->
+                <div class="bg-white p-8 rounded-[24px] text-center group hover:-translate-y-2 transition-transform duration-300">
+                    <i class="ph ph-heartbeat text-5xl text-[#8C8660] mb-4 group-hover:scale-110 transition-transform"></i>
+                    <h4 class="text-xl font-bold mb-3">Sanación Emocional</h4>
+                    <p class="text-sm text-gray-600">
+                        Abordaje integral del trauma y la ansiedad. Aplicamos técnicas científicamente comprobadas para reestructurar esquemas de pensamiento dañinos, guiados siempre por la compasión y la verdad espiritual.
+                    </p>
+                </div>
+
+                <!-- Especialidad 3 -->
+                <div class="bg-white p-8 rounded-[24px] text-center group hover:-translate-y-2 transition-transform duration-300">
+                    <i class="ph ph-trend-up text-5xl text-[#8C8660] mb-4 group-hover:scale-110 transition-transform"></i>
+                    <h4 class="text-xl font-bold mb-3">Alto Desempeño</h4>
+                    <p class="text-sm text-gray-600">
+                        Entrenamiento de funciones ejecutivas para acabar con la procrastinación. Optimizamos tu enfoque, toma de decisiones y productividad en tu vida académica, profesional y relacional.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Llamado a la acción hacia la tienda -->
+    <section id="recursos" class="...">
+    </section>
+    <section class="py-24 px-6 max-w-5xl mx-auto text-center">
+        <h2 class="text-3xl md:text-4xl font-bold mb-6">Explora Nuestros Recursos y Programas</h2>
+        <p class="text-gray-600 mb-10 max-w-2xl mx-auto">
+            Desde programas personalizados hasta material de trabajo independiente. Todo lo que necesitas para iniciar tu proceso de transformación está a un clic de distancia.
+        </p>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+            <a href="Tienda.html?cat=Personalizados" class="bg-white border border-gray-200 p-6 rounded-2xl hover:border-[#8C8660] hover:shadow-lg transition-all">
+                <i class="ph ph-user text-3xl text-[#8C8660] mb-2"></i>
+                <p class="font-bold text-sm">Personalizados</p>
+            </a>
+            <a href="Tienda.html?cat=Grupales" class="bg-white border border-gray-200 p-6 rounded-2xl hover:border-[#8C8660] hover:shadow-lg transition-all">
+                <i class="ph ph-users-three text-3xl text-[#8C8660] mb-2"></i>
+                <p class="font-bold text-sm">Grupales</p>
+            </a>
+            <a href="Tienda.html?cat=Servicios" class="bg-white border border-gray-200 p-6 rounded-2xl hover:border-[#8C8660] hover:shadow-lg transition-all">
+                <i class="ph ph-stethoscope text-3xl text-[#8C8660] mb-2"></i>
+                <p class="font-bold text-sm">Servicios</p>
+            </a>
+            <a href="Tienda.html?cat=Productos" class="bg-white border border-gray-200 p-6 rounded-2xl hover:border-[#8C8660] hover:shadow-lg transition-all">
+                <i class="ph ph-books text-3xl text-[#8C8660] mb-2"></i>
+                <p class="font-bold text-sm">Recursos</p>
+            </a>
+        </div>
+        <a href="tienda.html" class="inline-flex items-center gap-2 bg-[#54463C] text-white font-bold px-8 py-4 rounded-full hover:bg-[#8C8660] transition-colors">
+            Ver Catálogo Completo <i class="ph ph-arrow-right"></i>
+        </a>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#54463C] text-white py-12 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2 text-2xl font-black">
+                <i class="ph ph-brain text-[#8C8660]"></i> Renova <span class="text-[#8C8660]">Institute</span>
+            </div>
+            <p class="text-sm text-gray-300 text-center md:text-left">
+                © 2026 Renova Institute. Todos los derechos reservados.<br>
+                <span class="italic text-xs">Renovamos la mente. Restauramos la vida.</span>
+            </p>
+            <div class="flex gap-4">
+                <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#8C8660] transition">
+                    <i class="ph ph-instagram-logo text-xl"></i>
+                </a>
+                <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#8C8660] transition">
+                    <i class="ph ph-whatsapp-logo text-xl"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
