@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-        <!-- Título de la pestaña -->
+    <!-- Título de la pestaña -->
     <title>Renova Institute | Bienestar y Neurociencia</title>
     
     <!-- Descripción para buscadores -->
@@ -20,7 +20,6 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio - Renova Institute</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
@@ -35,10 +34,7 @@
         .delay-300 { animation-delay: 300ms; }
         
         @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -47,43 +43,41 @@
     <!-- Navegación -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
-<header class="bg-white/90 backdrop-blur-md sticky top-0 z-[150] border-b border-gray-100" x-data="{ mobileMenuOpen: false }">
-    <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
-        
-        <a href="./" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
-            <i class="ph ph-brain text-2xl text-[#8C8660]"></i>
-            <div class="flex flex-col leading-tight">
-                <span class="text-base font-bold text-[#8C8660]">RENOVA INSTITUTE</span>
-                <span class="text-[9px] font-medium text-[#54463C]">Restauración integral • Neurociencia + Fe</span>
-                <span class="text-[10px] font-light italic text-[#54463C] whitespace-nowrap">Renovamos la mente. Restauramos la vida.</span>
-            </div>
-        </a>
-        
-        <div class="hidden lg:flex items-center gap-8 flex-1 justify-end px-8">
-            <a href="./" class="text-sm text-gray-600 hover:text-[#8C8660] font-medium transition-colors">Inicio</a>
-            <a href="./#nosotros" class="text-sm text-gray-600 hover:text-[#8C8660] font-medium transition-colors">Nosotros</a>
-            <a href="./#recursos" class="text-sm text-gray-600 hover:text-[#8C8660] font-medium transition-colors">Servicios y Talleres</a>
-            <a href="Tienda.html" class="text-sm text-gray-600 hover:text-[#8C8660] font-medium transition-colors">Tienda</a>
+    <header class="bg-white/90 backdrop-blur-md sticky top-0 z-[150] border-b border-gray-100" x-data="{ mobileMenuOpen: false }">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            
+            <a href="./" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                <i class="ph ph-brain text-2xl text-[#8C8660]"></i>
+                <div class="flex flex-col leading-tight">
+                    <span class="text-base font-bold text-[#8C8660]">RENOVA INSTITUTE</span>
+                    <span class="text-[9px] font-medium text-[#54463C]">Restauración integral • Neurociencia + Fe</span>
+                    <span class="text-[10px] font-light italic text-[#54463C] whitespace-nowrap">Renovamos la mente. Restauramos la vida.</span>
+                </div>
+            </a>
+            
+            <div class="hidden lg:flex items-center gap-8 flex-1 justify-end px-8">
+                <a href="./" class="text-sm text-gray-600 hover:text-[#8C8660] font-medium transition-colors">Inicio</a>
+                <a href="./#nosotros" class="text-sm text-gray-600 hover:text-[#8C8660] font-medium transition-colors">Nosotros</a>
+                <a href="./#recursos" class="text-sm text-gray-600 hover:text-[#8C8660] font-medium transition-colors">Servicios y Talleres</a>
+                <a href="Tienda.html" class="text-sm text-gray-600 hover:text-[#8C8660] font-medium transition-colors">Tienda</a>
             </div>
 
-        <div class="flex items-center gap-4">
-            <button @click="mobileMenuOpen = !mobileMenuOpen" class="block lg:hidden text-[#54463C] p-2">
-                <i class="ph text-2xl" :class="mobileMenuOpen ? 'ph-x' : 'ph-list'"></i>
-            </button>
+            <div class="flex items-center gap-4">
+                <button @click="mobileMenuOpen = !mobileMenuOpen" class="block lg:hidden text-[#54463C] p-2">
+                    <i class="ph text-2xl" :class="mobileMenuOpen ? 'ph-x' : 'ph-list'"></i>
+                </button>
+            </div>
         </div>
-    </div>
 
-    <div x-show="mobileMenuOpen" style="display: none;" class="lg:hidden bg-white border-b absolute w-full shadow-lg p-4 z-[140]">
-        <a href="./" @click="mobileMenuOpen = false" class="block py-3 border-b text-gray-600 font-medium">Inicio</a>
-        <a href="./#nosotros" @click="mobileMenuOpen = false" class="block py-3 border-b text-gray-600 font-medium">Nosotros</a>
-        <a href="./#recursos" @click="mobileMenuOpen = false" class="block py-3 text-gray-600 font-medium">Servicios y Talleres</a>
-        <a href="Tienda.html" @click="mobileMenuOpen = false" class="block py-3 text-gray-600 font-medium">Tienda</a>
-    </div>
-</header>
+        <div x-show="mobileMenuOpen" style="display: none;" class="lg:hidden bg-white border-b absolute w-full shadow-lg p-4 z-[140]">
+            <a href="./" @click="mobileMenuOpen = false" class="block py-3 border-b text-gray-600 font-medium">Inicio</a>
+            <a href="./#nosotros" @click="mobileMenuOpen = false" class="block py-3 border-b text-gray-600 font-medium">Nosotros</a>
+            <a href="./#recursos" @click="mobileMenuOpen = false" class="block py-3 text-gray-600 font-medium">Servicios y Talleres</a>
+            <a href="Tienda.html" @click="mobileMenuOpen = false" class="block py-3 text-gray-600 font-medium">Tienda</a>
+        </div>
+    </header>
 
-    <!-- Sección Hero (Basada en la imagen) -->
+    <!-- Sección Hero -->
     <header class="bg-[#F6F3EE] py-24 px-6 text-center relative overflow-hidden">
         <div class="max-w-5xl mx-auto relative z-10">
             <h1 class="text-6xl md:text-8xl font-black mb-6 tracking-tight fade-in-up">
@@ -113,14 +107,13 @@
             </div>
         </div>
         
-        <!-- Elementos decorativos de fondo -->
         <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-10">
             <i class="ph ph-atom absolute -top-20 -left-20 text-[300px] text-[#8C8660]"></i>
             <i class="ph ph-cross absolute -bottom-20 -right-20 text-[300px] text-[#8C8660]"></i>
         </div>
     </header>
 
-    <!-- Sección Nosotros: Misión y Visión -->
+    <!-- Sección Nosotros -->
     <section id="nosotros" class="py-20 px-6 max-w-7xl mx-auto">
         <div class="text-center mb-16">
             <span class="text-[#8C8660] font-bold text-sm uppercase tracking-widest">Nuestra Esencia</span>
@@ -128,7 +121,6 @@
         </div>
         
         <div class="grid md:grid-cols-2 gap-12">
-            <!-- Misión -->
             <div class="bg-white p-10 rounded-[32px] shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
                 <div class="w-16 h-16 bg-[#F7EBE5] rounded-2xl flex items-center justify-center mb-6">
                     <i class="ph ph-target text-3xl text-[#8C8660]"></i>
@@ -139,7 +131,6 @@
                 </p>
             </div>
             
-            <!-- Visión -->
             <div class="bg-white p-10 rounded-[32px] shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
                 <div class="w-16 h-16 bg-[#F7EBE5] rounded-2xl flex items-center justify-center mb-6">
                     <i class="ph ph-eye text-3xl text-[#8C8660]"></i>
@@ -161,7 +152,6 @@
             </div>
             
             <div class="grid md:grid-cols-3 gap-8">
-                <!-- Especialidad 1 -->
                 <div class="bg-white p-8 rounded-[24px] text-center group hover:-translate-y-2 transition-transform duration-300">
                     <i class="ph ph-dna text-5xl text-[#8C8660] mb-4 group-hover:scale-110 transition-transform"></i>
                     <h4 class="text-xl font-bold mb-3">Neurobiología Aplicada</h4>
@@ -169,8 +159,6 @@
                         Comprendemos a fondo las mecánicas del estrés y la regulación conductual. Intervenimos sobre la neuroplasticidad, analizando cómo la amígdala, la corteza prefrontal y los neurotransmisores impactan tu bienestar diario.
                     </p>
                 </div>
-
-                <!-- Especialidad 2 -->
                 <div class="bg-white p-8 rounded-[24px] text-center group hover:-translate-y-2 transition-transform duration-300">
                     <i class="ph ph-heartbeat text-5xl text-[#8C8660] mb-4 group-hover:scale-110 transition-transform"></i>
                     <h4 class="text-xl font-bold mb-3">Sanación Emocional</h4>
@@ -178,8 +166,6 @@
                         Abordaje integral del trauma y la ansiedad. Aplicamos técnicas científicamente comprobadas para reestructurar esquemas de pensamiento dañinos, guiados siempre por la compasión y la verdad espiritual.
                     </p>
                 </div>
-
-                <!-- Especialidad 3 -->
                 <div class="bg-white p-8 rounded-[24px] text-center group hover:-translate-y-2 transition-transform duration-300">
                     <i class="ph ph-trend-up text-5xl text-[#8C8660] mb-4 group-hover:scale-110 transition-transform"></i>
                     <h4 class="text-xl font-bold mb-3">Alto Desempeño</h4>
@@ -191,10 +177,8 @@
         </div>
     </section>
 
-    <!-- Llamado a la acción hacia la tienda -->
-    <section id="recursos" class="...">
-    </section>
-    <section class="py-24 px-6 max-w-5xl mx-auto text-center">
+    <!-- Llamado a la acción -->
+    <section id="recursos" class="py-24 px-6 max-w-5xl mx-auto text-center">
         <h2 class="text-3xl md:text-4xl font-bold mb-6">Explora Nuestros Recursos y Programas</h2>
         <p class="text-gray-600 mb-10 max-w-2xl mx-auto">
             Desde programas personalizados hasta material de trabajo independiente. Todo lo que necesitas para iniciar tu proceso de transformación está a un clic de distancia.
@@ -243,5 +227,89 @@
         </div>
     </footer>
 
+    <!-- BANNER MODAL (NUEVO DISEÑO GRANDE) -->
+    <div x-data="bannerLibro()" x-init="initBanner()" x-show="mostrar" x-transition.opacity.duration.500ms 
+         class="fixed inset-0 z-[200] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
+         style="display: none;">
+        
+        <!-- Tarjeta Central -->
+        <div @click.away="cerrarBanner()" class="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto flex flex-col md:flex-row relative">
+            
+            <!-- Botón de cerrar -->
+            <button @click="cerrarBanner()" class="absolute top-4 right-4 bg-gray-100 hover:bg-gray-200 text-gray-800 p-2 rounded-full transition z-10">
+                <i class="ph ph-x text-xl"></i>
+            </button>
+            
+            <!-- Sección de Portada -->
+            <div class="md:w-5/12 bg-[#F6F3EE] p-8 flex items-center justify-center border-b md:border-b-0 md:border-r border-gray-200">
+                <img :src="config.imagen || 'https://via.placeholder.com/400x600.png?text=Portada+del+Libro'" 
+                     alt="Portada del libro" 
+                     class="max-h-[350px] md:max-h-[500px] w-auto rounded-lg shadow-xl object-cover">
+            </div>
+            
+            <!-- Sección de Contenido y Botones -->
+            <div class="md:w-7/12 p-8 md:p-12 flex flex-col justify-center bg-white">
+                <span class="text-xs font-bold text-[#8C8660] uppercase tracking-widest mb-3 flex items-center gap-2">
+                    <i class="ph ph-star-four text-yellow-500 text-lg"></i> Lanzamiento Exclusivo
+                </span>
+                
+                <h3 class="text-3xl md:text-4xl font-black text-[#54463C] mb-4 leading-tight" x-text="config.titulo || 'Nuevo Libro Disponible'"></h3>
+                <p class="text-gray-600 mb-8 leading-relaxed text-sm md:text-base" x-text="config.desc || 'Descubre nuestro último lanzamiento.'"></p>
+                
+                <div class="space-y-3 w-full">
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Elige dónde conseguirlo:</p>
+                    
+                    <!-- Botón 1 -->
+                    <template x-if="config.link1Nombre && config.link1Url">
+                        <a :href="config.link1Url" target="_blank" class="w-full flex items-center justify-between bg-white border-2 border-gray-100 text-[#54463C] font-bold px-6 py-4 rounded-xl hover:border-[#8C8660] hover:bg-[#FDFBFA] hover:shadow-md transition-all group">
+                            <span class="flex items-center gap-3"><i class="ph ph-book-open-text text-2xl text-[#8C8660]"></i> <span x-text="config.link1Nombre"></span></span>
+                            <i class="ph ph-arrow-right text-gray-400 group-hover:text-[#8C8660] transition-colors"></i>
+                        </a>
+                    </template>
+                    
+                    <!-- Botón 2 -->
+                    <template x-if="config.link2Nombre && config.link2Url">
+                        <a :href="config.link2Url" target="_blank" class="w-full flex items-center justify-between bg-white border-2 border-gray-100 text-[#54463C] font-bold px-6 py-4 rounded-xl hover:border-[#8C8660] hover:bg-[#FDFBFA] hover:shadow-md transition-all group">
+                            <span class="flex items-center gap-3"><i class="ph ph-device-mobile text-2xl text-[#8C8660]"></i> <span x-text="config.link2Nombre"></span></span>
+                            <i class="ph ph-arrow-right text-gray-400 group-hover:text-[#8C8660] transition-colors"></i>
+                        </a>
+                    </template>
+                    
+                    <!-- Botón 3 -->
+                    <template x-if="config.link3Nombre && config.link3Url">
+                        <a :href="config.link3Url" target="_blank" class="w-full flex items-center justify-between bg-[#54463C] border-2 border-[#54463C] text-white font-bold px-6 py-4 rounded-xl hover:bg-[#8C8660] hover:border-[#8C8660] hover:shadow-md transition-all group">
+                            <span class="flex items-center gap-3"><i class="ph ph-storefront text-2xl text-white"></i> <span x-text="config.link3Nombre"></span></span>
+                            <i class="ph ph-arrow-right text-white/50 group-hover:text-white transition-colors"></i>
+                        </a>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function bannerLibro() {
+            return {
+                mostrar: false,
+                config: { activo: false, imagen: '', titulo: '', desc: '', link1Nombre: '', link1Url: '', link2Nombre: '', link2Url: '', link3Nombre: '', link3Url: '' },
+                initBanner() {
+                    const guardado = JSON.parse(localStorage.getItem('promoLibro'));
+                    const bannerCerrado = sessionStorage.getItem('bannerLibroCerrado');
+                    
+                    if (guardado) {
+                        this.config = guardado;
+                    }
+                    
+                    if (this.config.activo && !bannerCerrado) {
+                        setTimeout(() => { this.mostrar = true; }, 1500); 
+                    }
+                },
+                cerrarBanner() {
+                    this.mostrar = false;
+                    sessionStorage.setItem('bannerLibroCerrado', 'true');
+                }
+            }
+        }
+    </script>
 </body>
 </html>

@@ -60,7 +60,7 @@
                 <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
                 <input type="text" onkeyup="document.getElementById('buscador').value = this.value; renderTienda();" placeholder="Buscar programas..." class="pl-12 pr-6 py-3 bg-gray-100 w-full rounded-xl text-sm outline-none">
             </div>
-            <a href="#" class="block py-3 border-b text-gray-800 font-bold">Inicio</a>
+            <a href="index.html" class="block py-3 border-b text-gray-800 font-bold">Inicio</a>
         </div>
     </header>
 
@@ -87,6 +87,66 @@
             <button onclick="cerrarDetalle()" class="absolute right-6 top-6 z-10 bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-full transition-colors"><i class="ph ph-x text-xl"></i></button>
             <div id="contenido-detalle" class="overflow-y-auto p-8 custom-scrollbar">
                 <!-- El contenido del modal se inyecta aquí -->
+            </div>
+        </div>
+    </div>
+
+    <!-- BANNER MODAL PARA LA TIENDA (Idéntico al de Index) -->
+    <div x-data="bannerLibro()" x-init="initBanner()" x-show="mostrar" x-transition.opacity.duration.500ms 
+         class="fixed inset-0 z-[200] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
+         style="display: none;">
+        
+        <!-- Tarjeta Central -->
+        <div @click.away="cerrarBanner()" class="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto flex flex-col md:flex-row relative">
+            
+            <!-- Botón de cerrar -->
+            <button @click="cerrarBanner()" class="absolute top-4 right-4 bg-gray-100 hover:bg-gray-200 text-gray-800 p-2 rounded-full transition z-10">
+                <i class="ph ph-x text-xl"></i>
+            </button>
+            
+            <!-- Sección de Portada -->
+            <div class="md:w-5/12 bg-[#F6F3EE] p-8 flex items-center justify-center border-b md:border-b-0 md:border-r border-gray-200">
+                <img :src="config.imagen || 'https://via.placeholder.com/400x600.png?text=Portada+del+Libro'" 
+                     alt="Portada del libro" 
+                     class="max-h-[350px] md:max-h-[500px] w-auto rounded-lg shadow-xl object-cover">
+            </div>
+            
+            <!-- Sección de Contenido y Botones -->
+            <div class="md:w-7/12 p-8 md:p-12 flex flex-col justify-center bg-white">
+                <span class="text-xs font-bold text-[#8C8660] uppercase tracking-widest mb-3 flex items-center gap-2">
+                    <i class="ph ph-star-four text-yellow-500 text-lg"></i> Lanzamiento Exclusivo
+                </span>
+                
+                <h3 class="text-3xl md:text-4xl font-black text-[#54463C] mb-4 leading-tight" x-text="config.titulo || 'Nuevo Libro Disponible'"></h3>
+                <p class="text-gray-600 mb-8 leading-relaxed text-sm md:text-base" x-text="config.desc || 'Descubre nuestro último lanzamiento.'"></p>
+                
+                <div class="space-y-3 w-full">
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Elige dónde conseguirlo:</p>
+                    
+                    <!-- Botón 1 -->
+                    <template x-if="config.link1Nombre && config.link1Url">
+                        <a :href="config.link1Url" target="_blank" class="w-full flex items-center justify-between bg-white border-2 border-gray-100 text-[#54463C] font-bold px-6 py-4 rounded-xl hover:border-[#8C8660] hover:bg-[#FDFBFA] hover:shadow-md transition-all group">
+                            <span class="flex items-center gap-3"><i class="ph ph-book-open-text text-2xl text-[#8C8660]"></i> <span x-text="config.link1Nombre"></span></span>
+                            <i class="ph ph-arrow-right text-gray-400 group-hover:text-[#8C8660] transition-colors"></i>
+                        </a>
+                    </template>
+                    
+                    <!-- Botón 2 -->
+                    <template x-if="config.link2Nombre && config.link2Url">
+                        <a :href="config.link2Url" target="_blank" class="w-full flex items-center justify-between bg-white border-2 border-gray-100 text-[#54463C] font-bold px-6 py-4 rounded-xl hover:border-[#8C8660] hover:bg-[#FDFBFA] hover:shadow-md transition-all group">
+                            <span class="flex items-center gap-3"><i class="ph ph-device-mobile text-2xl text-[#8C8660]"></i> <span x-text="config.link2Nombre"></span></span>
+                            <i class="ph ph-arrow-right text-gray-400 group-hover:text-[#8C8660] transition-colors"></i>
+                        </a>
+                    </template>
+                    
+                    <!-- Botón 3 -->
+                    <template x-if="config.link3Nombre && config.link3Url">
+                        <a :href="config.link3Url" target="_blank" class="w-full flex items-center justify-between bg-[#54463C] border-2 border-[#54463C] text-white font-bold px-6 py-4 rounded-xl hover:bg-[#8C8660] hover:border-[#8C8660] hover:shadow-md transition-all group">
+                            <span class="flex items-center gap-3"><i class="ph ph-storefront text-2xl text-white"></i> <span x-text="config.link3Nombre"></span></span>
+                            <i class="ph ph-arrow-right text-white/50 group-hover:text-white transition-colors"></i>
+                        </a>
+                    </template>
+                </div>
             </div>
         </div>
     </div>
@@ -834,6 +894,31 @@
                     ],
                     "modalidad": "Descargable",
                     "precio": 0
+          },
+          {
+                    "id": "N-017",
+                    "cat": "Grupales",
+                    "nombre": "Nuevo taller",
+                    "desc": "",
+                    "precio": 0,
+                    "incluye": []
+          },
+          {
+                    "id": "N-018",
+                    "cat": "Productos",
+                    "nombre": "Libro: ¿CÓMO SANAR  CUANDO EL  TIEMPO NO  ARREGLÓ NADA?",
+                    "grupoEtario": "Jóvenes y Adultos (18-55 años)",
+                    "enfoque": "Sanidad Integral",
+                    "paraQuien": "Para quienes deseamos trabajar nuestra sanidad emocional a nuestro propio ritmo y de forma independiente.",
+                    "desc": "Material de trabajo independiente.",
+                    "incluye": [
+                              "Workbook digital descargable",
+                              "Ejercicios guiados",
+                              "Acceso de por vida"
+                    ],
+                    "modalidad": "Físico",
+                    "precioFull": 0,
+                    "precio": 0
           }
 ];
 
@@ -841,113 +926,110 @@
         let carrito = [];
 
         function renderTienda() {
-    const grid = document.getElementById('grid-tienda');
-    const busqueda = document.getElementById('buscador').value.toLowerCase();
-    
-    const filtrados = catalogo.filter(p => p.visible !== false).filter(p => {
-        const matchBusqueda = p.nombre.toLowerCase().includes(busqueda);
-        const matchFiltro = filtroActual === 'todos' || p.cat === filtroActual;
-        return matchBusqueda && matchFiltro;
-    });
+            const grid = document.getElementById('grid-tienda');
+            const busqueda = document.getElementById('buscador').value.toLowerCase();
+            
+            const filtrados = catalogo.filter(p => p.visible !== false).filter(p => {
+                const matchBusqueda = p.nombre.toLowerCase().includes(busqueda);
+                const matchFiltro = filtroActual === 'todos' || p.cat === filtroActual;
+                return matchBusqueda && matchFiltro;
+            });
 
-    grid.innerHTML = filtrados.map(p => {
-        const esEspera = p.estado === 'espera';
-        const esGratis = p.precio === 0 && !esEspera;
-        
-        // Nueva lógica para el aviso de cupos
-        const mostrarAviso = p.cat === 'Grupales' && !esEspera && p.fechaInicio && p.fechaInicio !== "Por definir";
-        
-        const tagEdad = p.grupoEtario || p.grupoEdad;
-        const tagEnfoque = p.enfoque;
-        
-        let infoFechasCupos = '';
-        
-        // Construcción de la info principal (Fecha, Horario, Duración, Modalidad y Aviso)
-        if (p.cat === 'Grupales' || p.cat === 'Personalizados') {
-            if (p.fechaInicio && !esEspera && p.fechaInicio !== "Por definir") {
-                let cuposBarra = '';
-                if (p.cuposTotales && p.cuposDisponibles) {
-                    const porcentajeOcupado = ((p.cuposTotales - p.cuposDisponibles) / p.cuposTotales) * 100;
-                    const colorCupos = p.cuposDisponibles <= 3 ? 'text-red-500' : 'text-[#8C8660]';
-                    const bgBarra = p.cuposDisponibles <= 3 ? 'bg-red-500' : 'bg-[#8C8660]';
-                    
-                    cuposBarra = `
-                        <div class="mt-3 bg-white p-2 rounded border border-gray-100">
-                            <div class="flex justify-between items-center text-[10px] mb-1">
-                                <span class="text-gray-500 font-medium">Cupos disponibles</span>
-                                <span class="font-bold ${colorCupos}">${p.cuposDisponibles} de ${p.cuposTotales}</span>
+            grid.innerHTML = filtrados.map(p => {
+                const esEspera = p.estado === 'espera';
+                const esGratis = p.precio === 0 && !esEspera;
+                
+                const mostrarAviso = p.cat === 'Grupales' && !esEspera && p.fechaInicio && p.fechaInicio !== "Por definir";
+                
+                const tagEdad = p.grupoEtario || p.grupoEdad;
+                const tagEnfoque = p.enfoque;
+                
+                let infoFechasCupos = '';
+                
+                if (p.cat === 'Grupales' || p.cat === 'Personalizados') {
+                    if (p.fechaInicio && !esEspera && p.fechaInicio !== "Por definir") {
+                        let cuposBarra = '';
+                        if (p.cuposTotales && p.cuposDisponibles) {
+                            const porcentajeOcupado = ((p.cuposTotales - p.cuposDisponibles) / p.cuposTotales) * 100;
+                            const colorCupos = p.cuposDisponibles <= 3 ? 'text-red-500' : 'text-[#8C8660]';
+                            const bgBarra = p.cuposDisponibles <= 3 ? 'bg-red-500' : 'bg-[#8C8660]';
+                            
+                            cuposBarra = `
+                                <div class="mt-3 bg-white p-2 rounded border border-gray-100">
+                                    <div class="flex justify-between items-center text-[10px] mb-1">
+                                        <span class="text-gray-500 font-medium">Cupos disponibles</span>
+                                        <span class="font-bold ${colorCupos}">${p.cuposDisponibles} de ${p.cuposTotales}</span>
+                                    </div>
+                                    <div class="w-full bg-gray-100 rounded-full h-1">
+                                        <div class="${bgBarra} h-1 rounded-full transition-all" style="width: ${porcentajeOcupado}%"></div>
+                                    </div>
+                                </div>
+                            `;
+                        }
+
+                        infoFechasCupos = `
+                            <div class="mb-4 bg-gray-50 rounded-xl p-3 border border-gray-100">
+                                <p class="text-[11px] text-gray-700 flex items-center gap-1.5 mb-1"><i class="ph ph-calendar-check text-[#8C8660] text-sm"></i> <b>Inicia:</b> ${p.fechaInicio}</p>
+                                <p class="text-[11px] text-gray-700 flex items-center gap-1.5 mb-1"><i class="ph ph-clock text-[#8C8660] text-sm"></i> <b>Horario:</b> ${p.horario}</p>
+                                ${p.duracion ? `<p class="text-[11px] text-gray-700 flex items-center gap-1.5 mb-1"><i class="ph ph-hourglass text-[#8C8660] text-sm"></i> <b>Duración:</b> ${p.duracion}</p>` : ''}
+                                ${p.modalidad ? `<p class="text-[11px] text-gray-700 flex items-center gap-1.5 mb-1"><i class="ph ph-laptop text-[#8C8660] text-sm"></i> <b>Modalidad:</b> ${p.modalidad}</p>` : ''}
+                                ${cuposBarra}
+                                ${mostrarAviso ? `<div class="mt-2 pt-2 border-t border-gray-200 text-[10px] text-[#8C8660] font-bold italic flex items-center gap-1"><i class="ph ph-users text-sm"></i> Cupos limitados - Grupos pequeños</div>` : ''}
                             </div>
-                            <div class="w-full bg-gray-100 rounded-full h-1">
-                                <div class="${bgBarra} h-1 rounded-full transition-all" style="width: ${porcentajeOcupado}%"></div>
+                        `;
+                    } else if (p.fechaInicio === "Por definir" || esEspera) {
+                        infoFechasCupos = `
+                            <div class="mb-4 flex items-center gap-2 text-amber-700 bg-amber-50 border border-amber-100 px-3 py-2 rounded-xl">
+                                <i class="ph ph-calendar-blank text-base"></i> <span class="font-medium text-[11px] leading-tight">${esEspera ? 'Pronto abriremos fechas' : 'Pronto tendremos fechas disponibles'}</span>
                             </div>
-                        </div>
-                    `;
+                        `;
+                    }
+                } else if (p.duracion || p.sesiones) {
+                    infoFechasCupos = `<p class="text-[11px] font-medium text-gray-400 mb-4 flex items-center gap-1.5"><i class="ph ph-clock text-sm"></i> ${p.duracion || p.sesiones}</p>`;
                 }
 
-                infoFechasCupos = `
-                    <div class="mb-4 bg-gray-50 rounded-xl p-3 border border-gray-100">
-                        <p class="text-[11px] text-gray-700 flex items-center gap-1.5 mb-1"><i class="ph ph-calendar-check text-[#8C8660] text-sm"></i> <b>Inicia:</b> ${p.fechaInicio}</p>
-                        <p class="text-[11px] text-gray-700 flex items-center gap-1.5 mb-1"><i class="ph ph-clock text-[#8C8660] text-sm"></i> <b>Horario:</b> ${p.horario}</p>
-                        ${p.duracion ? `<p class="text-[11px] text-gray-700 flex items-center gap-1.5 mb-1"><i class="ph ph-hourglass text-[#8C8660] text-sm"></i> <b>Duración:</b> ${p.duracion}</p>` : ''}
-                        ${p.modalidad ? `<p class="text-[11px] text-gray-700 flex items-center gap-1.5 mb-1"><i class="ph ph-laptop text-[#8C8660] text-sm"></i> <b>Modalidad:</b> ${p.modalidad}</p>` : ''}
-                        ${cuposBarra}
-                        ${mostrarAviso ? `<div class="mt-2 pt-2 border-t border-gray-200 text-[10px] text-[#8C8660] font-bold italic flex items-center gap-1"><i class="ph ph-users text-sm"></i> Cupos limitados - Grupos pequeños</div>` : ''}
-                    </div>
-                `;
-            } else if (p.fechaInicio === "Por definir" || esEspera) {
-                infoFechasCupos = `
-                    <div class="mb-4 flex items-center gap-2 text-amber-700 bg-amber-50 border border-amber-100 px-3 py-2 rounded-xl">
-                        <i class="ph ph-calendar-blank text-base"></i> <span class="font-medium text-[11px] leading-tight">${esEspera ? 'Pronto abriremos fechas' : 'Pronto tendremos fechas disponibles'}</span>
-                    </div>
-                `;
-            }
-        } else if (p.duracion || p.sesiones) {
-            infoFechasCupos = `<p class="text-[11px] font-medium text-gray-400 mb-4 flex items-center gap-1.5"><i class="ph ph-clock text-sm"></i> ${p.duracion || p.sesiones}</p>`;
-        }
+                let etiquetaInversion = (!esEspera && !esGratis) ? '<span class="text-[11px] text-gray-500 font-medium block mb-1 mt-2 uppercase tracking-wide">Inversión:</span>' : '';
 
-        let etiquetaInversion = (!esEspera && !esGratis) ? '<span class="text-[11px] text-gray-500 font-medium block mb-1 mt-2 uppercase tracking-wide">Inversión:</span>' : '';
-
-        return `
-        <div class="bg-white p-6 rounded-[24px] border border-gray-100 hover:border-[#8C8660]/30 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group">
-            <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#8C8660]/5 to-transparent rounded-bl-[100px] -z-10 transition-transform group-hover:scale-110"></div>
-            <div>
-                <div class="flex justify-between items-start mb-4 gap-2 flex-wrap">
-                    <div class="flex gap-2 flex-wrap">
-                        ${tagEdad ? `<span class="bg-gray-100 text-gray-700 text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">${tagEdad}</span>` : ''}
-                        ${tagEnfoque ? `<span class="text-[10px] font-bold text-[#8C8660] bg-[#8C8660]/10 px-3 py-1.5 rounded-full uppercase tracking-wider">${tagEnfoque}</span>` : ''}
-                    </div>
-                    ${esGratis ? '<span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2 py-1 rounded-md shrink-0"><i class="ph ph-gift text-sm"></i></span>' : ''}
-                </div>
-                <h3 class="font-bold text-[#54463C] text-lg mt-2 mb-2 min-h-[3rem] line-clamp-2 leading-snug">${p.nombre}</h3>
-                <p class="text-xs text-gray-500 mb-4 line-clamp-3 leading-relaxed">${p.desc || p.paraQuien || ''}</p>
-                
-                ${infoFechasCupos}
-                ${etiquetaInversion}
-                
-                <div class="mt-auto pt-4 border-t border-gray-50">
-                    ${p.precioFull && !esEspera ? `
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="text-[11px] text-gray-400 line-through">Normal: $ ${p.precioFull.toLocaleString()}</span>
+                return `
+                <div class="bg-white p-6 rounded-[24px] border border-gray-100 hover:border-[#8C8660]/30 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#8C8660]/5 to-transparent rounded-bl-[100px] -z-10 transition-transform group-hover:scale-110"></div>
+                    <div>
+                        <div class="flex justify-between items-start mb-4 gap-2 flex-wrap">
+                            <div class="flex gap-2 flex-wrap">
+                                ${tagEdad ? `<span class="bg-gray-100 text-gray-700 text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">${tagEdad}</span>` : ''}
+                                ${tagEnfoque ? `<span class="text-[10px] font-bold text-[#8C8660] bg-[#8C8660]/10 px-3 py-1.5 rounded-full uppercase tracking-wider">${tagEnfoque}</span>` : ''}
+                            </div>
+                            ${esGratis ? '<span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2 py-1 rounded-md shrink-0"><i class="ph ph-gift text-sm"></i></span>' : ''}
                         </div>
-                    ` : ''}
-                    <p class="text-[#8C8660] font-bold text-xl mb-6">
-                        ${esEspera || p.fechaInicio === "Por definir" && p.precio === 0 ? '<span class="text-sm font-normal text-gray-400">Próximamente</span>' : (esGratis ? '¡GRATIS!' : '$ ' + p.precio.toLocaleString())}
-                    </p>
+                        <h3 class="font-bold text-[#54463C] text-lg mt-2 mb-2 min-h-[3rem] line-clamp-2 leading-snug">${p.nombre}</h3>
+                        <p class="text-xs text-gray-500 mb-4 line-clamp-3 leading-relaxed">${p.desc || p.paraQuien || ''}</p>
+                        
+                        ${infoFechasCupos}
+                        ${etiquetaInversion}
+                        
+                        <div class="mt-auto pt-4 border-t border-gray-50">
+                            ${p.precioFull && !esEspera ? `
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="text-[11px] text-gray-400 line-through">Normal: $ ${p.precioFull.toLocaleString()}</span>
+                                </div>
+                            ` : ''}
+                            <p class="text-[#8C8660] font-bold text-xl mb-6">
+                                ${esEspera || p.fechaInicio === "Por definir" && p.precio === 0 ? '<span class="text-sm font-normal text-gray-400">Próximamente</span>' : (esGratis ? '¡GRATIS!' : '$ ' + p.precio.toLocaleString())}
+                            </p>
+                        </div>
+                    </div>
+                    <div>
+                        <button onclick="verMas('${p.id}')" class="w-full bg-white text-[#8C8660] border-2 border-[#8C8660] py-3 rounded-xl font-bold text-sm hover:bg-[#8C8660] hover:text-white transition-all shadow-sm flex items-center justify-center gap-2">
+                            <i class="ph ${esEspera ? 'ph-bell' : (esGratis ? 'ph-download-simple' : 'ph-eye')} text-lg"></i>
+                            ${esEspera ? 'Solicitar apertura' : 'Ver Detalles'}
+                        </button>
+                    </div>
                 </div>
-            </div>
-            <div>
-                <button onclick="verMas('${p.id}')" class="w-full bg-white text-[#8C8660] border-2 border-[#8C8660] py-3 rounded-xl font-bold text-sm hover:bg-[#8C8660] hover:text-white transition-all shadow-sm flex items-center justify-center gap-2">
-                    <i class="ph ${esEspera ? 'ph-bell' : (esGratis ? 'ph-download-simple' : 'ph-eye')} text-lg"></i>
-                    ${esEspera ? 'Solicitar apertura' : 'Ver Detalles'}
-                </button>
-            </div>
-        </div>
-        `;
-    }).join('');
-}
+                `;
+            }).join('');
+        }
     
         function verMas(id) {
-            // Aseguramos que el id cruce bien ya sea int o string
             const p = catalogo.find(x => String(x.id) === String(id));
             if (!p) return;
 
@@ -1097,9 +1179,11 @@
 
         function toggleCarrito(abrir = null) {
             const sidebar = document.getElementById('carrito-sidebar');
-            if (abrir === true) sidebar.classList.remove('translate-x-full');
-            else if (abrir === false) sidebar.classList.add('translate-x-full');
-            else sidebar.classList.toggle('translate-x-full');
+            if (sidebar) {
+                if (abrir === true) sidebar.classList.remove('translate-x-full');
+                else if (abrir === false) sidebar.classList.add('translate-x-full');
+                else sidebar.classList.toggle('translate-x-full');
+            }
         }
 
         function agregarAlCarrito(id) {
@@ -1114,157 +1198,51 @@
                     const selector = document.getElementById('selector-fecha-fija');
                     if (selector) {
                         const opcion = p.infoFecha.opciones.find(o => o.idOpcion === selector.value);
-                        if(opcion) fechaTextoSeleccionada = opcion.texto;
+                        if (opcion) {
+                            fechaTextoSeleccionada = opcion.texto;
+                        }
                     }
                 }
             }
-
-            const detallesFijos = `Mod: ${p.modalidad || 'N/A'} | Grupo: ${p.grupoEdad || p.grupoEtario || 'N/A'}`;
-
-            const item = {
-                cartId: Date.now(),
-                nombre: p.nombre,
-                precio: p.precio,
-                precioFull: p.precioFull,
-                fecha: fechaTextoSeleccionada,
-                detalles: detallesFijos
-            };
-
-            carrito.push(item);
-            actualizarCarritoUI();
-            cerrarDetalle(); 
-            toggleCarrito(true);
-        }
-
-        function eliminarDelCarrito(cartId) {
-            carrito = carrito.filter(i => i.cartId !== cartId);
-            actualizarCarritoUI();
-        }
-
-        function actualizarCarritoUI() {
-            const contenedor = document.getElementById('lista-items-carrito');
-            const totalEtiq = document.getElementById('total-monto');
-            const badge = document.getElementById('badge-carrito');
             
-            const contenedorDesc = document.getElementById('contenedor-descuento');
-            const descEtiq = document.getElementById('total-descuento');
+            // Agrega al carrito y actualiza la vista
+            carrito.push({ ...p, fechaSeleccionada: fechaTextoSeleccionada });
+            document.getElementById('badge-carrito').innerText = carrito.length;
+            document.getElementById('badge-carrito').classList.remove('hidden');
+            cerrarDetalle();
+            alert('¡' + p.nombre + ' agregado al carrito!');
+        }
 
-            contenedor.innerHTML = '';
-            let total = 0;
-            let totalAhorro = 0; 
-
-            carrito.forEach(item => {
-                total += item.precio;
-                
-                if (item.precioFull && item.precioFull > item.precio) {
-                    totalAhorro += (item.precioFull - item.precio);
+        // --- LÓGICA DEL BANNER DEL LIBRO ---
+        function bannerLibro() {
+            return {
+                mostrar: false,
+                config: { activo: false, imagen: '', titulo: '', desc: '', link1Nombre: '', link1Url: '', link2Nombre: '', link2Url: '', link3Nombre: '', link3Url: '' },
+                initBanner() {
+                    // Lee la configuración que guardó el Administrador
+                    const guardado = JSON.parse(localStorage.getItem('promoLibro'));
+                    const bannerCerrado = sessionStorage.getItem('bannerLibroCerrado');
+                    
+                    if (guardado) {
+                        this.config = guardado;
+                    }
+                    
+                    // Si el administrador lo activó y el usuario no lo ha cerrado, lo mostramos
+                    if (this.config.activo && !bannerCerrado) {
+                        setTimeout(() => { this.mostrar = true; }, 1500); 
+                    }
+                },
+                cerrarBanner() {
+                    this.mostrar = false;
+                    sessionStorage.setItem('bannerLibroCerrado', 'true');
                 }
-
-                contenedor.innerHTML += `
-                    <div class="bg-gray-50 p-4 rounded-xl relative border border-gray-100 mb-3 hover:shadow-sm transition-shadow">
-                        <button onclick="eliminarDelCarrito(${item.cartId})" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors p-1"><i class="ph ph-trash text-lg"></i></button>
-                        <p class="font-bold text-sm pr-6 leading-tight text-[#54463C]">${item.nombre}</p>
-                        <p class="text-xs text-[#8C8660] font-medium mt-1"><i class="ph ph-calendar-blank"></i> ${item.fecha}</p>
-                        <p class="text-[10px] text-gray-400 mb-2">${item.detalles}</p>
-                        
-                        ${item.precioFull ? `
-                            <div class="flex items-center gap-2 mt-1">
-                                <span class="text-[10px] text-gray-400 line-through">$ ${item.precioFull.toLocaleString()}</span>
-                                <p class="text-[#8C8660] font-bold text-sm">$ ${item.precio.toLocaleString()}</p>
-                            </div>
-                        ` : `
-                            <p class="text-[#8C8660] font-bold text-sm mt-1">$ ${item.precio.toLocaleString()}</p>
-                        `}
-                    </div>
-                `;
-            });
-
-            totalEtiq.innerText = `$ ${total.toLocaleString()}`;
-
-            if (totalAhorro > 0) {
-                descEtiq.innerText = `-$ ${totalAhorro.toLocaleString()}`;
-                contenedorDesc.classList.remove('hidden');
-            } else {
-                contenedorDesc.classList.add('hidden');
-            }
-
-            if (carrito.length > 0) {
-                badge.innerText = carrito.length;
-                badge.classList.remove('hidden');
-            } else {
-                badge.classList.add('hidden');
-                contenedor.innerHTML = '<div class="flex flex-col items-center justify-center h-full text-gray-400 mt-10"><i class="ph ph-shopping-cart text-4xl mb-2"></i><p class="text-sm">Tu carrito está vacío</p></div>';
             }
         }
 
-        function enviarPedidoWhatsApp() {
-    if (carrito.length === 0) return alert("El carrito está vacío.");
-
-    let total = 0;
-    let totalAhorro = 0;
-    let mensaje = "¡Hola! Quisiera reservar los siguientes programas en Psique Lab:%0A%0A";
-
-    carrito.forEach((item, index) => {
-        mensaje += `*${index + 1}. ${item.nombre}*%0A`;
-        
-        // --- AQUÍ ESTABA EL ERROR: Faltaba sumar el precio al total ---
-        total += item.precio; 
-        
-        if(item.precioFull && item.precioFull > item.precio) {
-            mensaje += `   Valor de oferta: $${item.precio.toLocaleString()} (Precio normal: $${item.precioFull.toLocaleString()})%0A`;
-            totalAhorro += (item.precioFull - item.precio);
-        } else {
-            mensaje += `   Valor: $${item.precio.toLocaleString()}%0A`;
-        }
-    });
-
-    mensaje += `*Inversión total estimada: $${total.toLocaleString()}*%0A`;
-    
-    if (totalAhorro > 0) {
-        mensaje += `*🎉 Ahorro total en esta reserva: $${totalAhorro.toLocaleString()}*%0A%0A`;
-    } else {
-        mensaje += `%0A`;
-    }
-    
-    mensaje += "Quedo atento(a) para coordinar fechas, horarios, el pago y confirmar mi cupo. ¡Gracias!";
-
-    const numeroWhatsApp = "573114951646"; 
-    const url = `https://wa.me/${numeroWhatsApp}?text=${mensaje}`;
-
-    carrito = [];
-    actualizarCarritoUI();
-    toggleCarrito(false);
-
-    window.open(url, '_blank');
-}
-        // Inicializamos la tienda apenas termine de cargar
-        inicializarTiendaConFiltro();
+        // Inicializamos la tienda al cargar la página
+        window.onload = () => {
+            inicializarTiendaConFiltro();
+        };
     </script>
-
-    <div id="carrito-sidebar" class="fixed inset-y-0 right-0 w-full md:w-96 bg-white shadow-2xl z-[300] transform translate-x-full transition-transform duration-300 border-l flex flex-col">
-        <div class="p-6 border-b flex justify-between items-center bg-[#FDFBFA]">
-            <h3 class="font-bold text-xl flex items-center gap-2 text-[#54463C]"><i class="ph ph-shopping-bag"></i> Tus Selecciones</h3>
-            <button onclick="toggleCarrito()" class="hover:bg-gray-100 p-2 rounded-full transition-colors"><i class="ph ph-x text-xl text-gray-500"></i></button>
-        </div>
-        <div id="lista-items-carrito" class="flex-1 overflow-y-auto p-6 custom-scrollbar space-y-4 bg-white">
-            <!-- Items del carrito -->
-        </div>
-        <div class="p-6 border-t bg-[#FDFBFA]">
-            <div id="contenedor-descuento" class="flex justify-between items-center font-medium text-sm text-emerald-600 bg-emerald-50 p-3 rounded-lg mb-4 hidden">
-                <span class="flex items-center gap-2"><i class="ph ph-tag"></i> Tu ahorro total:</span>
-                <span id="total-descuento" class="font-bold">-$ 0</span>
-            </div>
-            
-            <div class="flex justify-between items-end font-bold text-lg mb-2 text-[#54463C]">
-                <span>Inversión total:</span>
-                <span id="total-monto" class="text-2xl text-[#8C8660]">$ 0</span>
-            </div>
-            <p class="text-xs text-gray-500 mb-6 text-center">Pagos habilitados a través de <b>Nequi</b> y <b>Daviplata</b>.</p>
-            
-            <button onclick="enviarPedidoWhatsApp()" class="w-full bg-[#25D366] text-white py-4 rounded-xl font-bold shadow-lg shadow-[#25D366]/20 hover:bg-[#128C7E] hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2">
-                <i class="ph ph-whatsapp-logo text-xl"></i> Reservar vía WhatsApp
-            </button>
-        </div>
-    </div>
 </body>
 </html>
