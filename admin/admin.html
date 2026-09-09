@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administración | Renova Institute</title>
+    <title>Administracion | Renova Institute</title>
     <style>
         :root { --ink: #332c28; --muted: #756b64; --line: #e7e1dc; --paper: #fffdfb; --olive: #8c8660; --olive-dark: #706b4c; --rose: #f4ebe5; --danger: #b94a48; }
         * { box-sizing: border-box; }
@@ -30,7 +30,7 @@
         .file-input { max-width: 100%; }
         .status { min-height: 24px; color: var(--olive-dark); font-weight: 700; }
         .workspace { display: grid; grid-template-columns: 330px minmax(0, 1fr); gap: 20px; align-items: start; }
-        .list-panel, .form-panel { padding: 20px; }
+        .list-panel, .form-panel, .output-panel { padding: 20px; }
         .list-panel { position: sticky; top: 20px; }
         .search { width: 100%; margin-bottom: 12px; }
         input, select, textarea { width: 100%; border: 1px solid var(--line); border-radius: 7px; padding: 9px 10px; color: var(--ink); background: #fff; }
@@ -52,13 +52,12 @@
         .form-actions { display: flex; justify-content: space-between; gap: 10px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); }
         .empty { padding: 24px 8px; color: var(--muted); text-align: center; }
         
-        /* Estilos Modal de Banner */
-        dialog { max-width: 600px; width: 100%; border: 1px solid var(--line); border-radius: 12px; padding: 24px; background: var(--paper); color: var(--ink); box-shadow: 0 10px 40px rgba(75, 58, 43, 0.2); }
+        /* Estilos para el modal del Banner */
+        dialog { max-width: 500px; width: 100%; border: 1px solid var(--line); border-radius: 12px; padding: 24px; background: var(--paper); color: var(--ink); box-shadow: 0 10px 40px rgba(75, 58, 43, 0.2); }
         dialog::backdrop { background: rgba(51, 44, 40, 0.6); backdrop-filter: blur(3px); }
-        .banner-links-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; margin-bottom: 15px; }
         
         @media (max-width: 850px) { .load-panel, .workspace { grid-template-columns: 1fr; } .list-panel { position: static; } .product-list { max-height: 310px; } }
-        @media (max-width: 560px) { .shell { padding: 16px; } header, .form-header, .form-actions { align-items: stretch; flex-direction: column; } .form-grid { grid-template-columns: 1fr; } .field.full, .section-title, .banner-links-grid { grid-column: auto; grid-template-columns: 1fr;} }
+        @media (max-width: 560px) { .shell { padding: 16px; } header, .form-header, .form-actions { align-items: stretch; flex-direction: column; } .form-grid { grid-template-columns: 1fr; } .field.full, .section-title { grid-column: auto; } }
     </style>
 </head>
 <body>
@@ -70,7 +69,7 @@
                 <p class="subtitle">Este archivo es el administrador directo de <strong>Tienda.html</strong> y configuraciones generales.</p>
             </div>
             <div class="actions">
-                <button class="button secondary" type="button" id="abrirBannerBtn">Configurar Banner del Libro</button>
+                <button class="button secondary" type="button" id="abrirBannerBtn">Configurar Banner</button>
                 <button class="button success" type="button" id="guardarDirectoBtn" disabled>Guardar en Tienda.html</button>
             </div>
         </header>
@@ -78,6 +77,7 @@
         <section class="panel load-panel">
             <div>
                 <h2>Catálogo</h2>
+                <p class="hint">La administración intenta cargar <strong>Tienda.html</strong> automáticamente. Para guardar directamente, concede permiso con el botón de apertura.</p>
                 <div class="dropzone">
                     <button class="button secondary" type="button" id="abrirConPermisoBtn">Abrir Tienda.html</button>
                     <input class="file-input" type="file" id="archivoTienda" accept=".html,text/html">
@@ -86,6 +86,7 @@
             <div>
                 <h2>Estado</h2>
                 <p class="status" id="estado">Aún no has cargado un archivo.</p>
+                <p class="hint">Al trabajar desde Abrir-Administracion.bat, cada cambio guardado se escribe directamente en Tienda.html.</p>
             </div>
         </section>
 
@@ -94,8 +95,24 @@
                 <div class="toolbar">
                     <h2 style="margin-right:auto">Productos</h2>
                     <button class="button" type="button" id="nuevoBtn" disabled>+ Nuevo</button>
+                    <button class="button secondary" type="button" id="duplicarBtn" disabled>Duplicar</button>
                 </div>
                 <input class="search" type="search" id="buscar" placeholder="Buscar por nombre o ID..." disabled>
+                <div class="toolbar" style="margin-bottom:12px">
+                    <select id="filtroCategoria" aria-label="Filtrar por tipo de recurso" disabled>
+                        <option value="todos">Todos los tipos</option>
+                        <option value="Personalizados">Personalizados</option>
+                        <option value="Grupales">Grupales</option>
+                        <option value="Servicios">Servicios</option>
+                        <option value="Productos">Productos</option>
+                        <option value="Gratuitos">Gratuitos</option>
+                    </select>
+                    <select id="filtroEstado" aria-label="Filtrar por estado" disabled>
+                        <option value="todos">Todos los estados</option>
+                        <option value="activo">Activos</option>
+                        <option value="oculto">Ocultos</option>
+                    </select>
+                </div>
                 <div class="product-list" id="listaProductos"><div class="empty">Carga el HTML para ver tus productos.</div></div>
             </aside>
 
@@ -105,138 +122,401 @@
                         <h2 id="tituloFormulario">Selecciona un producto</h2>
                         <p class="hint" id="ayudaFormulario">Aquí aparecerán sus datos para editar.</p>
                     </div>
+                    <button class="button danger" type="button" id="eliminarBtn" disabled>Eliminar</button>
                 </div>
                 <form id="productoForm" hidden>
                     <div class="form-grid">
                         <div class="section-title">Identificación y estado</div>
-                        <div class="field"><label>ID único</label><input id="id" name="id" required></div>
-                        <div class="field"><label>Categoría</label><select id="cat" name="cat"><option>Personalizados</option><option>Grupales</option><option>Servicios</option><option>Productos</option><option>Gratuitos</option></select></div>
-                        <div class="field full"><label>Nombre</label><input id="nombre" name="nombre" required></div>
-                        <div class="field"><label>Grupo de edad</label><input id="grupoEtario" name="grupoEtario"></div>
-                        <div class="field"><label>Enfoque</label><input id="enfoque" name="enfoque"></div>
-                        
+                        <div class="field"><label for="id">ID único</label><input id="id" name="id" required></div>
+                        <div class="field"><label for="cat">Categoría</label><select id="cat" name="cat"><option>Personalizados</option><option>Grupales</option><option>Servicios</option><option>Productos</option><option>Gratuitos</option></select></div>
+                        <div class="field full"><label for="nombre">Nombre</label><input id="nombre" name="nombre" required></div>
+                        <div class="field"><label for="grupoEtario">Grupo de edad</label><input id="grupoEtario" name="grupoEtario"></div>
+                        <div class="field"><label for="enfoque">Enfoque</label><input id="enfoque" name="enfoque"></div>
+                        <div class="field"><label for="estadoProducto">Estado comercial</label><select id="estadoProducto" name="estado"><option value="activo">Abierto / visible para comprar</option><option value="espera">En espera / solicitar apertura</option></select></div>
+                        <div class="field"><label for="visibilidad">Visibilidad</label><select id="visibilidad" name="visibilidad"><option value="visible">Visible en la tienda</option><option value="oculto">Oculto, pero conservado</option></select></div>
+                        <div class="field"><label for="modalidad">Modalidad</label><input id="modalidad" name="modalidad" placeholder="Virtual, presencial, híbrido..."></div>
+
                         <div class="section-title">Información visible</div>
-                        <div class="field full"><label>Descripción corta</label><textarea id="desc" name="desc"></textarea></div>
-                        <div class="field full"><label>Para quién es</label><textarea id="paraQuien" name="paraQuien"></textarea></div>
-                        <div class="field full"><label>Qué aprenderemos</label><textarea id="aprenderemos" name="aprenderemos"></textarea></div>
-                        <div class="field full"><label>Qué lograremos</label><textarea id="lograremos" name="lograremos"></textarea></div>
-                        <div class="field full"><label>Qué incluye (un elemento por línea)</label><textarea id="incluye" name="incluye"></textarea></div>
-                        
-                        <div class="section-title">Precios y Fechas</div>
-                        <div class="field"><label>Precio Normal ($)</label><input type="number" id="precioFull" name="precioFull"></div>
-                        <div class="field"><label>Precio de Oferta ($)</label><input type="number" id="precio" name="precio"></div>
-                        <div class="field"><label>Fecha de Inicio</label><input id="fechaInicio" name="fechaInicio"></div>
-                        <div class="field"><label>Horario</label><input id="horario" name="horario"></div>
+                        <div class="field full"><label for="desc">Descripción corta</label><textarea id="desc" name="desc"></textarea></div>
+                        <div class="field full"><label for="paraQuien">Para quién es</label><textarea id="paraQuien" name="paraQuien"></textarea></div>
+                        <div class="field full"><label for="aprenderemos">Qué aprenderemos</label><textarea id="aprenderemos" name="aprenderemos"></textarea></div>
+                        <div class="field full"><label for="lograremos">Qué lograremos</label><textarea id="lograremos" name="lograremos"></textarea></div>
+                        <div class="field full"><label for="metodologia">Metodología</label><textarea id="metodologia" name="metodologia"></textarea></div>
+                        <div class="field full"><label for="incluye">Qué incluye (un elemento por línea)</label><textarea id="incluye" name="incluye"></textarea></div>
+
+                        <div class="section-title">Precio, fechas y cupos</div>
+                        <div class="field"><label for="precio">Precio actual</label><input id="precio" name="precio" type="number" min="0" step="1000"></div>
+                        <div class="field"><label for="precioFull">Precio normal (opcional)</label><input id="precioFull" name="precioFull" type="number" min="0" step="1000"></div>
+                        <div class="field"><label for="fechaInicio">Fecha de inicio</label><input id="fechaInicio" name="fechaInicio" placeholder="Ej: Fecha de inicio: 20 de agosto"></div>
+                        <div class="field"><label for="horario">Horario</label><input id="horario" name="horario"></div>
+                        <div class="field"><label for="duracion">Duración o sesiones</label><input id="duracion" name="duracion"></div>
+                        <div class="field"><label for="cuposTotales">Cupos totales</label><input id="cuposTotales" name="cuposTotales" type="number" min="0" step="1"></div>
+                        <div class="field"><label for="cuposDisponibles">Cupos disponibles</label><input id="cuposDisponibles" name="cuposDisponibles" type="number" min="0" step="1"></div>
+                        <div class="field"><label for="infoFechaTexto">Texto de agenda personalizada</label><input id="infoFechaTexto" name="infoFechaTexto" placeholder="Horario personalizado según disponibilidad"></div>
                     </div>
                     <div class="form-actions">
-                        <button type="submit" class="button success">Actualizar Producto</button>
+                        <button class="button secondary" type="button" id="cancelarBtn">Descartar cambios</button>
+                        <button class="button" type="submit">Guardar producto</button>
                     </div>
                 </form>
             </section>
         </main>
+
+        <div class="hint" id="contador" style="margin-top:16px">0 productos</div>
     </div>
 
-    <!-- Modal para configurar el Banner del Libro -->
+    <!-- Modal para Configuración del Banner -->
     <dialog id="modalBanner">
-        <form id="formBanner" method="dialog">
-            <h2>Configuración del Banner (Inicio)</h2>
-            <p class="hint" style="margin-bottom: 20px;">Personaliza el título, la imagen y los botones de tiendas donde se vende tu libro.</p>
-            
-            <div class="field" style="margin-bottom:15px; padding: 10px; background: #fdfdfd; border: 1px solid var(--line); border-radius: 8px;">
-                <label style="display:flex; gap:10px; align-items:center; cursor:pointer; font-size: 14px; color: var(--ink);">
-                    <input type="checkbox" id="bannerActivo" style="width:auto; height: 18px; width: 18px;"> 
-                    <strong>Mostrar Banner en la página de inicio</strong>
-                </label>
+        <div class="form-header" style="margin-bottom: 8px;">
+            <h2 style="margin: 0;">Configuración del Banner (Inicio)</h2>
+            <button type="button" id="cerrarBannerBtn" style="border:none; background:none; font-size:24px; color: var(--muted); cursor:pointer;">&times;</button>
+        </div>
+        <p class="hint" style="margin-bottom: 20px;">Controla el banner flotante que aparece en tu página principal. Estos datos se sincronizan con tu navegador local.</p>
+        
+        <div class="form-grid">
+            <div class="field full">
+                <label for="bannerActivo">Estado del Banner</label>
+                <select id="bannerActivo">
+                    <option value="true">Activo (Visible en el sitio web)</option>
+                    <option value="false">Inactivo (Oculto)</option>
+                </select>
             </div>
-            
-            <div class="form-grid">
-                <div class="field full">
-                    <label>URL de la Portada (Imagen)</label>
-                    <input type="text" id="bannerImagen" placeholder="https://tusitio.com/assets/portada.jpg">
-                </div>
-                <div class="field full">
-                    <label>Título principal en el banner</label>
-                    <input type="text" id="bannerTitulo" placeholder="Ej: Nuevo Libro Disponible">
-                </div>
-                <div class="field full">
-                    <label>Breve descripción</label>
-                    <textarea id="bannerDesc" rows="2" placeholder="Un subtítulo atractivo..."></textarea>
-                </div>
-                
-                <div class="section-title">Botón 1 (Tienda Principal)</div>
-                <div class="banner-links-grid full">
-                    <div class="field"><label>Nombre del Botón</label><input type="text" id="bannerLink1Nombre" placeholder="Ej: Google Books"></div>
-                    <div class="field"><label>Enlace (URL)</label><input type="url" id="bannerLink1Url" placeholder="https://..."></div>
-                </div>
-                
-                <div class="section-title">Botón 2 (Tienda Secundaria)</div>
-                <div class="banner-links-grid full">
-                    <div class="field"><label>Nombre del Botón</label><input type="text" id="bannerLink2Nombre" placeholder="Ej: Apple Books"></div>
-                    <div class="field"><label>Enlace (URL)</label><input type="url" id="bannerLink2Url" placeholder="https://..."></div>
-                </div>
-                
-                <div class="section-title">Botón 3 (Tienda Física / Propia)</div>
-                <div class="banner-links-grid full">
-                    <div class="field"><label>Nombre del Botón</label><input type="text" id="bannerLink3Nombre" placeholder="Ej: Librería Nacional"></div>
-                    <div class="field"><label>Enlace (URL)</label><input type="url" id="bannerLink3Url" placeholder="https://..."></div>
-                </div>
+            <div class="field full">
+                <label for="bannerTitulo">Título Principal</label>
+                <input id="bannerTitulo" placeholder="Ej: Lanzamiento Exclusivo">
             </div>
-            
-            <div class="form-actions" style="margin-top: 30px;">
-                <button type="button" class="button secondary" onclick="document.getElementById('modalBanner').close()">Cancelar</button>
-                <button type="submit" class="button success">Guardar Cambios del Banner</button>
+            <div class="field full">
+                <label for="bannerDesc">Descripción Corta</label>
+                <textarea id="bannerDesc" style="min-height: 70px;" placeholder="Ej: Descubre nuestro nuevo libro y transforma tu vida..."></textarea>
             </div>
-        </form>
+            <div class="field full">
+                <label for="bannerEnlace">URL o Enlace del Botón</label>
+                <input id="bannerEnlace" placeholder="Ej: Tienda.html">
+            </div>
+        </div>
+        
+        <div class="form-actions" style="margin-top: 24px;">
+            <button class="button" type="button" id="guardarBannerBtn" style="width: 100%;">Guardar e Implementar Banner</button>
+        </div>
     </dialog>
 
     <script>
-        // Funcionalidad del Banner (Almacena en el navegador para que Index.html lo lea)
+        // --- Lógica del Banner Promocional ---
         const modalBanner = document.getElementById('modalBanner');
-        const formBanner = document.getElementById('formBanner');
-
+        
         document.getElementById('abrirBannerBtn').addEventListener('click', () => {
             // Leer configuración guardada previamente
-            const config = JSON.parse(localStorage.getItem('promoLibro')) || {};
+            const guardado = JSON.parse(localStorage.getItem('promoLibro') || '{"activo":false, "titulo":"", "desc":"", "enlace":""}');
             
-            document.getElementById('bannerActivo').checked = config.activo || false;
-            document.getElementById('bannerImagen').value = config.imagen || '';
-            document.getElementById('bannerTitulo').value = config.titulo || '';
-            document.getElementById('bannerDesc').value = config.desc || '';
-            
-            document.getElementById('bannerLink1Nombre').value = config.link1Nombre || '';
-            document.getElementById('bannerLink1Url').value = config.link1Url || '';
-            
-            document.getElementById('bannerLink2Nombre').value = config.link2Nombre || '';
-            document.getElementById('bannerLink2Url').value = config.link2Url || '';
-            
-            document.getElementById('bannerLink3Nombre').value = config.link3Nombre || '';
-            document.getElementById('bannerLink3Url').value = config.link3Url || '';
+            document.getElementById('bannerActivo').value = guardado.activo ? 'true' : 'false';
+            document.getElementById('bannerTitulo').value = guardado.titulo || '';
+            document.getElementById('bannerDesc').value = guardado.desc || '';
+            document.getElementById('bannerEnlace').value = guardado.enlace || '';
             
             modalBanner.showModal();
         });
 
-        formBanner.addEventListener('submit', (e) => {
-            // Guardar configuración del banner
+        document.getElementById('cerrarBannerBtn').addEventListener('click', () => {
+            modalBanner.close();
+        });
+
+        document.getElementById('guardarBannerBtn').addEventListener('click', () => {
             const config = {
-                activo: document.getElementById('bannerActivo').checked,
-                imagen: document.getElementById('bannerImagen').value,
-                titulo: document.getElementById('bannerTitulo').value,
-                desc: document.getElementById('bannerDesc').value,
-                link1Nombre: document.getElementById('bannerLink1Nombre').value,
-                link1Url: document.getElementById('bannerLink1Url').value,
-                link2Nombre: document.getElementById('bannerLink2Nombre').value,
-                link2Url: document.getElementById('bannerLink2Url').value,
-                link3Nombre: document.getElementById('bannerLink3Nombre').value,
-                link3Url: document.getElementById('bannerLink3Url').value,
+                activo: document.getElementById('bannerActivo').value === 'true',
+                titulo: document.getElementById('bannerTitulo').value.trim(),
+                desc: document.getElementById('bannerDesc').value.trim(),
+                enlace: document.getElementById('bannerEnlace').value.trim()
             };
             
             localStorage.setItem('promoLibro', JSON.stringify(config));
             
-            // Forzar a que el banner vuelva a salir aunque el usuario lo haya cerrado antes
+            // Forzar que el banner vuelva a aparecer borrando el registro de "cerrado" de la sesión actual
             sessionStorage.removeItem('bannerLibroCerrado');
             
-            alert('¡Configuración del Banner guardada exitosamente! Visita la página de inicio para ver los cambios.');
+            alert('¡Configuración del banner guardada! Ve a tu archivo index.html para ver los cambios en acción.');
+            modalBanner.close();
         });
+        // ------------------------------------
+
+        const camposTexto = ['id', 'cat', 'nombre', 'grupoEtario', 'enfoque', 'modalidad', 'desc', 'paraQuien', 'aprenderemos', 'lograremos', 'metodologia', 'fechaInicio', 'horario', 'duracion'];
+        let htmlOriginal = '';
+        let archivoHandle = null;
+        let productos = [];
+        let indiceSeleccionado = -1;
+        let productoEnEdicion = null;
+        let htmlGenerado = '';
+
+        const $ = selector => document.querySelector(selector);
+
+        $('#abrirConPermisoBtn').addEventListener('click', abrirConPermiso);
+        $('#guardarDirectoBtn').addEventListener('click', guardarDirecto);
+        $('#filtroCategoria').addEventListener('change', renderizarLista);
+        $('#filtroEstado').addEventListener('change', renderizarLista);
+
+        window.addEventListener('DOMContentLoaded', cargarTiendaPredeterminada);
+
+        $('#archivoTienda').addEventListener('change', async event => {
+            const archivo = event.target.files[0];
+            if (!archivo) return;
+            try {
+                htmlOriginal = await archivo.text();
+                archivoHandle = null;
+                cargarCatalogo(htmlOriginal, `${archivo.name}. Los cambios se guardan con Abrir Tienda.html.`);
+            } catch (error) {
+                htmlOriginal = '';
+                productos = [];
+                indiceSeleccionado = -1;
+                $('#estado').textContent = `No se pudo leer el catalogo: ${error.message}`;
+                $('#listaProductos').innerHTML = '<div class="empty">Revisa que sea el Tienda.html original.</div>';
+            }
+        });
+
+        $('#buscar').addEventListener('input', renderizarLista);
+        $('#nuevoBtn').addEventListener('click', nuevoProducto);
+        $('#duplicarBtn').addEventListener('click', duplicarProducto);
+        $('#eliminarBtn').addEventListener('click', eliminarProducto);
+        $('#cancelarBtn').addEventListener('click', cargarFormulario);
+        $('#productoForm').addEventListener('submit', guardarProducto);
+
+        function extraerCatalogo(html) {
+            const coincidencia = html.match(/const\s+catalogo\s*=\s*(\[[\s\S]*?\])\s*;/);
+            if (!coincidencia) throw new Error('No se encontro const catalogo en el archivo.');
+            const catalogo = Function(`"use strict"; return (${coincidencia[1]});`)();
+            if (!Array.isArray(catalogo)) throw new Error('El catalogo no tiene un formato valido.');
+            return catalogo.map(normalizarProducto);
+        }
+
+        function normalizarProducto(producto) {
+            return { ...producto, id: String(producto.id || ''), cat: producto.cat || 'Grupales', nombre: producto.nombre || '', precio: Number(producto.precio || 0) };
+        }
+
+        function habilitarAdministracion() {
+            $('#nuevoBtn').disabled = false;
+            $('#duplicarBtn').disabled = false;
+            $('#buscar').disabled = false;
+            $('#guardarDirectoBtn').disabled = location.protocol === 'file:' && !archivoHandle;
+            $('#filtroCategoria').disabled = false;
+            $('#filtroEstado').disabled = false;
+        }
+
+        function renderizarLista() {
+            const filtro = $('#buscar').value.toLowerCase().trim();
+            const categoria = $('#filtroCategoria').value;
+            const estado = $('#filtroEstado').value;
+            const lista = productos.map((producto, indice) => ({ producto, indice })).filter(({ producto }) => {
+                const coincideTexto = `${producto.id} ${producto.nombre}`.toLowerCase().includes(filtro);
+                const coincideCategoria = categoria === 'todos' || producto.cat === categoria;
+                const coincideEstado = estado === 'todos' || (estado === 'oculto' ? producto.visible === false : producto.visible !== false);
+                return coincideTexto && coincideCategoria && coincideEstado;
+            });
+            $('#listaProductos').innerHTML = lista.length ? lista.map(({ producto, indice }) => `
+                <button type="button" class="product-item ${indice === indiceSeleccionado ? 'selected' : ''}" data-indice="${indice}">
+                    <strong>${escapeHtml(producto.nombre || 'Sin nombre')}</strong>
+                    <small>${escapeHtml(producto.id)} · ${escapeHtml(producto.cat)} · ${producto.visible === false ? 'Oculto' : (producto.estado === 'espera' ? 'En espera' : 'Activo')}</small>
+                </button>`).join('') : '<div class="empty">No hay coincidencias.</div>';
+            $('#listaProductos').querySelectorAll('[data-indice]').forEach(button => button.addEventListener('click', () => {
+                indiceSeleccionado = Number(button.dataset.indice);
+                cargarFormulario();
+                renderizarLista();
+            }));
+            $('#contador').textContent = `${productos.length} producto${productos.length === 1 ? '' : 's'}`;
+        }
+
+        function cargarFormulario() {
+            const producto = productos[indiceSeleccionado];
+            if (!producto) {
+                $('#productoForm').hidden = true;
+                $('#tituloFormulario').textContent = 'Selecciona un producto';
+                $('#ayudaFormulario').textContent = 'Aqui apareceran sus datos para editar.';
+                $('#eliminarBtn').disabled = true;
+                return;
+            }
+            productoEnEdicion = JSON.parse(JSON.stringify(producto));
+            $('#productoForm').hidden = false;
+            $('#tituloFormulario').textContent = producto.nombre || 'Producto sin nombre';
+            $('#ayudaFormulario').textContent = `Editando ${producto.id}. Los cambios se aplican al HTML generado.`;
+            $('#eliminarBtn').disabled = false;
+            camposTexto.forEach(campo => { $(('#' + campo)).value = producto[campo] || ''; });
+            $('#estadoProducto').value = producto.estado === 'espera' ? 'espera' : 'activo';
+            $('#visibilidad').value = producto.visible === false ? 'oculto' : 'visible';
+            $('#precio').value = producto.precio ?? 0;
+            $('#precioFull').value = producto.precioFull ?? '';
+            $('#cuposTotales').value = producto.cuposTotales ?? '';
+            $('#cuposDisponibles').value = producto.cuposDisponibles ?? '';
+            $('#incluye').value = Array.isArray(producto.incluye) ? producto.incluye.join('\n') : '';
+            $('#infoFechaTexto').value = producto.infoFecha?.texto || '';
+        }
+
+        function leerFormulario() {
+            const producto = { ...productoEnEdicion };
+            camposTexto.forEach(campo => { const valor = $('#' + campo).value.trim(); if (valor) producto[campo] = valor; });
+            producto.precio = Number($('#precio').value || 0);
+            const precioFull = Number($('#precioFull').value || 0);
+            if (precioFull) producto.precioFull = precioFull;
+            const total = Number($('#cuposTotales').value || 0);
+            const disponibles = Number($('#cuposDisponibles').value || 0);
+            if (total) producto.cuposTotales = total;
+            if (total && $('#cuposDisponibles').value !== '') producto.cuposDisponibles = Math.min(disponibles, total);
+            const incluye = $('#incluye').value.split('\n').map(item => item.trim()).filter(Boolean);
+            if (incluye.length) producto.incluye = incluye;
+            const infoFechaTexto = $('#infoFechaTexto').value.trim();
+            if (infoFechaTexto) producto.infoFecha = { tipo: 'personalizada', texto: infoFechaTexto };
+            else delete producto.infoFecha;
+            if ($('#estadoProducto').value === 'espera') producto.estado = 'espera';
+            else delete producto.estado;
+            if ($('#visibilidad').value === 'oculto') producto.visible = false;
+            else delete producto.visible;
+            return normalizarProducto(producto);
+        }
+
+        async function guardarProducto(event) {
+            event.preventDefault();
+            const producto = leerFormulario();
+            if (!producto.id || !producto.nombre) return alert('El ID y el nombre son obligatorios.');
+            const duplicado = productos.findIndex((item, indice) => item.id === producto.id && indice !== indiceSeleccionado);
+            if (duplicado !== -1) return alert('Ese ID ya pertenece a otro producto.');
+            productos[indiceSeleccionado] = producto;
+            generarSalida();
+            renderizarLista();
+            cargarFormulario();
+            await sincronizarCambios('Producto actualizado directamente en Tienda.html.');
+        }
+
+        async function nuevoProducto() {
+            const nuevoId = siguienteId();
+            productos.push(normalizarProducto({ id: nuevoId, cat: 'Grupales', nombre: 'Nuevo taller', desc: '', precio: 0, incluye: [] }));
+            indiceSeleccionado = productos.length - 1;
+            renderizarLista();
+            cargarFormulario();
+            generarSalida();
+            await sincronizarCambios('Nuevo producto creado y guardado en Tienda.html.');
+        }
+
+        async function duplicarProducto() {
+            const producto = productos[indiceSeleccionado];
+            if (!producto) return;
+            const copia = JSON.parse(JSON.stringify(producto));
+            copia.id = siguienteId();
+            copia.nombre = `${producto.nombre} (copia)`;
+            productos.push(copia);
+            indiceSeleccionado = productos.length - 1;
+            renderizarLista();
+            cargarFormulario();
+            generarSalida();
+            await sincronizarCambios('Taller duplicado y guardado en Tienda.html.');
+        }
+
+        function siguienteId() {
+            const numeros = productos.map(producto => Number(String(producto.id).match(/(\d+)$/)?.[1] || 0));
+            return `N-${String(Math.max(0, ...numeros) + 1).padStart(3, '0')}`;
+        }
+
+        async function eliminarProducto() {
+            const producto = productos[indiceSeleccionado];
+            if (!producto || !confirm(`Eliminar "${producto.nombre}"?`)) return;
+            productos.splice(indiceSeleccionado, 1);
+            indiceSeleccionado = Math.min(indiceSeleccionado, productos.length - 1);
+            renderizarLista();
+            cargarFormulario();
+            generarSalida();
+            await sincronizarCambios('Producto eliminado y guardado en Tienda.html.');
+        }
+
+        function generarSalida() {
+            if (!htmlOriginal) return '';
+            const nuevoCatalogo = `const catalogo = ${JSON.stringify(productos, null, 12)};`;
+            htmlGenerado = htmlOriginal.replace(/const\s+catalogo\s*=\s*(\[[\s\S]*?\])\s*;/, nuevoCatalogo);
+            return htmlGenerado;
+        }
+
+        async function sincronizarCambios(mensaje) {
+            if (location.protocol === 'file:') {
+                $('#estado').textContent = `${mensaje} Para escritura automatica, abre Abrir-Administracion.bat.`;
+                return;
+            }
+            try {
+                const respuesta = await fetch('/api/tienda', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/html; charset=utf-8' },
+                    body: htmlGenerado
+                });
+                if (!respuesta.ok) throw new Error('El servidor no pudo guardar Tienda.html.');
+                htmlOriginal = htmlGenerado;
+                $('#estado').textContent = mensaje;
+            } catch (error) {
+                $('#estado').textContent = `No se pudo guardar automaticamente: ${error.message}`;
+            }
+        }
+
+        function cargarCatalogo(html, mensaje) {
+            htmlOriginal = html;
+            productos = extraerCatalogo(htmlOriginal);
+            indiceSeleccionado = productos.length ? 0 : -1;
+            habilitarAdministracion();
+            renderizarLista();
+            cargarFormulario();
+            generarSalida();
+            $('#estado').textContent = `${productos.length} productos cargados. ${mensaje}`;
+        }
+
+        async function cargarTiendaPredeterminada() {
+            try {
+                const respuesta = await fetch('../Tienda.html', { cache: 'no-store' });
+                if (!respuesta.ok) throw new Error('No se pudo leer Tienda.html.');
+                cargarCatalogo(await respuesta.text(), 'Para guardar directamente, usa Abrir Tienda.html.');
+            } catch (error) {
+                $('#estado').textContent = 'Selecciona Abrir Tienda.html para conceder permiso de lectura y escritura.';
+                if (window.showOpenFilePicker) abrirConPermiso();
+            }
+        }
+
+        async function abrirConPermiso() {
+            if (!window.showOpenFilePicker) {
+                return $('#archivoTienda').click();
+            }
+            try {
+                const [handle] = await window.showOpenFilePicker({
+                    multiple: false,
+                    types: [{ description: 'Archivo HTML', accept: { 'text/html': ['.html'] } }]
+                });
+                const archivo = await handle.getFile();
+                archivoHandle = handle;
+                cargarCatalogo(await archivo.text(), `Puedes guardar directamente en ${archivo.name}.`);
+            } catch (error) {
+                if (error.name !== 'AbortError') $('#estado').textContent = `No se pudo abrir el archivo: ${error.message}`;
+            }
+        }
+
+        async function guardarDirecto() {
+            generarSalida();
+            try {
+                if (location.protocol !== 'file:') {
+                    const respuesta = await fetch('/api/tienda', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'text/html; charset=utf-8' },
+                        body: htmlGenerado
+                    });
+                    if (!respuesta.ok) throw new Error('El servidor no pudo guardar Tienda.html.');
+                    htmlOriginal = htmlGenerado;
+                    $('#estado').textContent = 'Tienda.html actualizado directamente.';
+                    return;
+                }
+                if (!archivoHandle) return $('#estado').textContent = 'Abre Tienda.html con el boton de permiso para guardarlo directamente.';
+                const permiso = await archivoHandle.requestPermission({ mode: 'readwrite' });
+                if (permiso !== 'granted') throw new Error('No se concedio permiso de escritura.');
+                const writable = await archivoHandle.createWritable();
+                await writable.write(htmlGenerado);
+                await writable.close();
+                htmlOriginal = htmlGenerado;
+                $('#estado').textContent = 'Tienda.html actualizado correctamente.';
+            } catch (error) {
+                $('#estado').textContent = `No se pudo guardar directamente: ${error.message}. Puedes descargar el HTML.`;
+            }
+        }
+
+        function escapeHtml(text) {
+            return String(text).replace(/[&<>'"]/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[character]));
+        }
     </script>
 </body>
 </html>
