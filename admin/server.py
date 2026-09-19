@@ -2,38 +2,42 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-PORT = 8000
 
 
 class RenovaHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(ROOT), **kwargs)
 
+    def do_GET(self):
+        if self.path.rstrip('/') == '/admin':
+            self.path = '/admin/Admin.html'
+        super().do_GET()
+
     def do_POST(self):
-        if self.path != '/api/tienda':
-            self.send_error(404)
+        rutas = {'/api/tienda': ROOT / 'Tienda.html', '/api/inicio': ROOT / 'index.html'}
+        destino = rutas.get(self.path)
+        if destino is None:
+            self.send_error(404, 'Ruta no encontrada')
             return
 
-        length = int(self.headers.get('Content-Length', 0))
-        html = self.rfile.read(length)
-        target = ROOT / 'Tienda.html'
-        target.write_bytes(html)
+        length = int(self.headers.get('Content-Length', '0'))
+        contenido = self.rfile.read(length)
+        try:
+            destino.write_bytes(contenido)
+        except OSError as error:
+            self.send_error(500, f'No se pudo guardar el archivo: {error}')
+            return
 
-        self.send_response(200)
-        self.send_header('Content-Length', '0')
+        self.send_response(204)
         self.end_headers()
-
-    def log_message(self, format, *args):
-        print(f'[{self.log_date_time_string()}] {format % args}')
 
 
 if __name__ == '__main__':
-    server = ThreadingHTTPServer(('127.0.0.1', PORT), RenovaHandler)
-    print(f'Renova admin disponible en http://127.0.0.1:{PORT}/admin/')
-    print('Presiona Ctrl+C para detener el servidor.')
+    servidor = ThreadingHTTPServer(('127.0.0.1', 8000), RenovaHandler)
+    print('Renova local: http://127.0.0.1:8000/admin/')
     try:
-        server.serve_forever()
+        servidor.serve_forever()
     except KeyboardInterrupt:
-        print('\nServidor detenido.')
+        pass
     finally:
-        server.server_close()
+        servidor.server_close()

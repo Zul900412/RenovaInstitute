@@ -36,6 +36,7 @@
         input, select, textarea { width: 100%; border: 1px solid var(--line); border-radius: 7px; padding: 9px 10px; color: var(--ink); background: #fff; }
         input:focus, select:focus, textarea:focus { outline: 2px solid #8c866055; border-color: var(--olive); }
         textarea { min-height: 92px; resize: vertical; }
+        .form-panel textarea { min-height: 68px; }
         .product-list { display: grid; gap: 7px; max-height: 680px; overflow-y: auto; }
         .product-item { display: block; width: 100%; padding: 11px 12px; border: 1px solid transparent; border-radius: 8px; text-align: left; background: #faf7f4; color: var(--ink); }
         .product-item:hover, .product-item.selected { border-color: #cfc6a6; background: #f1eee1; }
@@ -44,20 +45,22 @@
         .badge { display: inline-block; border-radius: 999px; padding: 3px 8px; background: #ece9d9; color: var(--olive-dark); font: 700 10px Arial, sans-serif; text-transform: uppercase; }
         .badge.waiting { background: #fff1d8; color: #9a6915; }
         .form-header { display: flex; justify-content: space-between; gap: 12px; align-items: start; margin-bottom: 18px; }
-        .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+        .form-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
         .field { display: grid; gap: 5px; }
         .field.full { grid-column: 1 / -1; }
+        .field.wide { grid-column: span 2; }
         label { color: var(--muted); font: 700 11px Arial, sans-serif; letter-spacing: .03em; }
         .section-title { grid-column: 1 / -1; margin: 10px 0 -3px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--olive-dark); font: 700 11px Arial, sans-serif; letter-spacing: .1em; text-transform: uppercase; }
-        .form-actions { display: flex; justify-content: space-between; gap: 10px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); }
+        .form-actions { position: sticky; bottom: 0; z-index: 5; display: flex; justify-content: space-between; gap: 10px; margin: 20px -20px -20px; padding: 14px 20px 20px; border-top: 1px solid var(--line); background: linear-gradient(to bottom, #fffdfb 0%, #fffdfb 85%); }
         .empty { padding: 24px 8px; color: var(--muted); text-align: center; }
         
         /* Estilos para el modal del Banner */
         dialog { max-width: 500px; width: 100%; border: 1px solid var(--line); border-radius: 12px; padding: 24px; background: var(--paper); color: var(--ink); box-shadow: 0 10px 40px rgba(75, 58, 43, 0.2); }
         dialog::backdrop { background: rgba(51, 44, 40, 0.6); backdrop-filter: blur(3px); }
         
+        @media (max-width: 1100px) { .form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
         @media (max-width: 850px) { .load-panel, .workspace { grid-template-columns: 1fr; } .list-panel { position: static; } .product-list { max-height: 310px; } }
-        @media (max-width: 560px) { .shell { padding: 16px; } header, .form-header, .form-actions { align-items: stretch; flex-direction: column; } .form-grid { grid-template-columns: 1fr; } .field.full, .section-title { grid-column: auto; } }
+        @media (max-width: 560px) { .shell { padding: 16px; } header, .form-header, .form-actions { align-items: stretch; flex-direction: column; } .form-grid { grid-template-columns: 1fr; } .field.full, .field.wide, .section-title { grid-column: auto; } .form-actions { margin-left: -20px; margin-right: -20px; } }
     </style>
 </head>
 <body>
@@ -70,23 +73,28 @@
             </div>
             <div class="actions">
                 <button class="button secondary" type="button" id="abrirBannerBtn">Configurar Banner</button>
-                <button class="button success" type="button" id="guardarDirectoBtn" disabled>Guardar en Tienda.html</button>
             </div>
         </header>
 
         <section class="panel load-panel">
             <div>
-                <h2>Catálogo</h2>
-                <p class="hint">La administración intenta cargar <strong>Tienda.html</strong> automáticamente. Para guardar directamente, concede permiso con el botón de apertura.</p>
-                <div class="dropzone">
-                    <button class="button secondary" type="button" id="abrirConPermisoBtn">Abrir Tienda.html</button>
+                <h2>1. Conecta tus archivos</h2>
+                <p class="hint">Cada botón carga un archivo distinto. Selecciona exactamente el archivo que indica el botón.</p>
+                <div class="dropzone" style="margin-bottom:10px">
+                    <div style="flex:1"><strong>Tienda.html</strong><small class="file-status" id="estadoTiendaArchivo">No conectada</small></div>
+                    <button class="button secondary" type="button" id="abrirConPermisoBtn">Cargar tienda</button>
                     <input class="file-input" type="file" id="archivoTienda" accept=".html,text/html">
+                </div>
+                <div class="dropzone">
+                    <div style="flex:1"><strong>index.html</strong><small class="file-status" id="estadoInicioArchivo">No conectado</small></div>
+                    <button class="button secondary" type="button" id="abrirInicioBtn">Cargar inicio</button>
                 </div>
             </div>
             <div>
-                <h2>Estado</h2>
+                <h2>2. Estado y guardado</h2>
                 <p class="status" id="estado">Aún no has cargado un archivo.</p>
-                <p class="hint">Al trabajar desde Abrir-Administracion.bat, cada cambio guardado se escribe directamente en Tienda.html.</p>
+                <p class="hint">Los productos se guardan únicamente en Tienda.html. El banner se guarda en ambos archivos cuando los dos están conectados.</p>
+                <button class="button success" type="button" id="guardarDirectoBtn" disabled>Guardar cambios de tienda</button>
             </div>
         </section>
 
@@ -137,12 +145,12 @@
                         <div class="field"><label for="modalidad">Modalidad</label><input id="modalidad" name="modalidad" placeholder="Virtual, presencial, híbrido..."></div>
 
                         <div class="section-title">Información visible</div>
-                        <div class="field full"><label for="desc">Descripción corta</label><textarea id="desc" name="desc"></textarea></div>
-                        <div class="field full"><label for="paraQuien">Para quién es</label><textarea id="paraQuien" name="paraQuien"></textarea></div>
-                        <div class="field full"><label for="aprenderemos">Qué aprenderemos</label><textarea id="aprenderemos" name="aprenderemos"></textarea></div>
-                        <div class="field full"><label for="lograremos">Qué lograremos</label><textarea id="lograremos" name="lograremos"></textarea></div>
-                        <div class="field full"><label for="metodologia">Metodología</label><textarea id="metodologia" name="metodologia"></textarea></div>
-                        <div class="field full"><label for="incluye">Qué incluye (un elemento por línea)</label><textarea id="incluye" name="incluye"></textarea></div>
+                        <div class="field"><label for="desc">Descripción corta</label><textarea id="desc" name="desc"></textarea></div>
+                        <div class="field"><label for="paraQuien">Para quién es</label><textarea id="paraQuien" name="paraQuien"></textarea></div>
+                        <div class="field"><label for="aprenderemos">Qué aprenderemos</label><textarea id="aprenderemos" name="aprenderemos"></textarea></div>
+                        <div class="field"><label for="lograremos">Qué lograremos</label><textarea id="lograremos" name="lograremos"></textarea></div>
+                        <div class="field"><label for="metodologia">Metodología</label><textarea id="metodologia" name="metodologia"></textarea></div>
+                        <div class="field"><label for="incluye">Qué incluye (un elemento por línea)</label><textarea id="incluye" name="incluye"></textarea></div>
 
                         <div class="section-title">Precio, fechas y cupos</div>
                         <div class="field"><label for="precio">Precio actual</label><input id="precio" name="precio" type="number" min="0" step="1000"></div>
@@ -168,10 +176,10 @@
     <!-- Modal para Configuración del Banner -->
     <dialog id="modalBanner">
         <div class="form-header" style="margin-bottom: 8px;">
-            <h2 style="margin: 0;">Configuración del Banner (Inicio)</h2>
+                <h2 style="margin: 0;">Configurar banner</h2>
             <button type="button" id="cerrarBannerBtn" style="border:none; background:none; font-size:24px; color: var(--muted); cursor:pointer;">&times;</button>
         </div>
-        <p class="hint" style="margin-bottom: 20px;">Controla el banner flotante que aparece en tu página principal. Estos datos se sincronizan con tu navegador local.</p>
+        <p class="hint" style="margin-bottom: 20px;">Controla el banner flotante de Inicio y Tienda. Los datos se guardan dentro de ambos HTML para que GitHub los publique.</p>
         
         <div class="form-grid">
             <div class="field full">
@@ -190,29 +198,79 @@
                 <textarea id="bannerDesc" style="min-height: 70px;" placeholder="Ej: Descubre nuestro nuevo libro y transforma tu vida..."></textarea>
             </div>
             <div class="field full">
-                <label for="bannerEnlace">URL o Enlace del Botón</label>
-                <input id="bannerEnlace" placeholder="Ej: Tienda.html">
+                <label for="bannerImagen">Imagen de portada</label>
+                <input id="bannerImagen" placeholder="Ruta o imagen embebida">
+                <input id="bannerImagenArchivo" type="file" accept="image/*" style="margin-top: 6px;">
+                <img id="bannerImagenVista" alt="Vista previa de la portada" hidden style="display:block; max-width:120px; max-height:150px; margin-top:10px; border-radius:7px; object-fit:cover;">
+                <span class="hint">Selecciona una imagen para guardarla dentro de los HTML y publicarla con GitHub.</span>
+            </div>
+            <div class="field"><label for="bannerLink1Nombre">Botón 1</label><input id="bannerLink1Nombre" placeholder="Amazon"></div>
+            <div class="field"><label for="bannerLink1Url">URL botón 1</label><input id="bannerLink1Url"></div>
+            <div class="field"><label for="bannerLink2Nombre">Botón 2</label><input id="bannerLink2Nombre" placeholder="Google Books"></div>
+            <div class="field"><label for="bannerLink2Url">URL botón 2</label><input id="bannerLink2Url"></div>
+            <div class="field"><label for="bannerLink3Nombre">Botón 3</label><input id="bannerLink3Nombre" placeholder="Librería nacional"></div>
+            <div class="field"><label for="bannerLink3Url">URL botón 3</label><input id="bannerLink3Url"></div>
+            <div class="field full hint">
+                El banner se guardará en los dos archivos conectados: index.html y Tienda.html.
             </div>
         </div>
         
         <div class="form-actions" style="margin-top: 24px;">
-            <button class="button" type="button" id="guardarBannerBtn" style="width: 100%;">Guardar e Implementar Banner</button>
+            <button class="button" type="button" id="guardarBannerBtn" style="width: 100%;">Guardar banner en ambos archivos</button>
         </div>
     </dialog>
 
     <script>
         // --- Lógica del Banner Promocional ---
         const modalBanner = document.getElementById('modalBanner');
+        let archivoInicioHandle = null;
+        let bannerConfig = null;
+        let htmlInicio = '';
+        const camposBanner = ['imagen', 'titulo', 'desc', 'link1Nombre', 'link1Url', 'link2Nombre', 'link2Url', 'link3Nombre', 'link3Url'];
+
+        document.getElementById('bannerImagenArchivo').addEventListener('change', event => {
+            const archivo = event.target.files[0];
+            if (!archivo) return;
+            if (!archivo.type.startsWith('image/')) return alert('Selecciona un archivo de imagen.');
+            const lector = new FileReader();
+            lector.addEventListener('load', () => {
+                document.getElementById('bannerImagen').value = lector.result;
+                mostrarVistaPrevia(lector.result);
+            });
+            lector.readAsDataURL(archivo);
+        });
+
+        function mostrarVistaPrevia(imagen) {
+            const vista = document.getElementById('bannerImagenVista');
+            vista.src = imagen || '';
+            vista.hidden = !imagen;
+        }
+
+        function leerBanner(html) {
+            const coincidencia = html.match(/<script id="banner-data" type="application\/json">([\s\S]*?)<\/script>/);
+            return coincidencia ? JSON.parse(coincidencia[1]) : { activo: false };
+        }
+
+        function actualizarBanner(html, config) {
+            const bloque = `<script id="banner-data" type="application/json">\n${JSON.stringify(config, null, 2)}\n<\/script>`;
+            const patron = /<script id="banner-data" type="application\/json">[\s\S]*?<\/script>/;
+            if (!patron.test(html)) throw new Error('No se encontró el bloque banner-data.');
+            return html.replace(patron, bloque);
+        }
         
         document.getElementById('abrirBannerBtn').addEventListener('click', () => {
             // Leer configuración guardada previamente
-            const guardado = JSON.parse(localStorage.getItem('promoLibro') || '{"activo":false, "titulo":"", "desc":"", "enlace":""}');
+            const guardado = bannerConfig || { activo: false, imagen: '', titulo: '', desc: '', link1Nombre: '', link1Url: '', link2Nombre: '', link2Url: '', link3Nombre: '', link3Url: '' };
             
             document.getElementById('bannerActivo').value = guardado.activo ? 'true' : 'false';
             document.getElementById('bannerTitulo').value = guardado.titulo || '';
             document.getElementById('bannerDesc').value = guardado.desc || '';
-            document.getElementById('bannerEnlace').value = guardado.enlace || '';
-            
+            camposBanner.filter(campo => campo !== 'titulo' && campo !== 'desc').forEach(campo => {
+                const input = document.getElementById(`banner${campo[0].toUpperCase()}${campo.slice(1)}`) || document.getElementById(`banner${campo[0].toUpperCase()}${campo.slice(1)}`);
+                if (input) input.value = guardado[campo] || '';
+            });
+            mostrarVistaPrevia(guardado.imagen || '');
+            document.getElementById('guardarBannerBtn').disabled = !puedeGuardarBanner();
             modalBanner.showModal();
         });
 
@@ -220,22 +278,87 @@
             modalBanner.close();
         });
 
-        document.getElementById('guardarBannerBtn').addEventListener('click', () => {
+        document.getElementById('guardarBannerBtn').addEventListener('click', async () => {
+            if (!puedeGuardarBanner()) {
+                alert('Carga primero index.html y Tienda.html con los botones de arriba.');
+                return;
+            }
             const config = {
                 activo: document.getElementById('bannerActivo').value === 'true',
                 titulo: document.getElementById('bannerTitulo').value.trim(),
                 desc: document.getElementById('bannerDesc').value.trim(),
-                enlace: document.getElementById('bannerEnlace').value.trim()
+                imagen: document.getElementById('bannerImagen').value.trim(),
+                link1Nombre: document.getElementById('bannerLink1Nombre').value.trim(),
+                link1Url: document.getElementById('bannerLink1Url').value.trim(),
+                link2Nombre: document.getElementById('bannerLink2Nombre').value.trim(),
+                link2Url: document.getElementById('bannerLink2Url').value.trim(),
+                link3Nombre: document.getElementById('bannerLink3Nombre').value.trim(),
+                link3Url: document.getElementById('bannerLink3Url').value.trim()
             };
-            
-            localStorage.setItem('promoLibro', JSON.stringify(config));
-            
-            // Forzar que el banner vuelva a aparecer borrando el registro de "cerrado" de la sesión actual
+            bannerConfig = config;
+            await guardarBannerEnArchivos(config);
             sessionStorage.removeItem('bannerLibroCerrado');
-            
-            alert('¡Configuración del banner guardada! Ve a tu archivo index.html para ver los cambios en acción.');
             modalBanner.close();
         });
+
+        document.getElementById('abrirInicioBtn').addEventListener('click', abrirInicio);
+
+        async function abrirInicio() {
+            if (!window.showOpenFilePicker) return alert('Abre este administrador en Chrome o Edge para guardar archivos directamente.');
+            try {
+                const [handle] = await window.showOpenFilePicker({ multiple: false, types: [{ description: 'Archivo HTML', accept: { 'text/html': ['.html'] } }] });
+                const archivo = await handle.getFile();
+                if (archivo.name.toLowerCase() !== 'index.html') return alert('Selecciona el index.html de la carpeta principal.');
+                archivoInicioHandle = handle;
+                htmlInicio = await archivo.text();
+                bannerConfig = leerBanner(htmlInicio);
+                $('#estadoInicioArchivo').textContent = 'Conectado y listo para guardar';
+                actualizarEstadoArchivos();
+            } catch (error) {
+                if (error.name !== 'AbortError') $('#estado').textContent = `No se pudo abrir index.html: ${error.message}`;
+            }
+        }
+
+        async function guardarHandle(handle, contenido) {
+            if (!handle) return;
+            const permiso = await handle.requestPermission({ mode: 'readwrite' });
+            if (permiso !== 'granted') throw new Error('No se concedió permiso de escritura.');
+            const writable = await handle.createWritable();
+            await writable.write(contenido);
+            await writable.close();
+        }
+
+        async function guardarBannerEnArchivos(config) {
+            try {
+                if (location.protocol !== 'file:') {
+                    const inicio = actualizarBanner(htmlInicio, config);
+                    const tienda = actualizarBanner(htmlOriginal, config);
+                    const respuestas = await Promise.all([
+                        fetch('/api/inicio', { method: 'POST', headers: { 'Content-Type': 'text/html; charset=utf-8' }, body: inicio }),
+                        fetch('/api/tienda', { method: 'POST', headers: { 'Content-Type': 'text/html; charset=utf-8' }, body: tienda })
+                    ]);
+                    if (respuestas.some(respuesta => !respuesta.ok)) throw new Error('El servidor no pudo guardar uno de los archivos.');
+                    htmlInicio = inicio;
+                    htmlOriginal = tienda;
+                    $('#estado').textContent = 'Banner guardado en index.html y Tienda.html.';
+                    actualizarEstadoArchivos();
+                    return;
+                }
+                if (archivoInicioHandle) {
+                    const inicio = await archivoInicioHandle.getFile();
+                    await guardarHandle(archivoInicioHandle, actualizarBanner(await inicio.text(), config));
+                }
+                if (archivoHandle) {
+                    const tienda = await archivoHandle.getFile();
+                    const contenido = actualizarBanner(await tienda.text(), config);
+                    await guardarHandle(archivoHandle, contenido);
+                    htmlOriginal = contenido;
+                }
+                $('#estado').textContent = 'Banner guardado en index.html y Tienda.html.';
+            } catch (error) {
+                $('#estado').textContent = `No se pudo guardar el banner: ${error.message}`;
+            }
+        }
         // ------------------------------------
 
         const camposTexto = ['id', 'cat', 'nombre', 'grupoEtario', 'enfoque', 'modalidad', 'desc', 'paraQuien', 'aprenderemos', 'lograremos', 'metodologia', 'fechaInicio', 'horario', 'duracion'];
@@ -248,12 +371,26 @@
 
         const $ = selector => document.querySelector(selector);
 
+        function actualizarEstadoArchivos() {
+            const tiendaCargada = Boolean(htmlOriginal);
+            const tiendaConectada = Boolean(archivoHandle);
+            const inicioCargado = Boolean(htmlInicio || archivoInicioHandle);
+            $('#guardarDirectoBtn').disabled = !tiendaCargada;
+            $('#estadoTiendaArchivo').textContent = tiendaConectada || (location.protocol !== 'file:' && tiendaCargada) ? 'Conectada y lista para guardar' : (tiendaCargada ? 'Cargada; conecta el archivo para el banner' : 'No conectada');
+            $('#guardarBannerBtn').disabled = !puedeGuardarBanner();
+        }
+
+        function puedeGuardarBanner() {
+            return location.protocol !== 'file:' ? Boolean(htmlInicio && htmlOriginal) : Boolean(archivoInicioHandle && archivoHandle);
+        }
+
         $('#abrirConPermisoBtn').addEventListener('click', abrirConPermiso);
         $('#guardarDirectoBtn').addEventListener('click', guardarDirecto);
         $('#filtroCategoria').addEventListener('change', renderizarLista);
         $('#filtroEstado').addEventListener('change', renderizarLista);
 
         window.addEventListener('DOMContentLoaded', cargarTiendaPredeterminada);
+        window.addEventListener('DOMContentLoaded', cargarInicioPredeterminado);
 
         $('#archivoTienda').addEventListener('change', async event => {
             const archivo = event.target.files[0];
@@ -262,6 +399,8 @@
                 htmlOriginal = await archivo.text();
                 archivoHandle = null;
                 cargarCatalogo(htmlOriginal, `${archivo.name}. Los cambios se guardan con Abrir Tienda.html.`);
+                $('#estadoTiendaArchivo').textContent = 'Cargada sin permiso de escritura';
+                actualizarEstadoArchivos();
             } catch (error) {
                 htmlOriginal = '';
                 productos = [];
@@ -294,9 +433,9 @@
             $('#nuevoBtn').disabled = false;
             $('#duplicarBtn').disabled = false;
             $('#buscar').disabled = false;
-            $('#guardarDirectoBtn').disabled = location.protocol === 'file:' && !archivoHandle;
             $('#filtroCategoria').disabled = false;
             $('#filtroEstado').disabled = false;
+            actualizarEstadoArchivos();
         }
 
         function renderizarLista() {
@@ -470,6 +609,21 @@
             }
         }
 
+        async function cargarInicioPredeterminado() {
+            if (location.protocol === 'file:') return;
+            try {
+                const respuesta = await fetch('../index.html', { cache: 'no-store' });
+                if (!respuesta.ok) throw new Error('No se pudo leer index.html.');
+                htmlInicio = await respuesta.text();
+                bannerConfig = leerBanner(htmlInicio);
+                $('#estadoInicioArchivo').textContent = 'Conectado y listo para guardar';
+                actualizarEstadoArchivos();
+            } catch (error) {
+                $('#estadoInicioArchivo').textContent = 'No se pudo cargar automáticamente';
+                $('#estado').textContent = `Carga index.html manualmente: ${error.message}`;
+            }
+        }
+
         async function abrirConPermiso() {
             if (!window.showOpenFilePicker) {
                 return $('#archivoTienda').click();
@@ -480,8 +634,13 @@
                     types: [{ description: 'Archivo HTML', accept: { 'text/html': ['.html'] } }]
                 });
                 const archivo = await handle.getFile();
+                if (archivo.name.toLowerCase() !== 'tienda.html') {
+                    return alert('Selecciona Tienda.html, no index.html.');
+                }
                 archivoHandle = handle;
                 cargarCatalogo(await archivo.text(), `Puedes guardar directamente en ${archivo.name}.`);
+                $('#estadoTiendaArchivo').textContent = 'Conectada y lista para guardar';
+                actualizarEstadoArchivos();
             } catch (error) {
                 if (error.name !== 'AbortError') $('#estado').textContent = `No se pudo abrir el archivo: ${error.message}`;
             }
