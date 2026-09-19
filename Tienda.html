@@ -30,7 +30,8 @@
   "link2Nombre": "Píedelo por Whatsapp",
   "link2Url": "https://a.co/d/089ODs73",
   "link3Nombre": "Prueba",
-  "link3Url": "https://www.google.com/?hl=es&zx=1789778628592"
+  "link3Url": "https://www.google.com/?hl=es&zx=1789778628592",
+  "productoId": "N-018"
 }
 </script>
 </head>
@@ -960,7 +961,8 @@
                     "precioFull": 40000,
                     "precio": 30000,
                     "aprenderemos": "- Cómo se relacionan pensamientos, emociones, cerebro y comportamiento.\n- Cómo la práctica repetida puede favorecer nuevos patrones de respuesta.\n- Cómo comprender mejor nuestras reacciones ante el estrés, el miedo y la frustración.\n- Cómo desarrollar respuestas más conscientes frente a los desafíos.\n- Cómo integrar principios bíblicos con una comprensión contemporánea de la experiencia humana.\n- Cómo avanzar hacia una vida con mayor conciencia, propósito y renovación interior.",
-                    "lograremos": "Especialmente para quienes buscan herramientas para afrontar el estrés, la ansiedad, los errores, las relaciones, los cambios y los desafíos cotidianos desde una mirada integral."
+                    "lograremos": "Especialmente para quienes buscan herramientas para afrontar el estrés, la ansiedad, los errores, las relaciones, los cambios y los desafíos cotidianos desde una mirada integral.",
+                    "imagen": "images/Portada Ebook.jpg"
           },
           {
                     "id": "N-019",
@@ -1060,7 +1062,6 @@
                 <div class="bg-white p-6 rounded-[24px] border border-gray-100 hover:border-[#8C8660]/30 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group">
                     <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#8C8660]/5 to-transparent rounded-bl-[100px] -z-10 transition-transform group-hover:scale-110"></div>
                     <div>
-                        ${p.imagen ? `<div class="-mx-6 -mt-6 mb-5 h-48 overflow-hidden bg-gray-50"><img src="${p.imagen}" alt="${p.nombre}" class="w-full h-full object-cover"></div>` : ''}
                         <div class="flex justify-between items-start mb-4 gap-2 flex-wrap">
                             <div class="flex gap-2 flex-wrap">
                                 ${tagEdad ? `<span class="bg-gray-100 text-gray-700 text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">${tagEdad}</span>` : ''}
@@ -1201,6 +1202,7 @@
                                 <i class="ph ${(esEspera || esPorDefinir) ? 'ph-bell' : 'ph-shopping-cart-simple'} text-xl"></i>
                                 ${btnText}
                             </button>
+                            ${p.imagen ? `<div class="mt-6 pt-6 border-t border-gray-200"><p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Vista del producto</p><div class="rounded-xl bg-white border border-gray-200 p-3 flex justify-center"><img src="${p.imagen}" alt="${p.nombre}" class="max-w-full max-h-[70vh] w-auto h-auto object-contain rounded-lg"></div></div>` : ''}
                         </div>
                     </div>
                 </div>
