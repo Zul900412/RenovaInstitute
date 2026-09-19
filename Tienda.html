@@ -17,6 +17,7 @@
         .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #8C8660; border-radius: 10px; }
+        .cart-item + .cart-item { border-top: 1px solid #f3f4f6; padding-top: 1rem; }
     </style>
     <script id="banner-data" type="application/json">
 {
@@ -105,6 +106,16 @@
         </div>
     </div>
 
+    <div id="carrito-overlay" onclick="toggleCarrito(false)" class="fixed inset-0 bg-black/30 z-[180] hidden"></div>
+    <aside id="carrito-sidebar" class="fixed right-0 top-0 h-full w-full max-w-md bg-white z-[190] shadow-2xl translate-x-full transition-transform duration-300 flex flex-col">
+        <div class="flex items-center justify-between p-6 border-b border-gray-100">
+            <div><p class="text-xs uppercase tracking-widest text-[#8C8660] font-bold">Tu selección</p><h2 class="text-2xl font-bold text-[#54463C]">Carrito</h2></div>
+            <button onclick="toggleCarrito(false)" aria-label="Cerrar carrito" class="p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200"><i class="ph ph-x text-xl"></i></button>
+        </div>
+        <div id="carrito-items" class="flex-1 overflow-y-auto p-6 custom-scrollbar"></div>
+        <div class="p-6 border-t border-gray-100 bg-[#FDFBFA]"><div class="flex justify-between items-center mb-4 text-lg font-bold text-[#54463C]"><span>Total</span><span id="carrito-total">$ 0</span></div><button onclick="solicitarCarrito()" class="w-full bg-[#54463C] text-white py-3 rounded-xl font-bold hover:bg-[#8C8660] transition flex items-center justify-center gap-2"><i class="ph ph-whatsapp-logo text-xl"></i> Solicitar por WhatsApp</button></div>
+    </aside>
+
     <!-- BANNER MODAL PARA LA TIENDA (Idéntico al de Index) -->
     <div x-data="bannerLibro()" x-init="initBanner()" x-show="mostrar" x-transition.opacity.duration.500ms 
          class="fixed inset-0 z-[200] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
@@ -159,6 +170,12 @@
                             <span class="flex items-center gap-3"><i class="ph ph-storefront text-2xl text-white"></i> <span x-text="config.link3Nombre"></span></span>
                             <i class="ph ph-arrow-right text-white/50 group-hover:text-white transition-colors"></i>
                         </a>
+                    </template>
+                    <template x-if="config.productoId">
+                        <button @click="agregarProducto()" class="w-full flex items-center justify-between bg-[#8C8660] border-2 border-[#8C8660] text-white font-bold px-6 py-4 rounded-xl hover:bg-[#54463C] hover:border-[#54463C] transition-all group">
+                            <span class="flex items-center gap-3"><i class="ph ph-shopping-cart text-2xl text-white"></i> Agregar al carrito</span>
+                            <i class="ph ph-plus text-white/70 group-hover:text-white transition-colors"></i>
+                        </button>
                     </template>
                 </div>
             </div>
@@ -1043,6 +1060,7 @@
                 <div class="bg-white p-6 rounded-[24px] border border-gray-100 hover:border-[#8C8660]/30 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group">
                     <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#8C8660]/5 to-transparent rounded-bl-[100px] -z-10 transition-transform group-hover:scale-110"></div>
                     <div>
+                        ${p.imagen ? `<div class="-mx-6 -mt-6 mb-5 h-48 overflow-hidden bg-gray-50"><img src="${p.imagen}" alt="${p.nombre}" class="w-full h-full object-cover"></div>` : ''}
                         <div class="flex justify-between items-start mb-4 gap-2 flex-wrap">
                             <div class="flex gap-2 flex-wrap">
                                 ${tagEdad ? `<span class="bg-gray-100 text-gray-700 text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">${tagEdad}</span>` : ''}
@@ -1228,11 +1246,36 @@
 
         function toggleCarrito(abrir = null) {
             const sidebar = document.getElementById('carrito-sidebar');
+            const overlay = document.getElementById('carrito-overlay');
             if (sidebar) {
-                if (abrir === true) sidebar.classList.remove('translate-x-full');
-                else if (abrir === false) sidebar.classList.add('translate-x-full');
-                else sidebar.classList.toggle('translate-x-full');
+                const mostrar = abrir === null ? sidebar.classList.contains('translate-x-full') : abrir;
+                sidebar.classList.toggle('translate-x-full', !mostrar);
+                overlay.classList.toggle('hidden', !mostrar);
             }
+        }
+
+        function renderizarCarrito() {
+            const contenedor = document.getElementById('carrito-items');
+            const total = carrito.reduce((suma, producto) => suma + Number(producto.precio || 0), 0);
+            document.getElementById('carrito-total').innerText = '$ ' + total.toLocaleString();
+            document.getElementById('badge-carrito').innerText = carrito.length;
+            document.getElementById('badge-carrito').classList.toggle('hidden', carrito.length === 0);
+            contenedor.innerHTML = carrito.length ? carrito.map((producto, indice) => `
+                <div class="cart-item py-4 first:pt-0 flex gap-3">
+                    ${producto.imagen ? `<img src="${producto.imagen}" alt="${producto.nombre}" class="w-16 h-16 rounded-lg object-cover shrink-0">` : '<div class="w-16 h-16 rounded-lg bg-[#F6F3EE] flex items-center justify-center shrink-0"><i class="ph ph-book-open text-2xl text-[#8C8660]"></i></div>'}
+                    <div class="min-w-0 flex-1"><p class="font-bold text-sm text-[#54463C]">${producto.nombre}</p><p class="text-xs text-gray-500 mt-1">${producto.fechaSeleccionada || 'Recurso'}</p><p class="text-sm font-bold text-[#8C8660] mt-2">${producto.precio === 0 ? 'Gratis' : '$ ' + Number(producto.precio).toLocaleString()}</p></div>
+                    <button onclick="quitarDelCarrito(${indice})" aria-label="Quitar producto" class="text-gray-400 hover:text-red-500 self-start"><i class="ph ph-trash text-lg"></i></button>
+                </div>`).join('') : '<div class="h-full flex flex-col items-center justify-center text-center text-gray-500"><i class="ph ph-shopping-cart-simple text-5xl text-gray-300 mb-3"></i><p class="font-bold text-[#54463C]">Tu carrito está vacío</p><p class="text-sm mt-1">Agrega un producto desde Ver Detalles.</p></div>';
+        }
+
+        function quitarDelCarrito(indice) { carrito.splice(indice, 1); renderizarCarrito(); }
+
+        function solicitarCarrito() {
+            if (!carrito.length) return alert('Agrega al menos un producto al carrito.');
+            const detalle = carrito.map(producto => `- ${producto.nombre} (${producto.fechaSeleccionada || 'Recurso'})`).join('\n');
+            const total = carrito.reduce((suma, producto) => suma + Number(producto.precio || 0), 0);
+            const url = `https://wa.me/573114951646?text=${encodeURIComponent(`Hola, quiero solicitar estos productos:\n${detalle}\n\nTotal: $ ${total.toLocaleString()}`)}`;
+            window.open(url, '_blank');
         }
 
         function agregarAlCarrito(id) {
@@ -1256,17 +1299,16 @@
             
             // Agrega al carrito y actualiza la vista
             carrito.push({ ...p, fechaSeleccionada: fechaTextoSeleccionada });
-            document.getElementById('badge-carrito').innerText = carrito.length;
-            document.getElementById('badge-carrito').classList.remove('hidden');
+            renderizarCarrito();
             cerrarDetalle();
-            alert('¡' + p.nombre + ' agregado al carrito!');
+            toggleCarrito(true);
         }
 
         // --- LÓGICA DEL BANNER DEL LIBRO ---
         function bannerLibro() {
             return {
                 mostrar: false,
-                config: { activo: false, imagen: '', titulo: '', desc: '', link1Nombre: '', link1Url: '', link2Nombre: '', link2Url: '', link3Nombre: '', link3Url: '' },
+                config: { activo: false, imagen: '', titulo: '', desc: '', link1Nombre: '', link1Url: '', link2Nombre: '', link2Url: '', link3Nombre: '', link3Url: '', productoId: '' },
                 initBanner() {
                     const datos = document.getElementById('banner-data');
                     try {
@@ -1282,6 +1324,7 @@
                         setTimeout(() => { this.mostrar = true; }, 1500); 
                     }
                 },
+                agregarProducto() { if (this.config.productoId) agregarAlCarrito(this.config.productoId); },
                 cerrarBanner() {
                     this.mostrar = false;
                     const identificador = `${this.config.titulo}|${this.config.imagen}|${this.config.desc}`;

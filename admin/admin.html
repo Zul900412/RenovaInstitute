@@ -138,6 +138,7 @@
                         <div class="field"><label for="id">ID único</label><input id="id" name="id" required></div>
                         <div class="field"><label for="cat">Categoría</label><select id="cat" name="cat"><option>Personalizados</option><option>Grupales</option><option>Servicios</option><option>Productos</option><option>Gratuitos</option></select></div>
                         <div class="field full"><label for="nombre">Nombre</label><input id="nombre" name="nombre" required></div>
+                        <div class="field full"><label for="imagen">Imagen del producto (URL o imagen embebida)</label><input id="imagen" name="imagen" placeholder="images/portada.jpg o selecciona un archivo"><input id="imagenArchivo" type="file" accept="image/*" style="margin-top: 6px;"><img id="imagenVista" alt="Vista previa del producto" hidden style="display:block; max-width:160px; max-height:120px; margin-top:10px; border-radius:7px; object-fit:cover;"></div>
                         <div class="field"><label for="grupoEtario">Grupo de edad</label><input id="grupoEtario" name="grupoEtario"></div>
                         <div class="field"><label for="enfoque">Enfoque</label><input id="enfoque" name="enfoque"></div>
                         <div class="field"><label for="estadoProducto">Estado comercial</label><select id="estadoProducto" name="estado"><option value="activo">Abierto / visible para comprar</option><option value="espera">En espera / solicitar apertura</option></select></div>
@@ -210,6 +211,7 @@
             <div class="field"><label for="bannerLink2Url">URL botón 2</label><input id="bannerLink2Url"></div>
             <div class="field"><label for="bannerLink3Nombre">Botón 3</label><input id="bannerLink3Nombre" placeholder="Librería nacional"></div>
             <div class="field"><label for="bannerLink3Url">URL botón 3</label><input id="bannerLink3Url"></div>
+            <div class="field full"><label for="bannerProductoId">ID del producto para mostrar "Agregar al carrito"</label><input id="bannerProductoId" placeholder="Ej: P-001"><span class="hint">Opcional. Debe coincidir con el ID de un producto de Tienda.html.</span></div>
             <div class="field full hint">
                 El banner se guardará en los dos archivos conectados: index.html y Tienda.html.
             </div>
@@ -227,6 +229,24 @@
         let bannerConfig = null;
         let htmlInicio = '';
         const camposBanner = ['imagen', 'titulo', 'desc', 'link1Nombre', 'link1Url', 'link2Nombre', 'link2Url', 'link3Nombre', 'link3Url'];
+
+        document.getElementById('imagenArchivo').addEventListener('change', event => {
+            const archivo = event.target.files[0];
+            if (!archivo) return;
+            if (!archivo.type.startsWith('image/')) return alert('Selecciona un archivo de imagen.');
+            const lector = new FileReader();
+            lector.addEventListener('load', () => {
+                document.getElementById('imagen').value = lector.result;
+                mostrarVistaPreviaProducto(lector.result);
+            });
+            lector.readAsDataURL(archivo);
+        });
+
+        function mostrarVistaPreviaProducto(imagen) {
+            const vista = document.getElementById('imagenVista');
+            vista.src = imagen || '';
+            vista.hidden = !imagen;
+        }
 
         document.getElementById('bannerImagenArchivo').addEventListener('change', event => {
             const archivo = event.target.files[0];
@@ -270,6 +290,7 @@
                 if (input) input.value = guardado[campo] || '';
             });
             mostrarVistaPrevia(guardado.imagen || '');
+            document.getElementById('bannerProductoId').value = guardado.productoId || '';
             document.getElementById('guardarBannerBtn').disabled = !puedeGuardarBanner();
             modalBanner.showModal();
         });
@@ -293,7 +314,8 @@
                 link2Nombre: document.getElementById('bannerLink2Nombre').value.trim(),
                 link2Url: document.getElementById('bannerLink2Url').value.trim(),
                 link3Nombre: document.getElementById('bannerLink3Nombre').value.trim(),
-                link3Url: document.getElementById('bannerLink3Url').value.trim()
+                link3Url: document.getElementById('bannerLink3Url').value.trim(),
+                productoId: document.getElementById('bannerProductoId').value.trim()
             };
             bannerConfig = config;
             await guardarBannerEnArchivos(config);
@@ -361,7 +383,7 @@
         }
         // ------------------------------------
 
-        const camposTexto = ['id', 'cat', 'nombre', 'grupoEtario', 'enfoque', 'modalidad', 'desc', 'paraQuien', 'aprenderemos', 'lograremos', 'metodologia', 'fechaInicio', 'horario', 'duracion'];
+        const camposTexto = ['id', 'cat', 'nombre', 'imagen', 'grupoEtario', 'enfoque', 'modalidad', 'desc', 'paraQuien', 'aprenderemos', 'lograremos', 'metodologia', 'fechaInicio', 'horario', 'duracion'];
         let htmlOriginal = '';
         let archivoHandle = null;
         let productos = [];
@@ -484,12 +506,14 @@
             $('#cuposDisponibles').value = producto.cuposDisponibles ?? '';
             $('#incluye').value = Array.isArray(producto.incluye) ? producto.incluye.join('\n') : '';
             $('#infoFechaTexto').value = producto.infoFecha?.texto || '';
+            mostrarVistaPreviaProducto(producto.imagen || '');
         }
 
         function leerFormulario() {
             const producto = { ...productoEnEdicion };
             camposTexto.forEach(campo => { const valor = $('#' + campo).value.trim(); if (valor) producto[campo] = valor; });
             producto.precio = Number($('#precio').value || 0);
+            if (!producto.imagen) delete producto.imagen;
             const precioFull = Number($('#precioFull').value || 0);
             if (precioFull) producto.precioFull = precioFull;
             const total = Number($('#cuposTotales').value || 0);
