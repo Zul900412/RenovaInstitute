@@ -1227,11 +1227,15 @@
         function inicializarTiendaConFiltro() {
             const urlParams = new URLSearchParams(window.location.search);
             const categoriaUrl = urlParams.get('cat');
+            const productoParaAgregar = urlParams.get('agregar');
 
             if (categoriaUrl) {
                 cambiarFiltro(categoriaUrl);
             } else {
                 renderTienda();
+            }
+            if (productoParaAgregar) {
+                setTimeout(() => agregarAlCarrito(productoParaAgregar), 0);
             }
         }
 

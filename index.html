@@ -297,6 +297,12 @@
                             <i class="ph ph-arrow-right text-white/50 group-hover:text-white transition-colors"></i>
                         </a>
                     </template>
+                    <template x-if="config.productoId">
+                        <button @click="irAlCarrito()" class="w-full flex items-center justify-between bg-[#8C8660] border-2 border-[#8C8660] text-white font-bold px-6 py-4 rounded-xl hover:bg-[#54463C] hover:border-[#54463C] transition-all group">
+                            <span class="flex items-center gap-3"><i class="ph ph-shopping-cart text-2xl text-white"></i> Agregar al carrito</span>
+                            <i class="ph ph-arrow-right text-white/70 group-hover:text-white transition-colors"></i>
+                        </button>
+                    </template>
                 </div>
             </div>
         </div>
@@ -306,7 +312,7 @@
         function bannerLibro() {
             return {
                 mostrar: false,
-                config: { activo: false, imagen: '', titulo: '', desc: '', link1Nombre: '', link1Url: '', link2Nombre: '', link2Url: '', link3Nombre: '', link3Url: '' },
+                config: { activo: false, imagen: '', titulo: '', desc: '', link1Nombre: '', link1Url: '', link2Nombre: '', link2Url: '', link3Nombre: '', link3Url: '', productoId: '' },
                 initBanner() {
                     const datos = document.getElementById('banner-data');
                     const guardado = datos ? JSON.parse(datos.textContent) : null;
@@ -319,6 +325,9 @@
                     if (this.config.activo && !bannerCerrado) {
                         setTimeout(() => { this.mostrar = true; }, 1500); 
                     }
+                },
+                irAlCarrito() {
+                    window.location.href = `Tienda.html?agregar=${encodeURIComponent(this.config.productoId)}`;
                 },
                 cerrarBanner() {
                     this.mostrar = false;
