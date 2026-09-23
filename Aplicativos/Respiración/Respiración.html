@@ -102,26 +102,24 @@
                 <p id="info-ejecuta" class="text-gray-500 italic"><strong>Cómo se realiza:</strong> Inhala en 4s, sostén 7s y exhala despacio haciendo soplido en 8s.</p>
             </div>
 
-            <!-- ANIMADOR VISUAL INTERACTIVO -->
+            <!-- ANIMADOR VISUAL INTERACTIVO Y BOTÓN ÚNICO -->
             <div class="bg-gradient-to-b from-gray-50 to-amber-50/20 border border-gray-100 rounded-3xl p-5 mb-4 text-center relative overflow-hidden">
                 <div class="h-48 flex flex-col items-center justify-center relative">
                     <div class="absolute w-36 h-36 rounded-full border border-[#8C8660]/20 animate-pulse pointer-events-none"></div>
                     
-                    <div id="circle" class="breath-circle w-28 h-28 bg-[#8C8660] rounded-full flex flex-col items-center justify-center text-white shadow-md shadow-[#8C8660]/30 transform scale-100">
-                        <span id="breath-phase" class="text-xs font-bold tracking-wider uppercase">Listo</span>
-                        <span id="breath-timer" class="text-[11px] font-light opacity-90 mt-0.5">Presiona Iniciar</span>
-                    </div>
+                    <!-- Círculo principal que ahora funciona como botón táctil de Iniciar / Pausar -->
+                    <div id="circle" onclick="toggleRespiracion()" style="cursor: pointer;" class="breath-circle w-28 h-28 bg-[#8C8660] rounded-full flex flex-col items-center justify-center text-white shadow-md shadow-[#8C8660]/30 transform scale-100 select-none hover:scale-105 transition-transform">
+    <span id="breath-phase" class="text-xs font-bold tracking-wider uppercase select-none pointer-events-none">Iniciar</span>
+    <span id="breath-timer" class="text-[11px] font-light opacity-90 mt-0.5 select-none pointer-events-none">Toca aquí</span>
+</div>
                 </div>
 
-                <!-- Controles -->
-                <div class="flex justify-center gap-2.5 mt-2">
-                    <button id="start-btn" onclick="toggleRespiracion()" class="bg-[#8C8660] text-white px-5 py-2 rounded-xl font-bold text-xs shadow-md hover:bg-[#726d4e] transition-all flex items-center gap-1.5">
-                        <i id="play-icon" class="ph ph-play-fill text-sm"></i> <span id="btn-text">Iniciar Guía</span>
-                    </button>
-                    <button onclick="terminarSesion()" class="bg-white border border-gray-200 text-gray-600 px-4 py-2 rounded-xl font-bold text-xs hover:bg-gray-100 transition-all flex items-center gap-1">
-                        <i class="ph ph-stop-circle text-sm"></i> Terminar Sesión
-                    </button>
-                </div>
+                <!-- Texto de ayuda sutil debajo -->
+                <p class="text-[11px] text-gray-400 italic mt-1">
+                    Toca el círculo para iniciar, pausar o finalizar tu sesión.
+                </p>
+            </div>
+
             </div>
 
         </div>
@@ -279,14 +277,16 @@
             const timer = document.getElementById('breath-timer');
 
             circle.style.transition = 'transform 0.4s ease';
-            circle.className = 'breath-circle w-28 h-28 bg-[#8C8660] rounded-full flex flex-col items-center justify-center text-white shadow-md shadow-[#8C8660]/30 transform scale-100';
-            phase.innerText = 'Listo';
-            timer.innerText = 'Presiona Iniciar';
+            circle.className = 'breath-circle w-28 h-28 bg-[#8C8660] rounded-full flex flex-col items-center justify-center text-white shadow-md shadow-[#8C8660]/30 transform scale-100 cursor-pointer hover:scale-105 transition-transform select-none';
+            phase.innerText = 'Iniciar';
+            timer.innerText = 'Toca aquí';
         }
 
         function toggleRespiracion() {
             if (estaActivo) {
+                // Al darle pausar, detiene la respiración y abre inmediatamente el modal de cierre
                 detenerRespiracion();
+                terminarSesion();
             } else {
                 iniciarRespiracion();
             }
@@ -294,16 +294,12 @@
 
         function iniciarRespiracion() {
             estaActivo = true;
-            document.getElementById('play-icon').className = 'ph ph-pause-fill text-sm';
-            document.getElementById('btn-text').innerText = 'Pausar';
             ejecutarPaso();
         }
 
         function detenerRespiracion() {
             estaActivo = false;
             clearTimeout(timeoutId);
-            document.getElementById('play-icon').className = 'ph ph-play-fill text-sm';
-            document.getElementById('btn-text').innerText = 'Iniciar Guía';
             resetearCirculoVisual();
         }
 
