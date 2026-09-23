@@ -44,9 +44,16 @@
 
             <!-- Botón Ir a la Tienda -->
             <a href="../../Tienda.html" class="bg-[#8C8660]/10 hover:bg-[#8C8660]/20 text-[#8C8660] px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5">
-                <i class="ph ph-storefront text-sm"></i> Tienda
+                <i class="ph ph-storefront text-sm"></i> Para más recursos
             </a>
         </div>
+        <!-- BOTÓN DE INSTALACIÓN RÁPIDA (Oculto por defecto hasta que el navegador permita instalar) -->
+            <div id="contenedor-instalar" class="hidden mb-4 text-center">
+                <button id="btn-instalar" class="w-full bg-gradient-to-r from-amber-700 to-[#8C8660] text-white py-3 px-4 rounded-2xl font-bold text-xs shadow-md hover:opacity-95 transition-all flex items-center justify-center gap-2 border border-amber-600/30">
+                    <i class="ph ph-device-mobile text-lg animate-bounce"></i>
+                    <span>¡Instalar App en tu celular con 1 clic!</span>
+                </button>
+            </div>
     </header>
 
     <main class="flex-1 flex items-center justify-center p-4">
@@ -120,7 +127,7 @@
         </div>
     </main>
 
-    <!-- MODAL DE CIERRE Y VENTAS (Oculto por defecto) -->
+   <!-- MODAL DE CIERRE Y VENTAS -->
     <div id="modal-cierre" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden fade-in">
         <div class="bg-white rounded-[28px] max-w-md w-full p-6 shadow-2xl border border-gray-100 text-center space-y-4">
             <div class="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto text-2xl">
@@ -129,16 +136,41 @@
             
             <h3 class="text-lg font-bold text-[#54463C]">¡Excelente ejercicio de regulación!</h3>
             <p class="text-xs text-gray-600 leading-relaxed">
-                Has regalado un momento de paz a tu sistema nervioso. Te invitamos a conocer más recursos en nuestra tienda:
+                Has regalado un momento de paz a tu sistema nervioso. Para profundizar en tu bienestar emocional, te invitamos a conocer nuestras opciones:
             </p>
 
-            <!-- Botón Ir a Tienda dentro del Modal -->
-            <a href="../../Tienda.html" class="w-full bg-[#8C8660] text-white py-3 rounded-xl font-bold text-xs hover:bg-[#726d4e] transition-all flex justify-center items-center gap-2 shadow-sm">
-                <i class="ph ph-storefront text-base"></i> Visitar la Tienda de Renova Institute
+            <!-- Opciones de contacto y venta -->
+            <div class="space-y-2.5 pt-1 text-left">
+                <!-- Workbook por WhatsApp -->
+                <div class="bg-gray-50 border border-gray-200/80 p-3 rounded-2xl flex items-center justify-between gap-3">
+                    <div>
+                        <h4 class="text-xs font-bold text-[#54463C]">Workbook: Sanidad Emocional</h4>
+                        <p class="text-[10px] text-gray-500">Ejercicios prácticos y principios para renovar la mente.</p>
+                    </div>
+                    <button onclick="comprarWorkbook()" class="bg-[#25D366] text-white px-3 py-2 rounded-xl text-[11px] font-bold hover:bg-[#128C7E] transition-all whitespace-nowrap flex items-center gap-1 shadow-sm">
+                        <i class="ph ph-whatsapp-logo text-sm"></i> Pedir
+                    </button>
+                </div>
+
+                <!-- Sesión Personalizada por WhatsApp -->
+                <div class="bg-gray-50 border border-gray-200/80 p-3 rounded-2xl flex items-center justify-between gap-3">
+                    <div>
+                        <h4 class="text-xs font-bold text-[#54463C]">Sesión Personalizada</h4>
+                        <p class="text-[10px] text-gray-500">Acompañamiento profesional uno a uno adaptado a ti.</p>
+                    </div>
+                    <button onclick="agendarSesion()" class="bg-[#25D366] text-white px-3 py-2 rounded-xl text-[11px] font-bold hover:bg-[#128C7E] transition-all whitespace-nowrap flex items-center gap-1 shadow-sm">
+                        <i class="ph ph-whatsapp-logo text-sm"></i> Agendar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Botón Ir a la Tienda -->
+            <a href="../../tienda.html" class="w-full bg-[#8C8660] text-white py-2.5 rounded-xl font-bold text-xs hover:bg-[#726d4e] transition-all flex justify-center items-center gap-1.5 shadow-sm">
+                <i class="ph ph-storefront text-sm"></i> Visitar Tienda Renova Institute
             </a>
 
             <!-- Botón Reiniciar Ejercicio -->
-            <button onclick="reiniciarTodo()" class="w-full bg-gray-100 text-gray-600 py-2.5 rounded-xl font-bold text-xs hover:bg-gray-200 transition-all flex justify-center items-center gap-1.5">
+            <button onclick="reiniciarTodo()" class="w-full bg-gray-100 text-gray-600 py-2 rounded-xl font-bold text-xs hover:bg-gray-200 transition-all flex justify-center items-center gap-1.5">
                 <i class="ph ph-arrow-counter-clockwise text-sm"></i> Repetir Ejercicio
             </button>
         </div>
@@ -321,6 +353,52 @@
             pasoActual = 0;
             resetearCirculoVisual();
         }
+        function comprarWorkbook() {
+            const numeroWhatsApp = "573114951646"; 
+            const mensaje = "Hola Renova Institute. Completé mi sesión de respiración y me interesa adquirir el Workbook: Sanidad Emocional.";
+            window.open(`https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`, '_blank');
+        }
+
+        function agendarSesion() {
+            const numeroWhatsApp = "573114951646"; 
+            const mensaje = "Hola Renova Institute. Completé mi sesión de respiración y me gustaría agendar una Sesión Personalizada.";
+            window.open(`https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`, '_blank');
+        }
+        // Lógica para la instalación de la PWA
+        let deferredPrompt;
+        const contenedorInstalar = document.getElementById('contenedor-instalar');
+        const btnInstalar = document.getElementById('btn-instalar');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Previene que Chrome muestre su banner automático por defecto
+            e.preventDefault();
+            deferredPrompt = e;
+            // Muestra nuestro botón personalizado
+            if (contenedorInstalar) {
+                contenedorInstalar.classList.remove('hidden');
+            }
+        });
+
+        if (btnInstalar) {
+            btnInstalar.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    if (outcome === 'accepted') {
+                        console.log('El usuario aceptó instalar la PWA');
+                    }
+                    deferredPrompt = null;
+                    contenedorInstalar.classList.add('hidden');
+                }
+            });
+        }
+
+        window.addEventListener('appinstalled', (evt) => {
+            console.log('¡Aplicación instalada con éxito!');
+            if (contenedorInstalar) {
+                contenedorInstalar.classList.add('hidden');
+            }
+        });
     </script>
 </body>
 </html>
