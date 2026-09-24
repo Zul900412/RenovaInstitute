@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Interactiva de Oración y Sanidad Mental | Renova Institute</title>
+    
+    <!-- Configuración para PWA (Instalación en celular) -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#8C8660">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Renova Oración">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <style>
+        .fade-in { animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Animación de Respiración */
+        .breath-circle {
+            animation: breathe 8s infinite ease-in-out;
+        }
+        @keyframes breathe {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0.8); opacity: 0.5; }
+        }
+
+        .custom-shadow { box-shadow: 0 10px 40px -10px rgba(140, 134, 96, 0.15); }
+        
+        /* Ocultar barra de desplazamiento en el textarea */
+        textarea::-webkit-scrollbar { width: 6px; }
+        textarea::-webkit-scrollbar-thumb { background: #8C8660; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-[#FDFBFA] text-[#54463C] min-h-screen flex flex-col font-sans">
+
+    <!-- Header Actualizado -->
+    <header class="bg-white/70 backdrop-blur-lg shadow-sm border-b border-gray-100/50 sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-6 h-16 flex justify-between items-center">
+            <!-- Logo y Marca -->
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-full bg-[#8C8660]/10 flex items-center justify-center text-[#8C8660]">
+                    <i class="ph ph-brain text-lg"></i>
+                </div>
+                <div>
+                    <span class="block text-xs font-bold text-[#8C8660] tracking-wider uppercase">RENOVA INSTITUTE</span>
+                    <span class="block text-[9px] text-gray-400 italic font-medium">Restauración integral • Neurociencia + Fe</span>
+                </div>
+            </div>
+
+            <!-- Botón de Tienda ("Para más recursos") -->
+            <div class="flex items-center gap-2">
+                <a href="../../tienda.html" style="cursor: pointer;" class="bg-[#8C8660]/10 hover:bg-[#8C8660]/20 text-[#8C8660] px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 select-none">
+                    <i class="ph ph-storefront text-base"></i> Para más recursos
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 flex items-center justify-center p-4 py-8">
+        <div class="w-full max-w-3xl bg-white rounded-[32px] custom-shadow border border-gray-100 overflow-hidden relative min-h-[500px]">
+            
+            <!-- PASO 1: CHECK-IN EMOCIONAL -->
+            <div id="paso-1" class="p-8 md:p-12 fade-in">
+                
+               
+                <!-- BOTÓN DE INSTALACIÓN RÁPIDA (PWA) -->
+                <div id="contenedor-instalar" class="hidden mb-6 text-center">
+                    <button id="btn-instalar" style="cursor: pointer;" class="w-full bg-gradient-to-r from-amber-700 to-[#8C8660] text-white py-3.5 px-4 rounded-2xl font-bold text-xs shadow-md hover:opacity-95 transition-all flex items-center justify-center gap-2 border border-amber-600/30 select-none">
+                        <i class="ph ph-device-mobile text-lg animate-bounce pointer-events-none"></i>
+                        <span class="pointer-events-none">¡Instala esta Guía en tu celular con 1 clic!</span>
+                    </button>
+                </div>
+
+                <div class="text-center mb-8">
+                    <h1 class="text-3xl font-bold mb-3 text-[#54463C]">Bienvenido a tu espacio seguro</h1>
+                    <p class="text-gray-500 text-sm">Antes de orar y reflexionar, identifiquemos qué hay en tu corazón hoy. ¿Cuál es la carga principal que necesitas soltar?</p>
+                </div>
+
+                <div class="space-y-3">
+                    <button onclick="iniciarExperiencia('ansiedad')" style="cursor: pointer;" class="w-full bg-gray-50 p-5 rounded-2xl border border-gray-100 hover:border-[#8C8660]/50 hover:bg-[#8C8660]/5 text-left flex items-center gap-4 transition-all select-none">
+                        <div class="bg-white p-3 rounded-xl shadow-sm"><i class="ph ph-wind text-xl text-[#8C8660]"></i></div>
+                        <div>
+                            <h3 class="font-bold text-gray-800">Ansiedad, miedo o preocupación</h3>
+                            <p class="text-sm text-gray-500">Siento que mi mente no para y me angustia el futuro.</p>
+                        </div>
+                    </button>
+
+                    <button onclick="iniciarExperiencia('pasado')" style="cursor: pointer;" class="w-full bg-gray-50 p-5 rounded-2xl border border-gray-100 hover:border-[#8C8660]/50 hover:bg-[#8C8660]/5 text-left flex items-center gap-4 transition-all select-none">
+                        <div class="bg-white p-3 rounded-xl shadow-sm"><i class="ph ph-bandaids text-xl text-[#8C8660]"></i></div>
+                        <div>
+                            <h3 class="font-bold text-gray-800">Heridas del pasado o culpa</h3>
+                            <p class="text-sm text-gray-500">Hay dolor no resuelto, falta de perdón o rechazo.</p>
+                        </div>
+                    </button>
+
+                    <button onclick="iniciarExperiencia('agotamiento')" style="cursor: pointer;" class="w-full bg-gray-50 p-5 rounded-2xl border border-gray-100 hover:border-[#8C8660]/50 hover:bg-[#8C8660]/5 text-left flex items-center gap-4 transition-all select-none">
+                        <div class="bg-white p-3 rounded-xl shadow-sm"><i class="ph ph-battery-warning-vertical text-xl text-[#8C8660]"></i></div>
+                        <div>
+                            <h3 class="font-bold text-gray-800">Agotamiento extremo y estrés</h3>
+                            <p class="text-sm text-gray-500">No tengo energía, me siento sobrecargado(a).</p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- PASO 2: EJERCICIO DE REGULACIÓN -->
+            <div id="paso-2" class="hidden p-8 md:p-12 text-center fade-in flex-col justify-center items-center h-full min-h-[500px]">
+                <h2 class="text-2xl font-bold text-[#54463C] mb-2">Preparando tu sistema nervioso</h2>
+                <p class="text-gray-500 text-sm mb-12">No podemos orar con claridad si el cuerpo está en alerta. Sigue el círculo con tu respiración por unos segundos.</p>
+                
+                <div class="relative w-48 h-48 mx-auto flex items-center justify-center mb-12">
+                    <div class="absolute w-full h-full bg-[#8C8660]/20 rounded-full breath-circle"></div>
+                    <div class="absolute w-3/4 h-3/4 bg-[#8C8660]/40 rounded-full breath-circle" style="animation-delay: 0.2s;"></div>
+                    <div class="relative z-10 font-bold text-[#8C8660] text-sm bg-white/80 px-4 py-2 rounded-full backdrop-blur-sm select-none pointer-events-none">
+                        Inhala... Exhala...
+                    </div>
+                </div>
+
+                <button onclick="pasarAReflexion()" style="cursor: pointer;" class="bg-[#8C8660] text-white px-8 py-3 rounded-xl font-bold shadow-md hover:bg-[#726d4e] transition-colors select-none">
+                    Ya me siento más tranquilo(a)
+                </button>
+            </div>
+
+            <!-- PASO 3: DIARIO Y ORACIÓN -->
+            <div id="paso-3" class="hidden p-8 md:p-10 fade-in h-full flex flex-col">
+                <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
+                    <i id="ref-icono" class="ph text-3xl text-[#8C8660]"></i>
+                    <h2 id="ref-titulo" class="text-2xl font-bold text-[#54463C]"></h2>
+                </div>
+
+                <div class="bg-amber-50/70 border border-amber-100 rounded-2xl p-5 mb-6 text-sm text-gray-700 leading-relaxed relative">
+                    <div class="absolute left-0 top-0 w-1 h-full bg-amber-400 rounded-l-2xl"></div>
+                    <span class="block font-bold text-amber-700 mb-1">La Promesa:</span>
+                    <span id="ref-fe" class="italic"></span>
+                </div>
+
+                <div class="flex-1 flex flex-col mb-4">
+                    <label class="font-bold text-[#54463C] mb-2 text-sm flex justify-between items-center">
+                        <span>Escribe tu oración o desahogo aquí:</span>
+                        <span class="text-xs font-normal text-gray-400">Nadie más leerá esto.</span>
+                    </label>
+                    <textarea class="w-full flex-1 min-h-[150px] p-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#8C8660] focus:ring-1 focus:ring-[#8C8660] resize-none text-gray-700 placeholder-gray-400" placeholder="Señor, hoy entrego en tus manos..."></textarea>
+                </div>
+
+                <button onclick="finalizarExperiencia()" style="cursor: pointer;" class="w-full bg-[#54463C] text-white px-6 py-4 rounded-xl font-bold shadow-md hover:bg-[#3a3029] transition-colors flex justify-center items-center gap-2 select-none">
+                    <i class="ph ph-hands-praying text-xl pointer-events-none"></i> <span class="pointer-events-none">Soltar esta carga y finalizar</span>
+                </button>
+            </div>
+
+            <!-- PASO 4: EL PUENTE HACIA TU SERVICIO (VENTA) -->
+            <div id="paso-4" class="hidden p-8 md:p-12 text-center fade-in bg-[#8C8660]/5 min-h-[500px] flex flex-col justify-center">
+                <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm text-[#8C8660]">
+                    <i class="ph ph-check-circle text-4xl"></i>
+                </div>
+                
+                <h2 class="text-3xl font-bold text-[#54463C] mb-4">Has dado el primer paso</h2>
+                <p class="text-gray-600 mb-8 max-w-md mx-auto text-sm">Orar y reconocer lo que sientes es vital, pero Dios también nos ha dado herramientas en la psicología y la neurociencia para sanar de raíz.</p>
+
+                <div class="bg-white p-6 rounded-2xl border border-[#8C8660]/30 shadow-sm max-w-md mx-auto text-left mb-8 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-[#8C8660] text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg uppercase tracking-wide">Paso Recomendado</div>
+                    
+                    <h3 id="venta-titulo" class="font-bold text-lg text-[#54463C] mt-2 mb-2"></h3>
+                    <p id="venta-desc" class="text-xs text-gray-500 mb-4"></p>
+                    
+                    <button onclick="contactarAsesoria()" style="cursor: pointer;" class="w-full bg-[#25D366] text-white px-5 py-3 rounded-xl font-bold flex justify-center items-center gap-2 hover:bg-[#128C7E] transition-colors text-xs select-none">
+                        <i class="ph ph-whatsapp-logo text-lg pointer-events-none"></i> <span class="pointer-events-none">Quiero información</span>
+                    </button>
+                </div>
+                
+                <p class="text-xs text-gray-400">Si cierras esta página, tu oración se borrará para proteger tu privacidad.</p>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        const baseDatos = {
+            ansiedad: {
+                titulo: "Entregando la Ansiedad",
+                icono: "ph-wind",
+                fe: "«Por nada estéis afanosos, sino sean conocidas vuestras peticiones delante de Dios en toda oración... Y la paz de Dios guardará vuestros corazones y pensamientos.» (Filipenses 4:6-7)",
+                programaTitulo: "Programa: Recupera tu Paz Interior",
+                programaDesc: "Un acompañamiento diseñado para enseñarte a regular tu sistema nervioso y vencer los ataques de ansiedad fusionando terapia clínica y fe.",
+                mensajeWa: "Hola equipo de Renova Institute. Acabo de terminar la Guía de Oración por mi ansiedad. Me gustaría recibir información sobre el programa 'Recupera tu Paz Interior'."
+            },
+            pasado: {
+                titulo: "Sanando las Heridas",
+                icono: "ph-bandaids",
+                fe: "«Él sana a los quebrantados de corazón y venda sus heridas.» (Salmo 147:3). Tu cerebro y tu alma tienen la capacidad divina de ser restaurados por completo.",
+                programaTitulo: "Taller: Sana tu pasado y restaura tu identidad",
+                programaDesc: "Aprende a reprocesar memorias dolorosas, perdonar desde la neuropsicología y reconectar con el diseño original que Dios tiene para ti.",
+                mensajeWa: "Hola equipo de Renova Institute. Acabo de usar la Guía Interactiva y me di cuenta que necesito sanar heridas del pasado. Quiero información del taller 'Sana tu pasado y restaura tu identidad'."
+            },
+            agotamiento: {
+                titulo: "Encontrando Descanso Profundo",
+                icono: "ph-battery-warning-vertical",
+                fe: "«Venid a mí todos los que estáis trabajados y cargados, y yo os haré descansar.» (Mateo 11:28). El descanso verdadero restaura tu mente y tus neuroquímicos.",
+                programaTitulo: "Programa de Alto Rendimiento y Hábitos",
+                programaDesc: "Si el estrés te consume, necesitas sistemas. Aprende a gestionar tus ritmos circadianos, tu energía mental y tus hábitos sin sacrificar tu salud.",
+                mensajeWa: "Hola Renova Institute. Completé la Guía por temas de agotamiento crónico. Quisiera información sobre el programa de hábitos y alto rendimiento para gestionar mi estrés."
+            }
+        };
+
+        let seleccionActual = '';
+
+        function ocultarTodos() {
+            ['paso-1', 'paso-2', 'paso-3', 'paso-4'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+                document.getElementById(id).classList.remove('fade-in');
+            });
+        }
+
+        function mostrarPaso(id) {
+            ocultarTodos();
+            const elemento = document.getElementById(id);
+            elemento.classList.remove('hidden');
+            void elemento.offsetWidth;
+            elemento.classList.add('fade-in');
+        }
+
+        function iniciarExperiencia(emocion) {
+            seleccionActual = emocion;
+            const data = baseDatos[emocion];
+            
+            document.getElementById('ref-icono').className = `ph ${data.icono} text-3xl text-[#8C8660]`;
+            document.getElementById('ref-titulo').innerText = data.titulo;
+            document.getElementById('ref-fe').innerText = data.fe;
+            
+            document.getElementById('venta-titulo').innerText = data.programaTitulo;
+            document.getElementById('venta-desc').innerText = data.programaDesc;
+
+            mostrarPaso('paso-2');
+        }
+
+        function pasarAReflexion() {
+            mostrarPaso('paso-3');
+        }
+
+        function finalizarExperiencia() {
+            mostrarPaso('paso-4');
+        }
+
+        function contactarAsesoria() {
+            const data = baseDatos[seleccionActual];
+            const numeroWhatsApp = "573114951646"; 
+            const mensaje = encodeURIComponent(data.mensajeWa);
+            const url = `https://wa.me/${numeroWhatsApp}?text=${mensaje}`;
+            window.open(url, '_blank');
+        }
+
+        // Lógica para la instalación de la PWA
+        let deferredPrompt;
+        const contenedorInstalar = document.getElementById('contenedor-instalar');
+        const btnInstalar = document.getElementById('btn-instalar');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            if (contenedorInstalar) {
+                contenedorInstalar.classList.remove('hidden');
+            }
+        });
+
+        if (btnInstalar) {
+            btnInstalar.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    deferredPrompt = null;
+                    contenedorInstalar.classList.add('hidden');
+                }
+            });
+        }
+
+        window.addEventListener('appinstalled', (evt) => {
+            if (contenedorInstalar) {
+                contenedorInstalar.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
