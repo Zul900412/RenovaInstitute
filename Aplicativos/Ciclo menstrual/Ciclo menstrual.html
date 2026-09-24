@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ciclo y Bienestar | Renova Institute</title>
+    <meta name="description" content="Un espacio privado para comprender tu ciclo, registrar cómo te sientes y acompañar cada etapa con cuidado y fe.">
+    <meta name="theme-color" content="#6f5060">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Ciclo y Bienestar">
+    <link rel="manifest" href="manifest.json">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #FBF9F6;
+            color: #4A403A;
+        }
+        h1, h2, h3, .font-serif {
+            font-family: 'Cormorant Garamond', serif;
+        }
+        /* Ocultar barra de desplazamiento en el carrusel pero permitir scroll */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+            body {
+                padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+            }
+                .app-header {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 1rem;
+                    padding: .8rem 1rem;
+                    border: 1px solid #efe6e1;
+                    border-radius: 1.2rem;
+                    background: rgba(255, 255, 255, .78);
+                    box-shadow: 0 8px 24px rgba(74, 64, 58, .06);
+                }
+                .brand-lockup { display: flex; align-items: center; gap: .65rem; text-align: left; }
+                .brand-mark { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: .7rem; background: #8c8660; color: #fff; font-size: 1.1rem; }
+                .brand-name { display: block; color: #8c8660; font: 700 .68rem/1.2 Arial, sans-serif; letter-spacing: .12em; }
+                .brand-tagline { display: block; margin-top: .12rem; color: #54463c; font: 500 .56rem/1.2 Arial, sans-serif; }
+                .brand-page { display: block; margin-top: .15rem; color: #54463c; font: 600 .7rem/1.2 Arial, sans-serif; }
+                .store-link { display: inline-flex; align-items: center; gap: .4rem; padding: .6rem .75rem; border-radius: .7rem; background: #f4ebe8; color: #8c8660; font: 700 .7rem Arial, sans-serif; text-decoration: none; white-space: nowrap; }
+                .store-link:hover { background: #ead5d0; }
+                .install-button {
+                    display: none;
+                    align-items: center;
+                    gap: .4rem;
+                    padding: .65rem .8rem;
+                    border: 1px solid #ead5d0;
+                    border-radius: .9rem;
+                    background: #fff;
+                    color: #6f5060;
+                    font-size: .7rem;
+                    font-weight: 700;
+                }
+                .install-button.visible { display: inline-flex; }
+                .privacy-note {
+                    display: flex;
+                    align-items: flex-start;
+                    gap: .55rem;
+                    padding: .75rem .9rem;
+                    border: 1px solid #e8ded9;
+                    border-radius: 1rem;
+                    background: #fffdfb;
+                    color: #756762;
+                    font-size: .7rem;
+                    line-height: 1.5;
+                }
+                .privacy-note i { flex: 0 0 auto; color: #a66b5e; font-size: 1rem; }
+                .setup-message { display: none; }
+                .setup-message.visible { display: block; }
+                .cycle-content.hidden { display: none; }
+                .faith-card {
+                    background: linear-gradient(135deg, #f4ebf0, #f7f1ed);
+                    border: 1px solid #ead5d0;
+                }
+                .faith-card p { color: #5a4a55; }
+                .daily-word { background: linear-gradient(135deg, #f4ebf0, #f7f1ed); border: 1px solid #ead5d0; }
+                .daily-word .verse { padding-top: .7rem; border-top: 1px solid #ead5d0; color: #5a4a55; font-size: .8rem; font-style: italic; line-height: 1.5; }
+                .sales-card { background: #3b302a; color: #fff; }
+                .sales-card a { display: inline-flex; align-items: center; gap: .4rem; margin-top: .75rem; padding: .65rem .85rem; border-radius: .7rem; background: #e4c8c2; color: #3b302a; font-size: .72rem; font-weight: 700; text-decoration: none; }
+                .sales-card a.secondary { margin-left: .4rem; background: transparent; color: #ead5d0; border: 1px solid rgba(234, 213, 208, .5); }
+            button, input {
+                -webkit-tap-highlight-color: transparent;
+            }
+            .app-shell {
+                padding-bottom: 5.5rem;
+            }
+            .toast {
+                transform: translateY(1rem);
+                opacity: 0;
+                pointer-events: none;
+                transition: all .25s ease;
+            }
+            .toast.visible {
+                transform: translateY(0);
+                opacity: 1;
+            }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between py-6 px-4 sm:px-6 lg:px-8">
+
+    <div class="max-w-xl mx-auto w-full space-y-6">
+        
+        <!-- ENCABEZADO -->
+        <header class="app-header">
+            <a class="brand-lockup" href="../../index.html">
+                <span class="brand-mark"><i class="ph ph-brain"></i></span>
+                <span><strong class="brand-name">RENOVA INSTITUTE</strong><span class="brand-tagline">Restauración integral · Neurociencia + Fe</span><span class="brand-page">Ciclo & Bienestar</span></span>
+            </a>
+            <div class="flex items-center gap-2">
+                <a class="store-link" href="../../Tienda.html"><i class="ph ph-storefront"></i><span>Más recursos</span></a>
+                <button id="btnInstalar" class="install-button" type="button" aria-label="Instalar aplicación"><i class="ph ph-device-mobile"></i><span>Instalar</span></button>
+            </div>
+        </header>
+
+        <!-- CONFIGURACIÓN DE FECHA -->
+        <div class="bg-white p-5 rounded-3xl shadow-sm border border-[#EFECE6] flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+                <label for="fechaUltimaRegla" class="block text-xs font-bold uppercase text-gray-400 mb-1">Inicio de tu último periodo</label>
+                <input type="date" id="fechaUltimaRegla" class="p-2.5 bg-[#FBF9F6] border border-gray-200 rounded-xl text-sm font-medium text-[#4A403A] outline-none focus:border-[#A66B5E]">
+            </div>
+                <div class="w-full sm:w-auto">
+                    <label for="duracionCiclo" class="block text-xs uppercase text-gray-400 font-bold mb-1">Duración habitual</label>
+                    <div class="flex items-center gap-2">
+                        <input type="number" id="duracionCiclo" min="21" max="40" inputmode="numeric" class="w-20 p-2.5 bg-[#FBF9F6] border border-gray-200 rounded-xl text-sm font-medium text-[#4A403A] outline-none focus:border-[#A66B5E]">
+                        <span class="text-sm text-[#8C6D62]">días</span>
+                    </div>
+            </div>
+        </div>
+
+        <div id="mensajeConfiguracion" class="setup-message bg-[#3B302A] text-white p-5 rounded-3xl shadow-sm space-y-2">
+            <div class="flex items-center gap-3"><i class="ph ph-calendar-heart text-2xl text-[#E4C8C2]"></i><h2 class="text-xl font-bold">Comencemos con tus datos</h2></div>
+            <p class="text-sm text-[#EAD5D0]">Elige la fecha de inicio de tu último periodo y la duración habitual de tu ciclo. No mostraremos una fase hasta que tú decidas configurarlo.</p>
+        </div>
+
+        <div class="privacy-note"><i class="ph ph-lock-key"></i><span>Tus registros se guardan únicamente en este dispositivo. No se envían a servidores. Esta herramienta es educativa y no reemplaza una consulta médica.</span></div>
+
+            <!-- REGISTRO DIARIO -->
+            <section data-cycle-content class="bg-[#3B302A] text-white p-6 rounded-3xl shadow-sm space-y-5">
+                <div class="flex items-start justify-between gap-4">
+                    <div>
+                        <span class="text-xs uppercase tracking-widest text-[#E4C8C2] font-bold">Tu check-in de hoy</span>
+                        <h3 class="text-2xl font-bold mt-1">Escuchar al cuerpo</h3>
+                    </div>
+                    <i class="ph-fill ph-notebook text-3xl text-[#E4C8C2]"></i>
+                </div>
+                <div>
+                        <p class="text-xs text-[#EAD5D0] mb-2">¿Qué describe mejor tu estado hoy?</p>
+                    <div id="opcionesAnimo" class="grid grid-cols-5 gap-2">
+                            <button data-mood="Cansada" class="estado-btn bg-white/10 rounded-2xl p-2 text-center text-xs border border-white/10">Cansada</button>
+                            <button data-mood="Sensible" class="estado-btn bg-white/10 rounded-2xl p-2 text-center text-xs border border-white/10">Sensible</button>
+                            <button data-mood="Tranquila" class="estado-btn bg-white/10 rounded-2xl p-2 text-center text-xs border border-white/10">Tranquila</button>
+                            <button data-mood="Irritable" class="estado-btn bg-white/10 rounded-2xl p-2 text-center text-xs border border-white/10">Irritable</button>
+                            <button data-mood="Con energía" class="estado-btn bg-white/10 rounded-2xl p-2 text-center text-xs border border-white/10">Con energía</button>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-xs text-[#EAD5D0] mb-2">Síntomas o notas</p>
+                    <div id="opcionesSintomas" class="flex flex-wrap gap-2">
+                        <button data-symptom="Cólicos" class="sintoma-btn rounded-full border border-white/20 px-3 py-2 text-xs">Cólicos</button>
+                        <button data-symptom="Dolor de cabeza" class="sintoma-btn rounded-full border border-white/20 px-3 py-2 text-xs">Dolor de cabeza</button>
+                        <button data-symptom="Sensibilidad" class="sintoma-btn rounded-full border border-white/20 px-3 py-2 text-xs">Sensibilidad</button>
+                        <button data-symptom="Flujo" class="sintoma-btn rounded-full border border-white/20 px-3 py-2 text-xs">Flujo</button>
+                        <button data-symptom="Buen descanso" class="sintoma-btn rounded-full border border-white/20 px-3 py-2 text-xs">Buen descanso</button>
+                    </div>
+                </div>
+                <button id="guardarRegistro" class="w-full bg-[#E4C8C2] text-[#3B302A] font-bold rounded-2xl py-3 hover:bg-white transition">Guardar registro de hoy</button>
+                <p id="resumenRegistro" class="text-xs text-[#EAD5D0] hidden"></p>
+            </section>
+
+            <!-- RESUMEN DE PATRONES -->
+            <section data-cycle-content class="bg-white p-6 rounded-3xl shadow-sm border border-[#EFECE6] space-y-4">
+                <div class="flex items-center justify-between gap-4">
+                    <div>
+                        <span class="text-xs uppercase tracking-widest text-[#A66B5E] font-bold">Lo que vas descubriendo</span>
+                        <h3 class="text-2xl font-bold text-[#3B302A] mt-1">Resumen de tus registros</h3>
+                    </div>
+                    <i class="ph-bold ph-chart-line-up text-2xl text-[#A66B5E]"></i>
+                </div>
+                <p id="textoResumen" class="text-sm text-[#5A4A42]">Aún no hay suficientes registros para encontrar patrones.</p>
+                <div id="tarjetasResumen" class="grid gap-2 sm:grid-cols-2"></div>
+                <div class="bg-[#FBF9F6] p-4 rounded-2xl border border-[#EFECE6]">
+                    <strong class="block text-xs uppercase tracking-wide text-[#8C6D62]">Sugerencia para ti</strong>
+                    <p id="tipRegistro" class="text-sm text-[#5A4A42] mt-1">Registra cómo te sientes durante varios días para que la app pueda reconocer tus patrones.</p>
+                </div>
+            </section>
+
+            <!-- PREPARACION -->
+            <section data-cycle-content class="bg-white p-6 rounded-3xl shadow-sm border border-[#EFECE6] space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-xs uppercase tracking-widest text-[#A66B5E] font-bold">Para estar preparada</span>
+                        <h3 class="text-2xl font-bold text-[#3B302A] mt-1">Para cuidar de ti hoy</h3>
+                    </div>
+                    <span id="contadorPreparacion" class="text-xs bg-[#F4EBE8] px-3 py-1 rounded-full font-bold text-[#8C6D62]">0 / 3</span>
+                </div>
+                <div id="listaPreparacion" class="space-y-2"></div>
+                <p class="text-[11px] text-gray-400">Los datos se guardan solo en este dispositivo. Esta app orienta y no sustituye una consulta medica.</p>
+            </section>
+
+        <!-- TARJETA PRINCIPAL: FASE ACTUAL -->
+        <div data-cycle-content id="tarjetaFaseActual" class="bg-gradient-to-br from-[#F4EBE8] to-[#EFE2DE] p-6 sm:p-8 rounded-3xl shadow-sm border border-[#EAD5D0] relative overflow-hidden transition-all duration-500">
+            <div class="absolute -right-6 -bottom-6 text-[#E4C8C2] opacity-40">
+                <i class="ph-fill ph-plant text-9xl"></i>
+            </div>
+            
+            <div class="relative z-10 space-y-4">
+                <div class="flex justify-between items-center">
+                    <span id="badgeFaseHoy" class="bg-white/80 backdrop-blur-sm text-[#A66B5E] text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">Hoy estás en</span>
+                    <span id="diaCicloLabel" class="text-xs font-bold text-[#6B554E]">Día 1 del ciclo</span>
+                </div>
+
+                <div>
+                    <h2 id="nombreFaseActual" class="text-3xl sm:text-4xl font-bold text-[#3B302A]">Fase Menstrual</h2>
+                    <p id="subtituloFaseActual" class="text-sm text-[#6B554E] mt-1 font-medium">Momento de introspección, descanso y renovación profunda.</p>
+                </div>
+
+                <!-- Cuenta regresiva y estado de fertilidad -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <div class="bg-white/60 backdrop-blur-sm p-3 rounded-2xl flex items-center gap-2 text-xs font-medium text-[#5A4A42]">
+                        <i class="ph-bold ph-hourglass text-base text-[#A66B5E]"></i>
+                        <span id="textoCountdown">Siguiente fase en X días</span>
+                    </div>
+                    <div class="bg-white/60 backdrop-blur-sm p-3 rounded-2xl flex items-center gap-2 text-xs font-medium text-[#5A4A42]">
+                        <i class="ph-bold ph-drop text-base text-[#D97706]"></i>
+                        <span id="textoFertilidadHoy">Fertilidad: Baja</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GRÁFICA CIRCULAR DE FERTILIDAD Y FASES -->
+        <div data-cycle-content class="bg-white p-6 rounded-3xl shadow-sm border border-[#EFECE6] space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-sm font-bold uppercase tracking-wider text-gray-400">Mapa Circular del Ciclo</h3>
+                <span class="text-xs text-[#A66B5E] font-medium bg-[#F4EBE8] px-2.5 py-1 rounded-full">Anillo de 28 días</span>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row items-center gap-6 justify-around py-2">
+                <!-- Gráfica SVG Circular -->
+                <div class="relative w-40 h-40 flex items-center justify-center">
+                    <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                        <!-- Círculo base de fondo -->
+                        <circle cx="50" cy="50" r="40" fill="transparent" stroke="#F4EBE8" stroke-width="12"></circle>
+                        <!-- Arco Fértil (Días 10 a 16 aprox: 7 días de 28 = 25% del círculo) -->
+                        <circle cx="50" cy="50" r="40" fill="transparent" stroke="#D97706" stroke-width="12" 
+                                stroke-dasharray="251.2" stroke-dashoffset="150" stroke-linecap="round"></circle>
+                    </svg>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-2">
+                        <i class="ph-fill ph-circle-notch text-2xl text-[#A66B5E] animate-spin" style="animation-duration: 15s;"></i>
+                        <span id="circuloDiaTexto" class="text-xs font-bold text-[#3B302A] mt-1">Día 1</span>
+                    </div>
+                </div>
+
+                <!-- Leyenda del Gráfico -->
+                <div class="space-y-2 text-xs">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-[#A66B5E] inline-block"></span>
+                        <span class="text-gray-600 font-medium">Fase Menstrual y Lútea</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-[#E5A99E] inline-block"></span>
+                        <span class="text-gray-600 font-medium">Fase Folicular</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-[#D97706] inline-block"></span>
+                        <span class="text-[#3B302A] font-bold">Ventana Fértil / Ovulación</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CALENDARIO LINEAL DE LOS 28 DÍAS (CON BOTONES DE DESPLAZAMIENTO) -->
+        <div data-cycle-content class="bg-white p-5 rounded-3xl shadow-sm border border-[#EFECE6] space-y-3">
+            <div class="flex items-center justify-between">
+                <h3 id="tituloCronograma" class="text-sm font-bold uppercase tracking-wider text-gray-400">Cronograma de cambios</h3>
+                <div class="flex gap-1">
+                    <button onclick="moverCarrusel(-1)" class="w-8 h-8 rounded-full bg-[#FBF9F6] border border-gray-200 flex items-center justify-center text-[#4A403A] hover:bg-[#F4EBE8] transition">
+                        <i class="ph-bold ph-caret-left"></i>
+                    </button>
+                    <button onclick="moverCarrusel(1)" class="w-8 h-8 rounded-full bg-[#FBF9F6] border border-gray-200 flex items-center justify-center text-[#4A403A] hover:bg-[#F4EBE8] transition">
+                        <i class="ph-bold ph-caret-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Contenedor del Carrusel -->
+            <div id="carruselDias" class="flex gap-2 overflow-x-auto no-scrollbar py-2 scroll-smooth">
+                <!-- Se inyecta dinámicamente mediante JavaScript -->
+            </div>
+            <p class="text-[11px] text-center text-gray-400">El emoji muestra una tendencia posible del ánimo, no una predicción. Toca un día para explorar.</p>
+        </div>
+
+        <!-- SECCIÓN DE TIPS Y PREPARACIÓN DETALLADA -->
+        <div data-cycle-content id="panelDetalleFase" class="bg-white p-6 rounded-3xl shadow-sm border border-[#EFECE6] space-y-4">
+            <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+                <h3 id="tituloDetalleFase" class="text-xl font-bold text-[#3B302A]">Preparación y Bienestar</h3>
+                <span id="etiquetaVentanaDias" class="text-xs bg-[#FBF9F6] px-3 py-1 rounded-full font-bold text-[#8C6D62] border border-gray-100">Días 1 a 5</span>
+            </div>
+
+            <div class="space-y-3 text-sm text-[#5A4A42]">
+                <div class="flex items-start gap-3">
+                    <div class="p-2 bg-[#F4EBE8] rounded-xl text-[#A66B5E] mt-0.5">
+                        <i class="ph-bold ph-heart"></i>
+                    </div>
+                    <div>
+                        <strong class="block text-[#3B302A] text-xs uppercase tracking-wide">Cuidado Emocional & Sensibilidad</strong>
+                        <p id="tipEmocional" class="mt-0.5 text-gray-600">...</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-3">
+                    <div class="p-2 bg-[#F4EBE8] rounded-xl text-[#A66B5E] mt-0.5">
+                        <i class="ph-bold ph-fork-knife"></i>
+                    </div>
+                    <div>
+                        <strong class="block text-[#3B302A] text-xs uppercase tracking-wide">Nutrición y Energía</strong>
+                        <p id="tipNutricion" class="mt-0.5 text-gray-600">...</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-3">
+                    <div class="p-2 bg-[#F4EBE8] rounded-xl text-[#A66B5E] mt-0.5">
+                        <i class="ph-bold ph-sparkle"></i>
+                    </div>
+                    <div>
+                        <strong class="block text-[#3B302A] text-xs uppercase tracking-wide">Indicador de Fertilidad para este día</strong>
+                        <p id="tipFertilidad" class="mt-0.5 text-gray-600 font-semibold text-[#D97706]">...</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-3">
+                    <div class="p-2 bg-[#F4EBE8] rounded-xl text-[#A66B5E] mt-0.5">
+                        <i class="ph-bold ph-moon-stars"></i>
+                    </div>
+                    <div>
+                        <strong class="block text-[#3B302A] text-xs uppercase tracking-wide">Sueño y descanso</strong>
+                        <p id="tipDescanso" class="mt-0.5 text-gray-600">...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section data-cycle-content class="daily-word p-6 rounded-3xl shadow-sm space-y-3">
+            <div class="flex items-center gap-3">
+                <div class="p-2 rounded-xl bg-white/70 text-[#A66B5E]"><i class="ph-bold ph-book-open text-xl"></i></div>
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-[#A66B5E] font-bold">Palabra del día · Día <span id="palabraDia">1</span></span>
+                    <h3 id="palabraTitulo" class="text-2xl font-bold text-[#3B302A] mt-1">Cuidado con propósito</h3>
+                </div>
+            </div>
+            <p id="palabraTip" class="text-sm leading-relaxed">Tu cuerpo merece atención, descanso y respeto. La fe puede acompañar este proceso desde la gratitud y el cuidado.</p>
+            <p id="palabraVersiculo" class="verse">«Te alabo porque soy una creación admirable.» — Salmo 139:14</p>
+        </section>
+
+        <section data-cycle-content class="sales-card p-6 rounded-3xl shadow-sm space-y-2">
+            <span class="text-xs uppercase tracking-widest text-[#E4C8C2] font-bold">Un siguiente paso, si lo necesitas</span>
+            <h3 class="text-2xl font-bold">Acompañar también es cuidarte</h3>
+            <p class="text-sm text-[#EAD5D0]">Si este espacio te ayudó a escucharte, una sesión personalizada puede ayudarte a conversar con calma sobre lo que estás viviendo y encontrar herramientas para tu bienestar.</p>
+            <a href="https://wa.me/573114951646?text=Hola%20Renova%20Institute.%20Prob%C3%A9%20la%20app%20Ciclo%20%26%20Bienestar%20y%20quiero%20conocer%20la%20Sesi%C3%B3n%20Personalizada%20de%20Psicolog%C3%ADa." target="_blank" rel="noopener"><i class="ph ph-whatsapp-logo"></i> Consultar por WhatsApp</a>
+            <a class="secondary" href="../../Tienda.html"><i class="ph ph-storefront"></i> Ver en la tienda</a>
+        </section>
+
+    </div>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="text-center text-xs text-gray-400 mt-8 space-y-1">
+        <p>Creado con todo el amor del mundo para recordarte lo especial que eres en cada estación.</p>
+    </footer>
+
+        <div id="toast" class="toast fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-[#3B302A] text-white text-xs font-semibold px-4 py-3 rounded-full shadow-lg">Guardado en este dispositivo</div>
+
+    <!-- SCRIPT DE LÓGICA E INTERACTIVIDAD -->
+    <script>
+        const fasesInfo = [
+            {
+                nombre: "Fase Menstrual",
+                subtitulo: "Momento de introspeccion, descanso y renovacion profunda.",
+                rangoDias: "Dias 1 a 5",
+                emocional: "Es un periodo para consentirte, permitirte bajar el ritmo y no exigirte de más. Tu cuerpo esta haciendo un trabajo interno valioso.",
+                nutricion: "Prefiere infusiones calidas, alimentos ricos en hierro (como espinacas o legumbres) y comidas reconfortantes.",
+                faseId: 0
+            },
+            {
+                nombre: "Fase Folicular",
+                subtitulo: "Aparece la energia renovada, la creatividad y las ganas de iniciar proyectos.",
+                rangoDias: "Dias 6 a 13",
+                emocional: "Te sentiras con mayor claridad mental, optimismo y apertura social. Excelente momento para planificar.",
+                nutricion: "Alimentos frescos, vegetales crujientes, frutas ricas en antioxidantes y proteinas ligeras.",
+                faseId: 1
+            },
+            {
+                nombre: "Fase Ovulatoria",
+                subtitulo: "Tu ventana fertil. Estas en tu punto maximo de brillo, energia y magnetismo.",
+                rangoDias: "Dias 14 a 16",
+                emocional: "Alta confianza, empatia y expresion comunicativa al maximo. Te sentiras muy magnetica y segura.",
+                nutricion: "Alimentos crudos, ensaladas frescas, semillas y granos integrales que apoyen tu vitalidad.",
+                faseId: 2
+            },
+            {
+                nombre: "Fase Lutea",
+                subtitulo: "Transicion hacia la calma. Tiempo de enfoque, detalle y autocuidado consciente.",
+                rangoDias: "Dias 17 a 28",
+                emocional: "Puedes experimentar mayor sensibilidad. Rodéate de paz y haz espacio para consentirte.",
+                nutricion: "Carbohidratos complejos (camote, avena), magnesio y alimentos para equilibrar el estado de animo.",
+                faseId: 3
+            }
+        ];
+
+        const palabrasDiarias = [
+            { titulo: 'Escucha', tip: 'No todo lo que sientes necesita una respuesta inmediata. Antes de exigirte, pregúntate qué señal está intentando darte tu cuerpo y qué cuidado concreto puedes ofrecerle hoy.', versiculo: '«El corazón del entendido adquiere sabiduría; y el oído de los sabios busca la ciencia.» — Proverbios 18:15' },
+            { titulo: 'Descanso', tip: 'Descansar no es abandonar tus responsabilidades; es recuperar los recursos con los que las sostienes. Protege un pequeño espacio del día sin productividad.', versiculo: '«En paz me acostaré, y asimismo dormiré; porque solo tú, Jehová, me haces vivir confiado.» — Salmo 4:8' },
+            { titulo: 'Paciencia', tip: 'Tu ritmo no tiene que parecerse al de nadie. La paciencia contigo misma convierte un día difícil en una oportunidad de cuidado, no en una acusación.', versiculo: '«Todo lo hizo hermoso en su tiempo.» — Eclesiastés 3:11' },
+            { titulo: 'Límites', tip: 'Un límite expresado con claridad protege tu energía y también tus relaciones. Decir “hoy necesito bajar el ritmo” es una forma honesta de cuidarte.', versiculo: '«Sobre toda cosa guardada, guarda tu corazón.» — Proverbios 4:23' },
+            { titulo: 'Gratitud', tip: 'Agradecer no significa negar el cansancio o el dolor. Significa reconocer, aun en medio de ellos, una pequeña evidencia de cuidado que sí está presente.', versiculo: '«Dad gracias en todo, porque esta es la voluntad de Dios.» — 1 Tesalonicenses 5:18' },
+            { titulo: 'Claridad', tip: 'Cuando todo parece urgente, elige una sola prioridad. La claridad no siempre llega pensando más, sino creando silencio suficiente para escucharte.', versiculo: '«Reconócelo en todos tus caminos, y él enderezará tus veredas.» — Proverbios 3:6' },
+            { titulo: 'Ternura', tip: 'Háblate con la misma ternura con la que cuidarías a alguien amado. La exigencia puede empujarte un momento; la compasión te ayuda a sostenerte.', versiculo: '«Vestíos, pues, como escogidos de Dios... de entrañable misericordia, de benignidad.» — Colosenses 3:12' },
+            { titulo: 'Presencia', tip: 'Regresa a lo que está ocurriendo ahora: una respiración, una textura, un sonido. El presente es un lugar pequeño, pero suficiente para comenzar.', versiculo: '«Este es el día que hizo Jehová; nos gozaremos y alegraremos en él.» — Salmo 118:24' },
+            { titulo: 'Fortaleza', tip: 'La fortaleza no siempre se ve como avanzar. A veces se parece a pedir ayuda, cambiar de plan o reconocer que necesitas una pausa.', versiculo: '«Bástate mi gracia; porque mi poder se perfecciona en la debilidad.» — 2 Corintios 12:9' },
+            { titulo: 'Esperanza', tip: 'No necesitas resolver todo el futuro hoy. Elige un siguiente paso amable y deja que la esperanza crezca a través de acciones pequeñas y posibles.', versiculo: '«Porque yo sé los pensamientos que tengo acerca de vosotros... pensamientos de paz.» — Jeremías 29:11' },
+            { titulo: 'Orden', tip: 'Prepara con anticipación lo que suele ayudarte: agua, descanso, alimentos y apoyo. El orden cotidiano puede convertirse en una forma silenciosa de amor propio.', versiculo: '«Pero hágase todo decentemente y con orden.» — 1 Corintios 14:40' },
+            { titulo: 'Cuidado', tip: 'Cuidarte no es un premio que debes ganarte cuando termines todo. Es una responsabilidad legítima y una manera de honrar la vida que recibiste.', versiculo: '«Te alabo porque soy una creación admirable.» — Salmo 139:14' }
+        ];
+
+        const consejosGraduales = [
+            [
+                { etiqueta: 'Comienzo suave', emocional: 'Baja el ritmo sin aislarte. Es normal necesitar más silencio y menos exigencia.', nutricion: 'Elige comidas tibias y sencillas; prioriza hierro y líquidos.', descanso: 'Busca una noche protegida: luz tenue, calor local y una hora tranquila antes de dormir.' },
+                { etiqueta: 'Descanso profundo', emocional: 'Tu sensibilidad puede estar más presente. Decide qué puede esperar y date pausas reales.', nutricion: 'Mantén horarios regulares y combina alimentos reconfortantes con proteínas.', descanso: 'Si aparece cansancio, una siesta corta o acostarte un poco antes puede ayudarte.' },
+                { etiqueta: 'Cierre de fase', emocional: 'Empieza a observar si vuelve la energía, sin obligarte a acelerar todavía.', nutricion: 'Retoma variedad y alimentos frescos poco a poco, según cómo te sienten.', descanso: 'Conserva la rutina de sueño: la transición funciona mejor con horarios estables.' },
+                { etiqueta: 'Transición', emocional: 'Puedes sentir una mezcla de calma y ganas de volver a la actividad; ambas cosas son válidas.', nutricion: 'Escucha el hambre y la energía del día en lugar de seguir reglas rígidas.', descanso: 'Mantén tu hora de despertar y deja que el cuerpo marque el ritmo de actividad.' }
+            ],
+            [
+                { etiqueta: 'Energía en ascenso', emocional: 'La claridad puede volver de forma gradual. Empieza por una tarea importante, no por diez.', nutricion: 'Suma vegetales, fruta y proteínas ligeras a tus comidas habituales.', descanso: 'Aunque te sientas mejor, conserva una rutina de sueño que puedas sostener.' },
+                { etiqueta: 'Más apertura', emocional: 'Es un buen momento para planear, conversar y retomar movimiento sin sobrecargarte.', nutricion: 'Acompaña la actividad con agua y comidas completas.', descanso: 'La energía puede aumentar; baja pantallas y estímulos al final del día para dormir bien.' },
+                { etiqueta: 'Cerca del pico', emocional: 'Puedes notar más iniciativa y sociabilidad. Deja espacio para disfrutar sin llenar toda la agenda.', nutricion: 'Come suficiente durante el día para no llegar con demasiada hambre a la noche.', descanso: 'Si tu mente se activa por la noche, anota pendientes antes de acostarte.' },
+                { etiqueta: 'Puente hacia ovulación', emocional: 'Tu energía puede sentirse alta, pero no es igual todos los días: ajusta tus expectativas.', nutricion: 'Mantén hidratación y comidas regulares para acompañar el cambio.', descanso: 'Protege tus horas de sueño antes de los días de mayor actividad.' }
+            ],
+            [
+                { etiqueta: 'Entrada a la ventana', emocional: 'Puede aumentar la confianza y el deseo de conectar. Observa también tus límites.', nutricion: 'Prioriza agua, alimentos frescos y comidas que no te pesen.', descanso: 'No sacrifiques sueño por aprovechar la energía; el descanso también sostiene tu bienestar.' },
+                { etiqueta: 'Punto de mayor intensidad', emocional: 'La energía y la expresividad pueden estar más altas. Elige qué merece tu atención.', nutricion: 'Reparte la energía entre comida, agua y pausas para evitar el bajón posterior.', descanso: 'Una rutina de desconexión ayuda a que la activación del día no se lleve a la noche.' },
+                { etiqueta: 'Comienza a bajar', emocional: 'Puedes seguir sintiéndote activa mientras aparece más necesidad de calma.', nutricion: 'Vuelve a comidas más completas y observa qué te ayuda a sentirte estable.', descanso: 'Empieza a bajar luces y planes nocturnos un poco antes.' },
+                { etiqueta: 'Transición lútea', emocional: 'La sensibilidad puede cambiar rápido. Nómbrala sin interpretarla como un problema.', nutricion: 'Mantén horarios y evita saltarte comidas si notas cambios de humor.', descanso: 'Haz del descanso una prioridad preventiva, no solo una respuesta al cansancio.' }
+            ],
+            [
+                { etiqueta: 'Inicio de bajada', emocional: 'La concentración puede pedir más estructura. Divide las tareas y reduce compromisos innecesarios.', nutricion: 'Incluye carbohidratos complejos, magnesio y suficiente agua.', descanso: 'Empieza una rutina nocturna más lenta y consistente.' },
+                { etiqueta: 'Mayor sensibilidad', emocional: 'Puede haber menos paciencia o más necesidad de espacio. Comunicarlo evita exigirte de más.', nutricion: 'No te saltes comidas; la regularidad puede ayudar a sostener el ánimo.', descanso: 'Prioriza dormir un poco más y evita convertir el cansancio en una deuda acumulada.' },
+                { etiqueta: 'Pre-menstrual', emocional: 'Si notas irritabilidad o bajón, trátalo como información para cuidarte, no como una falla personal.', nutricion: 'Prepara con anticipación comidas y apoyos que te resulten fáciles.', descanso: 'Reduce estímulos por la noche y deja preparado el día siguiente para descansar mejor.' },
+                { etiqueta: 'Cerca del reinicio', emocional: 'Tu cuerpo puede pedir cierre y calma. Revisa lo que necesitas antes de que comience el sangrado.', nutricion: 'Ten a mano alimentos, agua y productos menstruales para los próximos días.', descanso: 'Una noche tranquila y sin agenda apretada puede hacer más amable la transición.' }
+            ]
+        ];
+
+        const inputFecha = document.getElementById('fechaUltimaRegla');
+        const inputDuracion = document.getElementById('duracionCiclo');
+        const claveDatos = 'ciclo-bienestar-datos';
+        const datosGuardados = JSON.parse(localStorage.getItem(claveDatos) || '{}');
+        inputFecha.value = datosGuardados.fechaInicio || '';
+        inputDuracion.value = datosGuardados.duracion || 28;
+
+        let diaActualCiclo = 1;
+        let diaSeleccionadoGlobal = 1;
+        let estadoSeleccionado = datosGuardados.registro?.estado || '';
+        let sintomasSeleccionados = datosGuardados.registro?.sintomas || [];
+        const preparacionPorDia = [
+            ['Prepara una bebida caliente y tómala sin prisa.', 'Deja a mano lo que necesitas para sentirte cómoda.', 'Registra cualquier dolor nuevo y su intensidad.'],
+            ['Reserva diez minutos sin exigencias ni pantallas.', 'Elige una comida sencilla que te caiga bien.', 'Dile a alguien de confianza cómo puede acompañarte.'],
+            ['Haz una pausa de respiración lenta.', 'Revisa si hoy necesitas calor local o más descanso.', 'Anota una cosa que tu cuerpo te está comunicando.'],
+            ['Camina suavemente o estira si te resulta agradable.', 'Llena una botella de agua para tenerla cerca.', 'Protege una hora tranquila antes de dormir.'],
+            ['Elige una prioridad realista para hoy.', 'Incluye una porción de fruta o vegetales en una comida.', 'Observa qué actividad aumenta tu energía sin agotarte.'],
+            ['Retoma una tarea que te entusiasme, sin llenar la agenda.', 'Haz una comida completa antes de que aparezca mucha hambre.', 'Programa una pausa entre compromisos.'],
+            ['Escribe una idea que quieras desarrollar.', 'Sal al aire libre unos minutos si puedes.', 'Apaga las notificaciones durante un bloque de concentración.'],
+            ['Celebra un avance pequeño de esta semana.', 'Hidrátate antes y después de moverte.', 'Comenta con claridad un límite que necesites cuidar.'],
+            ['Observa tu energía sin compararla con la de otros días.', 'Ten a mano una opción de comida nutritiva y fácil.', 'Deja espacio para una conversación que te haga bien.'],
+            ['Reduce una exigencia innecesaria de tu agenda.', 'Prepara con anticipación lo que necesitarás en los próximos días.', 'Anota qué señales aparecen antes de sentirte agotada.'],
+            ['Haz una revisión amable de tus emociones.', 'Prioriza alimentos y horarios que te ayuden a sentir estabilidad.', 'Elige una rutina de noche más lenta.'],
+            ['Ordena un pequeño espacio para facilitar tu descanso.', 'Deja listos productos menstruales, agua y algo reconfortante.', 'Pide apoyo si un síntoma está afectando tu vida diaria.']
+        ];
+
+        function guardarDatos() {
+            const fechaRegistro = new Date().toISOString().split('T')[0];
+            const historial = datosGuardados.historial || [];
+            const registro = { estado: estadoSeleccionado, sintomas: sintomasSeleccionados, fecha: fechaRegistro, diaCiclo: diaActualCiclo };
+            const sinRegistroDeHoy = historial.filter(item => item.fecha !== fechaRegistro);
+            datosGuardados.historial = [...sinRegistroDeHoy, registro].slice(-60);
+            datosGuardados.registro = registro;
+            datosGuardados.fechaInicio = inputFecha.value;
+            datosGuardados.duracion = Number(inputDuracion.value);
+            localStorage.setItem(claveDatos, JSON.stringify(datosGuardados));
+        }
+
+        function obtenerLimitesFases() {
+            const duracion = Number(inputDuracion.value) || 28;
+            const ovulacion = Math.min(duracion - 3, Math.max(10, duracion - 14));
+            return [[1, 5], [6, Math.max(6, ovulacion - 2)], [Math.max(7, ovulacion - 1), Math.min(duracion - 1, ovulacion + 1)], [Math.min(duracion, ovulacion + 2), duracion]];
+        }
+
+        function obtenerFasePorDia(dia) {
+            const fase = obtenerLimitesFases().findIndex(([inicio, final]) => dia >= inicio && dia <= final);
+            return fase === -1 ? 3 : fase;
+        }
+
+        function obtenerFertilidadPorDia(dia) {
+            const duracion = Number(inputDuracion.value) || 28;
+            const ovulacion = Math.min(duracion - 3, Math.max(10, duracion - 14));
+            if (dia >= ovulacion - 1 && dia <= ovulacion + 1) return { nivel: "Alta (estimación)", color: "text-[#D97706]", bg: "bg-amber-100 border-amber-300" };
+            if (dia >= ovulacion - 5 && dia <= ovulacion + 2) return { nivel: "Posible ventana fértil", color: "text-amber-600", bg: "bg-amber-50 border-amber-200" };
+            return { nivel: "No estimada", color: "text-gray-400", bg: "bg-gray-50 border-gray-100" };
+        }
+
+        function obtenerNivelTransicion(dia) {
+            const limites = obtenerLimitesFases();
+            const indiceFase = obtenerFasePorDia(dia);
+            const [inicio, final] = limites[indiceFase];
+            const progreso = final === inicio ? 1 : (dia - inicio) / (final - inicio);
+            return Math.min(3, Math.max(0, Math.round(progreso * 3)));
+        }
+
+        function obtenerFechaInicioCicloActual() {
+            const fechaInicio = new Date(`${inputFecha.value}T00:00:00`);
+            const hoyLocal = new Date();
+            const diasTranscurridos = Math.max(0, Math.floor((hoyLocal - fechaInicio) / (1000 * 60 * 60 * 24)));
+            const duracion = Number(inputDuracion.value) || 28;
+            fechaInicio.setDate(fechaInicio.getDate() + Math.floor(diasTranscurridos / duracion) * duracion);
+            return fechaInicio;
+        }
+
+        function formatearFechaCorta(fecha) {
+            return new Intl.DateTimeFormat('es-ES', { day: '2-digit', month: 'short' })
+                .format(fecha).replace('.', '');
+        }
+
+        function obtenerTendenciaAnimo(dia) {
+            const fase = obtenerFasePorDia(dia);
+            const nivel = obtenerNivelTransicion(dia);
+            const tendencias = [
+                [
+                    { emoji: '😴', texto: 'Más necesidad de calma' },
+                    { emoji: '🌙', texto: 'Sensible y hacia dentro' },
+                    { emoji: '😌', texto: 'Calma en recuperación' },
+                    { emoji: '🌤️', texto: 'Volviendo poco a poco' }
+                ],
+                [
+                    { emoji: '🌱', texto: 'Energía despertando' },
+                    { emoji: '🙂', texto: 'Más despejada' },
+                    { emoji: '😊', texto: 'Más abierta y activa' },
+                    { emoji: '✨', texto: 'Cerca de su punto alto' }
+                ],
+                [
+                    { emoji: '😊', texto: 'Confianza en aumento' },
+                    { emoji: '✨', texto: 'Expresiva y conectada' },
+                    { emoji: '⚡', texto: 'Energía más intensa' },
+                    { emoji: '🌅', texto: 'Comienza a bajar' }
+                ],
+                [
+                    { emoji: '🌿', texto: 'Enfoque tranquilo' },
+                    { emoji: '😐', texto: 'Más sensible a estímulos' },
+                    { emoji: '😮‍💨', texto: 'Necesita más espacio' },
+                    { emoji: '🤍', texto: 'Pide calma y cuidado' }
+                ]
+            ];
+            return tendencias[fase][nivel];
+        }
+
+        function obtenerMasFrecuente(valores) {
+            if (!valores.length) return '';
+            const conteo = valores.reduce((resultado, valor) => {
+                resultado[valor] = (resultado[valor] || 0) + 1;
+                return resultado;
+            }, {});
+            return Object.keys(conteo).sort((a, b) => conteo[b] - conteo[a])[0];
+        }
+
+        function renderizarPalabraDiaria(dia) {
+            const palabra = palabrasDiarias[(dia - 1) % palabrasDiarias.length];
+            document.getElementById('palabraDia').innerText = dia;
+            document.getElementById('palabraTitulo').innerText = palabra.titulo;
+            document.getElementById('palabraTip').innerText = palabra.tip;
+            document.getElementById('palabraVersiculo').innerText = palabra.versiculo;
+        }
+
+        function renderizarResumen() {
+            const historial = datosGuardados.historial || [];
+            const texto = document.getElementById('textoResumen');
+            const tarjetas = document.getElementById('tarjetasResumen');
+            const tip = document.getElementById('tipRegistro');
+            tarjetas.innerHTML = '';
+
+            if (!historial.length) {
+                texto.innerText = 'Aún no hay suficientes registros para encontrar patrones.';
+                tip.innerText = 'Registra cómo te sientes durante varios días para que la app pueda reconocer tus patrones.';
+                return;
+            }
+
+            const ultimoRegistro = historial[historial.length - 1];
+            const sintomas = historial.flatMap(item => item.sintomas || []);
+            const sintomaFrecuente = obtenerMasFrecuente(sintomas);
+            const estadoFrecuente = obtenerMasFrecuente(historial.map(item => item.estado).filter(Boolean));
+            texto.innerText = `Tienes ${historial.length} registro${historial.length === 1 ? '' : 's'} guardado${historial.length === 1 ? '' : 's'}. Cada entrada ayuda a comparar cómo te sientes en distintas fases.`;
+
+            const datosResumen = [
+                ['Estado más registrado', estadoFrecuente || 'Aún sin datos'],
+                ['Síntoma más repetido', sintomaFrecuente || 'Aún sin datos'],
+                ['Último registro', ultimoRegistro.estado || 'Sin estado']
+            ];
+            datosResumen.forEach(([etiqueta, valor]) => {
+                const tarjeta = document.createElement('div');
+                tarjeta.className = 'bg-[#FBF9F6] p-3 rounded-2xl border border-[#EFECE6]';
+                tarjeta.innerHTML = `<span class="block text-[10px] uppercase tracking-wide text-gray-400">${etiqueta}</span><strong class="block text-sm text-[#3B302A] mt-1">${valor}</strong>`;
+                tarjetas.appendChild(tarjeta);
+            });
+
+            const tipPorSintoma = {
+                Cólicos: 'Si los cólicos se repiten o te impiden tus actividades, registra también su intensidad y coméntalo en consulta.',
+                Colicos: 'Si los cólicos se repiten o te impiden tus actividades, registra también su intensidad y coméntalo en consulta.',
+                'Dolor de cabeza': 'Observa si el dolor de cabeza coincide con poco descanso, poca hidratación o una fase concreta.',
+                Sensibilidad: 'Reserva más pausas y comunica tus límites; comparar varios ciclos puede mostrar cuándo aparece.',
+                Flujo: 'Anota cambios de cantidad, color, olor o dolor asociado; si algo te preocupa, consúltalo.',
+                'Buen descanso': 'El buen descanso es una pista útil: observa qué rutinas te ayudan a repetirlo.'
+            };
+            const faseActual = fasesInfo[obtenerFasePorDia(diaActualCiclo)];
+            const consejoActual = consejosGraduales[obtenerFasePorDia(diaActualCiclo)][obtenerNivelTransicion(diaActualCiclo)];
+            tip.innerText = sintomaFrecuente && tipPorSintoma[sintomaFrecuente]
+                ? tipPorSintoma[sintomaFrecuente]
+                : `Ahora estás en ${faseActual.nombre}, ${consejoActual.etiqueta.toLowerCase()}. ${consejoActual.descanso}`;
+        }
+
+        function renderizarCarrusel(diaActivo) {
+            const contenedor = document.getElementById('carruselDias');
+            contenedor.innerHTML = '';
+
+            const duracion = Number(inputDuracion.value) || 28;
+            const fechaInicioCiclo = obtenerFechaInicioCicloActual();
+            document.getElementById('tituloCronograma').innerText = `Cronograma de cambios (${duracion} días)`;
+            for (let i = 1; i <= duracion; i++) {
+                const fert = obtenerFertilidadPorDia(i);
+                const esHoy = i === diaActivo;
+                const fechaDia = new Date(fechaInicioCiclo);
+                fechaDia.setDate(fechaDia.getDate() + i - 1);
+                const tendenciaAnimo = obtenerTendenciaAnimo(i);
+
+                const btn = document.createElement('button');
+                btn.onclick = () => seleccionarDiaManual(i);
+                btn.className = `flex-shrink-0 w-14 p-2.5 rounded-2xl text-center border transition-all flex flex-col items-center justify-between ${
+                    esHoy 
+                        ? 'bg-[#F4EBE8] border-[#A66B5E] shadow-sm scale-105' 
+                        : 'bg-[#FBF9F6] border-gray-200 hover:border-gray-300'
+                }`;
+
+                let etiquetaFaseCorto = "Men";
+                const faseDia = obtenerFasePorDia(i);
+                if (faseDia === 1) etiquetaFaseCorto = "Foli";
+                if (faseDia === 2) etiquetaFaseCorto = "Ovul";
+                if (faseDia === 3) etiquetaFaseCorto = "Lute";
+
+                btn.innerHTML = `
+                    <span class="text-[10px] uppercase font-bold text-gray-400">${etiquetaFaseCorto}</span>
+                    <span class="text-base font-bold text-[#3B302A] my-1">D${i}</span>
+                    <span class="text-[10px] text-[#8C6D62]">${formatearFechaCorta(fechaDia)}</span>
+                    <span class="text-lg leading-none mt-1" title="${tendenciaAnimo.texto}" aria-label="${tendenciaAnimo.texto}">${tendenciaAnimo.emoji}</span>
+                    <span class="w-2 h-2 rounded-full ${obtenerFertilidadPorDia(i).nivel !== 'No estimada' ? 'bg-[#D97706]' : 'bg-gray-200'}"></span>
+                `;
+                contenedor.appendChild(btn);
+            }
+        }
+
+        function actualizarVistaCompleta(diaCiclo, actualizarResumenActual = false) {
+            diaSeleccionadoGlobal = diaCiclo;
+            const indiceFase = obtenerFasePorDia(diaCiclo);
+            const fase = fasesInfo[indiceFase];
+            const fertilidad = obtenerFertilidadPorDia(diaCiclo);
+            const consejo = consejosGraduales[indiceFase][obtenerNivelTransicion(diaCiclo)];
+            renderizarPalabraDiaria(diaCiclo);
+
+            if (actualizarResumenActual) {
+                const faseActual = fasesInfo[obtenerFasePorDia(diaActualCiclo)];
+                const fertilidadActual = obtenerFertilidadPorDia(diaActualCiclo);
+                const consejoActual = consejosGraduales[obtenerFasePorDia(diaActualCiclo)][obtenerNivelTransicion(diaActualCiclo)];
+                const diasRestantes = (Number(inputDuracion.value) || 28) - diaActualCiclo;
+                document.getElementById('nombreFaseActual').innerText = faseActual.nombre;
+                document.getElementById('subtituloFaseActual').innerText = `${faseActual.subtitulo} ${consejoActual.etiqueta}.`;
+                document.getElementById('diaCicloLabel').innerText = `Día ${diaActualCiclo} del ciclo`;
+                document.getElementById('circuloDiaTexto').innerText = `Día ${diaActualCiclo}`;
+                document.getElementById('textoFertilidadHoy').innerText = `Fertilidad: ${fertilidadActual.nivel}`;
+                document.getElementById('textoCountdown').innerText = `Faltan ${diasRestantes} días para nuevo ciclo`;
+            }
+
+            // Actualizar Panel de Detalles
+            document.getElementById('tituloDetalleFase').innerText = `Detalle: ${fase.nombre} (Día ${diaCiclo})`;
+            const [inicioFase, finalFase] = obtenerLimitesFases()[indiceFase];
+            document.getElementById('etiquetaVentanaDias').innerText = `Días ${inicioFase} a ${finalFase} · ${consejo.etiqueta}`;
+            document.getElementById('tipEmocional').innerText = consejo.emocional;
+            document.getElementById('tipNutricion').innerText = consejo.nutricion;
+            document.getElementById('tipFertilidad').innerText = `${fertilidad.nivel}. Este calendario es orientativo y no debe usarse como método anticonceptivo ni como diagnóstico.`;
+            document.getElementById('tipDescanso').innerText = consejo.descanso;
+
+            renderizarCarrusel(diaCiclo);
+            renderizarPreparacion(indiceFase, diaCiclo);
+            renderizarResumen();
+        }
+
+        function calcularCiclo() {
+            const fechaInicioStr = inputFecha.value;
+            const mensajeConfiguracion = document.getElementById('mensajeConfiguracion');
+            const contenidos = document.querySelectorAll('[data-cycle-content]');
+            if (!fechaInicioStr) {
+                mensajeConfiguracion.classList.add('visible');
+                contenidos.forEach(contenido => contenido.classList.add('hidden'));
+                return;
+            }
+            mensajeConfiguracion.classList.remove('visible');
+            contenidos.forEach(contenido => contenido.classList.remove('hidden'));
+
+            const fechaInicio = new Date(fechaInicioStr);
+            const fechaActual = new Date();
+
+            const diferenciaTiempo = fechaActual - fechaInicio;
+            let diaActual = Math.floor(diferenciaTiempo / (1000 * 60 * 60 * 24)) + 1;
+            
+            if (diaActual < 1) diaActual = 1;
+            const duracion = Math.min(40, Math.max(21, Number(inputDuracion.value) || 28));
+            inputDuracion.value = duracion;
+            let diaEnCiclo = ((diaActual - 1) % duracion) + 1;
+
+            diaActualCiclo = diaEnCiclo;
+            actualizarVistaCompleta(diaActualCiclo, true);
+        }
+
+        function seleccionarDiaManual(dia) {
+            actualizarVistaCompleta(dia);
+        }
+
+        function moverCarrusel(direccion) {
+            const contenedor = document.getElementById('carruselDias');
+            contenedor.scrollBy({ left: direccion * 120, behavior: 'smooth' });
+        }
+
+        function renderizarPreparacion(indiceFase, diaCiclo) {
+            const lista = document.getElementById('listaPreparacion');
+            const indiceTareas = (diaCiclo - 1) % preparacionPorDia.length;
+            const tareasDelDia = preparacionPorDia[indiceTareas];
+            const completadas = datosGuardados.preparacion?.[diaCiclo] || [];
+            lista.innerHTML = '';
+            tareasDelDia.forEach((texto, indice) => {
+                const boton = document.createElement('button');
+                const completada = completadas.includes(indice);
+                boton.className = `w-full flex items-center gap-3 text-left p-3 rounded-2xl border transition ${completada ? 'bg-[#F4EBE8] border-[#E4C8C2]' : 'bg-[#FBF9F6] border-gray-100'}`;
+                boton.innerHTML = `<span class="w-5 h-5 rounded-full border flex items-center justify-center text-xs ${completada ? 'bg-[#A66B5E] border-[#A66B5E] text-white' : 'border-gray-300'}">${completada ? '✓' : ''}</span><span class="text-xs text-[#5A4A42]">${texto}</span>`;
+                boton.onclick = () => {
+                    const listaActual = datosGuardados.preparacion || {};
+                    const tareasCompletadas = listaActual[diaCiclo] || [];
+                    listaActual[diaCiclo] = tareasCompletadas.includes(indice) ? tareasCompletadas.filter(item => item !== indice) : [...tareasCompletadas, indice];
+                    datosGuardados.preparacion = listaActual;
+                    localStorage.setItem(claveDatos, JSON.stringify({ ...datosGuardados, fechaInicio: inputFecha.value, duracion: Number(inputDuracion.value) }));
+                    actualizarVistaCompleta(diaSeleccionadoGlobal);
+                };
+                lista.appendChild(boton);
+            });
+            document.getElementById('contadorPreparacion').innerText = `${completadas.length} / ${tareasDelDia.length}`;
+        }
+
+        document.querySelectorAll('.estado-btn').forEach(boton => boton.addEventListener('click', () => {
+            estadoSeleccionado = boton.dataset.mood;
+            document.querySelectorAll('.estado-btn').forEach(item => item.classList.remove('bg-[#E4C8C2]', 'text-[#3B302A]'));
+            boton.classList.add('bg-[#E4C8C2]', 'text-[#3B302A]');
+        }));
+
+        document.querySelectorAll('.sintoma-btn').forEach(boton => boton.addEventListener('click', () => {
+            const sintoma = boton.dataset.symptom;
+            sintomasSeleccionados = sintomasSeleccionados.includes(sintoma) ? sintomasSeleccionados.filter(item => item !== sintoma) : [...sintomasSeleccionados, sintoma];
+            boton.classList.toggle('bg-[#E4C8C2]', sintomasSeleccionados.includes(sintoma));
+            boton.classList.toggle('text-[#3B302A]', sintomasSeleccionados.includes(sintoma));
+        }));
+
+        document.getElementById('guardarRegistro').addEventListener('click', () => {
+            guardarDatos();
+            renderizarResumen();
+            const resumen = document.getElementById('resumenRegistro');
+            resumen.innerText = `Guardado: ${estadoSeleccionado || 'sin estado'}${sintomasSeleccionados.length ? ` · ${sintomasSeleccionados.join(', ')}` : ''}`;
+            resumen.classList.remove('hidden');
+            document.getElementById('toast').classList.add('visible');
+            setTimeout(() => document.getElementById('toast').classList.remove('visible'), 2200);
+        });
+
+        inputFecha.addEventListener('change', () => { guardarDatos(); calcularCiclo(); });
+        inputDuracion.addEventListener('change', () => { guardarDatos(); calcularCiclo(); });
+
+        let deferredPrompt;
+        const btnInstalar = document.getElementById('btnInstalar');
+        window.addEventListener('beforeinstallprompt', event => {
+            event.preventDefault();
+            deferredPrompt = event;
+            btnInstalar.classList.add('visible');
+        });
+        btnInstalar.addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            await deferredPrompt.userChoice;
+            deferredPrompt = null;
+            btnInstalar.classList.remove('visible');
+        });
+        window.addEventListener('appinstalled', () => btnInstalar.classList.remove('visible'));
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
+        }
+
+        calcularCiclo();
+    </script>
+</body>
+</html>

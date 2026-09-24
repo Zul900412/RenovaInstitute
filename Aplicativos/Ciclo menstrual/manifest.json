@@ -1,0 +1,22 @@
+{
+  "name": "Ciclo y Bienestar | Renova Institute",
+  "short_name": "Ciclo y Bienestar",
+  "description": "Un espacio privado para comprender tu ciclo y acompañar cada etapa con cuidado y fe.",
+  "start_url": "Ciclo menstrual.html",
+  "display": "standalone",
+  "background_color": "#FBF9F6",
+  "theme_color": "#6f5060",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icono-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icono-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
