@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Carga Emocional | Psique Lab</title>
+    
+    <!-- Configuración para PWA (Instalación en celular) -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#8C8660">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Psique Lab Test">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <style>
+        .fade-in { animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .custom-shadow { box-shadow: 0 10px 40px -10px rgba(140, 134, 96, 0.15); }
+        .option-card {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .option-card:hover {
+            border-color: #8C8660;
+            background-color: rgba(140, 134, 96, 0.04);
+        }
+        .option-card.selected {
+            border-color: #8C8660;
+            background-color: rgba(140, 134, 96, 0.1);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="bg-[#FDFBFA] text-[#54463C] min-h-screen flex flex-col font-sans">
+
+    <!-- Header con Botón de Tienda ("Para más recursos") -->
+    <header class="bg-white/70 backdrop-blur-lg shadow-sm border-b border-gray-100/50 sticky top-0 z-50">
+        <div class="max-w-3xl mx-auto px-6 h-16 flex justify-between items-center">
+            <!-- Logo y Marca -->
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-full bg-[#8C8660]/10 flex items-center justify-center text-[#8C8660]">
+                    <i class="ph ph-brain text-lg"></i>
+                </div>
+                <span class="text-lg font-bold text-[#8C8660] tracking-wide">PSIQUE LAB</span>
+            </div>
+
+            <!-- Botón de Tienda -->
+            <div>
+                <a href="../../tienda.html" style="cursor: pointer;" class="bg-[#8C8660]/10 hover:bg-[#8C8660]/20 text-[#8C8660] px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 select-none">
+                    <i class="ph ph-storefront text-base"></i> Para más recursos
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 flex items-center justify-center p-4 py-8">
+        <div class="w-full max-w-2xl bg-white rounded-[32px] custom-shadow border border-gray-100 overflow-hidden p-6 md:p-10">
+            
+            <!-- BOTÓN DE INSTALACIÓN RÁPIDA (PWA) -->
+            <div id="contenedor-instalar" class="hidden mb-6 text-center">
+                <button id="btn-instalar" style="cursor: pointer;" class="w-full bg-gradient-to-r from-amber-700 to-[#8C8660] text-white py-3 px-4 rounded-2xl font-bold text-xs shadow-md hover:opacity-95 transition-all flex items-center justify-center gap-2 border border-amber-600/30 select-none">
+                    <i class="ph ph-device-mobile text-lg animate-bounce pointer-events-none"></i>
+                    <span class="pointer-events-none">¡Instala este Test en tu celular con 1 clic!</span>
+                </button>
+            </div>
+
+            <!-- VISTA 1: INTRODUCCIÓN -->
+            <div id="vista-intro" class="text-center fade-in py-4">
+                <div class="w-16 h-16 bg-[#8C8660]/10 text-[#8C8660] rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="ph ph-pulse text-3xl"></i>
+                </div>
+                <h1 class="text-2xl md:text-3xl font-bold text-[#54463C] mb-3">Test de Carga Emocional y Bienestar</h1>
+                <p class="text-gray-500 text-xs md:text-sm max-w-lg mx-auto mb-8 leading-relaxed">Descubre en qué estado se encuentra tu sistema nervioso y tu nivel de desgaste mental actual. Responde con honestidad a estas 10 preguntas para recibir un diagnóstico personalizado y alternativas para tu equilibrio.</p>
+                
+                <button onclick="iniciarTest()" style="cursor: pointer;" class="w-full sm:w-auto px-8 py-3.5 bg-[#8C8660] text-white rounded-xl text-sm font-bold shadow-md hover:bg-[#726d4e] transition-colors flex items-center justify-center gap-2 mx-auto select-none">
+                    Comenzar Evaluación <i class="ph ph-arrow-right text-base"></i>
+                </button>
+            </div>
+
+            <!-- VISTA 2: PREGUNTAS DEL TEST -->
+            <div id="vista-test" class="hidden fade-in">
+                <!-- Barra de Progreso de Preguntas -->
+                <div class="flex justify-between items-center text-xs font-bold text-gray-400 mb-4">
+                    <span id="txt-progreso-num">Pregunta 1 de 10</span>
+                    <span id="txt-porcentaje-test">10%</span>
+                </div>
+                <div class="w-full bg-gray-100 rounded-full h-2 mb-6 overflow-hidden">
+                    <div id="barra-progreso-test" class="bg-[#8C8660] h-2 rounded-full transition-all duration-300 w-[10%]"></div>
+                </div>
+
+                <!-- Contenedor de la Pregunta -->
+                <h2 id="pregunta-titulo" class="text-lg md:text-xl font-bold text-[#54463C] mb-6"></h2>
+
+                <!-- Opciones -->
+                <div id="opciones-container" class="space-y-3 mb-8">
+                    <!-- Generadas por JS -->
+                </div>
+
+                <div class="flex justify-between items-center">
+                    <button id="btn-anterior" onclick="preguntaAnterior()" style="cursor: pointer;" class="px-4 py-2 bg-gray-100 text-gray-600 rounded-xl text-xs font-bold hover:bg-gray-200 transition-colors hidden select-none">
+                        <i class="ph ph-arrow-left"></i> Anterior
+                    </button>
+                    <div class="ml-auto">
+                        <button id="btn-siguiente" onclick="siguientePregunta()" style="cursor: pointer;" class="px-6 py-2.5 bg-[#8C8660] text-white rounded-xl text-xs font-bold shadow-md hover:bg-[#726d4e] transition-colors opacity-50 cursor-not-allowed select-none" disabled>
+                            Siguiente <i class="ph ph-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VISTA 3: RESULTADOS Y RECOMENDACIONES -->
+            <div id="vista-resultado" class="hidden fade-in">
+                <div class="text-center mb-6">
+                    <div id="res-icono-container" class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 text-3xl shadow-sm">
+                        <!-- Icono dinámico -->
+                    </div>
+                    <span id="res-nivel-tag" class="text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider"></span>
+                    <h2 id="res-titulo" class="text-2xl font-bold text-[#54463C] mt-2 mb-1"></h2>
+                    <p id="res-descripcion" class="text-xs text-gray-600 max-w-lg mx-auto leading-relaxed"></p>
+                </div>
+
+                <!-- Tarjeta de Sugerencias Útiles -->
+                <div class="bg-gray-50 border border-gray-200 p-5 rounded-2xl mb-6 space-y-3">
+                    <h3 class="font-bold text-xs text-[#8C8660] uppercase tracking-wide flex items-center gap-2">
+                        <i class="ph ph-lightbulb text-base"></i> Estrategias Clave para tu Momento Actual
+                    </h3>
+                    <ul id="res-sugerencias" class="space-y-2 text-xs text-gray-700">
+                        <!-- Dinámico -->
+                    </ul>
+                </div>
+
+                <!-- Opciones de Servicios y Talleres Psique Lab -->
+                <div class="bg-amber-50/60 border border-amber-200 p-5 rounded-2xl mb-6">
+                    <h3 class="font-bold text-amber-800 text-xs uppercase tracking-wide mb-2 flex items-center gap-2">
+                        <i class="ph ph-sparkle text-base"></i> Servicio o Taller Recomendado para ti
+                    </h3>
+                    <div id="res-servicio-recomendado" class="text-xs text-gray-700 leading-relaxed mb-4">
+                        <!-- Dinámico -->
+                    </div>
+                    <button onclick="contactarAsesoria()" style="cursor: pointer;" class="w-full bg-[#25D366] text-white px-6 py-3.5 rounded-xl font-bold shadow-md shadow-[#25D366]/20 hover:bg-[#128C7E] transition-all flex justify-center items-center gap-2 text-xs md:text-sm select-none">
+                        <i class="ph ph-whatsapp-logo text-lg"></i> Solicitar más información en WhatsApp
+                    </button>
+                </div>
+
+                <div class="text-center">
+                    <button onclick="reiniciarTest()" style="cursor: pointer;" class="text-xs text-gray-400 hover:text-[#54463C] underline transition-colors select-none">Volver a realizar el test</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        const preguntas = [
+            {
+                pregunta: "¿Con qué frecuencia sientes que te falta tiempo en el día para atender tus propias necesidades básicas o de descanso?",
+                opciones: [
+                    { texto: "Casi nunca o nunca", puntos: 1 },
+                    { texto: "A veces durante la semana", puntos: 2 },
+                    { texto: "Frecuentemente", puntos: 3 },
+                    { texto: "Casi todos los días", puntos: 4 }
+                ]
+            },
+            {
+                pregunta: "¿Te cuesta poner límites claros a las demandas y expectativas de los demás (trabajo, familia, entorno)?",
+                opciones: [
+                    { texto: "No, suelo establecer límites sanos", puntos: 1 },
+                    { texto: "Me cuesta un poco en ciertas situaciones", puntos: 2 },
+                    { texto: "Frecuentemente cedo por complacer", puntos: 3 },
+                    { texto: "Me es casi imposible decir 'no'", puntos: 4 }
+                ]
+            },
+            {
+                pregunta: "¿Experimentas tensión física frecuente (dolores de cabeza, cuello rígido, mandíbula apretada o fatiga corporal)?",
+                opciones: [
+                    { texto: "Rara vez o nunca", puntos: 1 },
+                    { texto: "Ocasionalmente en momentos puntuales", puntos: 2 },
+                    { texto: "Bastante seguido", puntos: 3 },
+                    { texto: "Es una constante en mi día a día", puntos: 4 }
+                ]
+            },
+            {
+                pregunta: "¿Sientes que tus pensamientos se aceleran o te abruman al intentar conciliar el sueño por la noche?",
+                opciones: [
+                    { texto: "Duermo plácidamente", puntos: 1 },
+                    { texto: "A veces me cuesta desconectar", puntos: 2 },
+                    { texto: "Frecuentemente rumiando preocupaciones", puntos: 3 },
+                    { texto: "Insomnio o mente hiperactiva constante", puntos: 4 }
+                ]
+            },
+            {
+                pregunta: "¿Has notado irritabilidad, impaciencia o sensibilidad excesiva ante pequeños imprevistos cotidianos?",
+                opciones: [
+                    { texto: "Mantengo la calma con facilidad", puntos: 1 },
+                    { texto: "Solo si el día es muy pesado", puntos: 2 },
+                    { texto: "Sí, me altero con relativa facilidad", puntos: 3 },
+                    { texto: "Vivo al límite de la frustración", puntos: 4 }
+                ]
+            },
+            {
+                pregunta: "¿Sientes que cargas con responsabilidades emocionales ajenas más allá de lo que te corresponde?",
+                opciones: [
+                    { texto: "Mantengo mi espacio emocional sano", puntos: 1 },
+                    { texto: "A veces absorbo problemas de otros", puntos: 2 },
+                    { texto: "Frecuentemente me hago cargo de todo", puntos: 3 },
+                    { texto: "Siento que el peso del mundo está sobre mí", puntos: 4 }
+                ]
+            },
+            {
+                pregunta: "¿Te cuesta disfrutar del momento presente debido a la anticipación constante de problemas futuros?",
+                opciones: [
+                    { texto: "Vivo con tranquilidad el presente", puntos: 1 },
+                    { texto: "A veces me invade la expectativa", puntos: 2 },
+                    { texto: "Casi siempre estoy pensando en el 'qué pasará'", puntos: 3 },
+                    { texto: "La ansiedad por el futuro me paraliza", puntos: 4 }
+                ]
+            },
+            {
+                pregunta: "¿Has perdido el entusiasmo o la energía por actividades que antes disfrutabas o te daban motivación?",
+                opciones: [
+                    { texto: "Disfruto plenamente de mis pasiones", puntos: 1 },
+                    { texto: "He sentido algo de apatía reciente", puntos: 2 },
+                    { texto: "Me cuesta hallar motivación", puntos: 3 },
+                    { texto: "Apatía generalizada y falta de energía vital", puntos: 4 }
+                ]
+            },
+            {
+                pregunta: "¿Sientes que la fatiga mental persiste incluso después de haber dormido o tomado un descanso?",
+                opciones: [
+                    { texto: "Me recargo bien al descansar", puntos: 1 },
+                    { texto: "A veces amanezco cansado/a", puntos: 2 },
+                    { texto: "El descanso ya no parece suficiente", puntos: 3 },
+                    { texto: "Agotamiento mental crónico severo", puntos: 4 }
+                ]
+            },
+            {
+                pregunta: "¿Te cuesta identificar o expresar con claridad lo que sientes cuando estás bajo presión?",
+                opciones: [
+                    { texto: "Identifico y gestiono mis emociones bien", puntos: 1 },
+                    { texto: "A veces me guardo lo que siento", puntos: 2 },
+                    { texto: "Tiendo a bloquearme o explotar", puntos: 3 },
+                    { texto: "Desconexión total de mis emociones", puntos: 4 }
+                ]
+            }
+        ];
+
+        let preguntaActual = 0;
+        let respuestasUsuario = Array(preguntas.length).fill(null);
+        let resultadoActualTexto = "";
+
+        function iniciarTest() {
+            document.getElementById('vista-intro').classList.add('hidden');
+            document.getElementById('vista-test').classList.remove('hidden');
+            cargarPregunta();
+        }
+
+        function cargarPregunta() {
+            const p = preguntas[preguntaActual];
+            document.getElementById('pregunta-titulo').innerText = p.pregunta;
+            document.getElementById('txt-progreso-num').innerText = `Pregunta ${preguntaActual + 1} de ${preguntas.length}`;
+            
+            const porcentaje = Math.round(((preguntaActual + 1) / preguntas.length) * 100);
+            document.getElementById('txt-porcentaje-test').innerText = `${porcentaje}%`;
+            document.getElementById('barra-progreso-test').style.width = `${porcentaje}%`;
+
+            const container = document.getElementById('opciones-container');
+            container.innerHTML = '';
+
+            p.opciones.forEach((opcion, index) => {
+                const seleccionada = respuestasUsuario[preguntaActual] === index ? 'selected' : '';
+                const div = document.createElement('div');
+                div.className = `option-card p-4 rounded-2xl border border-gray-200 bg-white text-xs md:text-sm text-[#54463C] flex items-center justify-between ${seleccionada}`;
+                div.innerHTML = `
+                    <span>${opcion.texto}</span>
+                    <div class="w-4 h-4 rounded-full border border-gray-300 flex items-center justify-center">
+                        <div class="w-2 h-2 rounded-full ${seleccionada ? 'bg-[#8C8660]' : 'bg-transparent'}"></div>
+                    </div>
+                `;
+                div.onclick = () => seleccionarOpcion(index);
+                container.appendChild(div);
+            });
+
+            if (preguntaActual > 0) {
+                document.getElementById('btn-anterior').classList.remove('hidden');
+            } else {
+                document.getElementById('btn-anterior').classList.add('hidden');
+            }
+
+            actualizarEstadoBotonSiguiente();
+        }
+
+        function seleccionarOpcion(index) {
+            respuestasUsuario[preguntaActual] = index;
+            cargarPregunta();
+        }
+
+        function actualizarEstadoBotonSiguiente() {
+            const btn = document.getElementById('btn-siguiente');
+            if (respuestasUsuario[preguntaActual] !== null) {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        function siguientePregunta() {
+            if (preguntaActual < preguntas.length - 1) {
+                preguntaActual++;
+                cargarPregunta();
+            } else {
+                calcularResultado();
+            }
+        }
+
+        function preguntaAnterior() {
+            if (preguntaActual > 0) {
+                preguntaActual--;
+                cargarPregunta();
+            }
+        }
+
+        function calcularResultado() {
+            let puntajeTotal = 0;
+            respuestasUsuario.forEach((respIdx, pIdx) => {
+                if (respIdx !== null) {
+                    puntajeTotal += preguntas[pIdx].opciones[respIdx].puntos;
+                }
+            });
+
+            document.getElementById('vista-test').classList.add('hidden');
+            document.getElementById('vista-resultado').classList.remove('hidden');
+
+            let nivelInfo = {};
+
+            if (puntajeTotal <= 15) {
+                nivelInfo = {
+                    tag: "Nivel 1 • Paz Mental Óptima",
+                    tagBg: "bg-emerald-100 text-emerald-800",
+                    icono: "ph-check-circle",
+                    iconoBg: "bg-emerald-50 text-emerald-700 border border-emerald-200",
+                    titulo: "Tu sistema nervioso muestra equilibrio",
+                    desc: "Tienes una excelente gestión de tus cargas y un estilo de vida que respeta tus espacios de bienestar. Tu mente opera con claridad y bajo niveles mínimos de cortisol.",
+                    sugerencias: [
+                        "<li>• <strong>Consolida tus hábitos:</strong> Mantén tus rutinas de autocuidado y pausas conscientes.</li>",
+                        "<li>• <strong>Prevención activa:</strong> Utiliza herramientas de planificación para anticiparte a momentos de alta exigencia.</li>",
+                        "<li>• <strong>Cultiva tu propósito:</strong> Es el momento ideal para potenciar proyectos de crecimiento personal a largo plazo.</li>"
+                    ],
+                    servicio: "<strong>Recomendación Psique Lab:</strong> Potencia tu autoconocimiento y liderazgo interno con nuestro <em>Programa de Bienestar Integral y Crecimiento Consciente</em>."
+                };
+            } else if (puntajeTotal <= 22) {
+                nivelInfo = {
+                    tag: "Nivel 2 • Alerta Temprana",
+                    tagBg: "bg-blue-100 text-blue-800",
+                    icono: "ph-shield-warning",
+                    iconoBg: "bg-blue-50 text-blue-700 border border-blue-200",
+                    titulo: "Se asoman pequeños desequilibrios",
+                    desc: "Estás comenzando a acumular tensiones cotidianas. Aunque funcionas con normalidad, tu cuerpo y mente empiezan a enviar señales leves de que el ritmo exige atención.",
+                    sugerencias: [
+                        "<li>• <strong>Pausas activas:</strong> Introduce micro-descansos de 5 minutos durante tu jornada laboral.</li>",
+                        "<li>• <strong>Higiene mental:</strong> Desconéctate de pantallas y exigencias al menos una hora antes de dormir.</li>",
+                        "<li>• <strong>Monitoreo de hábitos:</strong> Rastrea tus detonantes de estrés para frenarlos a tiempo.</li>"
+                    ],
+                    servicio: "<strong>Recomendación Psique Lab:</strong> Aprende herramientas prácticas de autorregulación participando en nuestro <em>Taller de Gestión Emocional y Hábitos de Paz</em>."
+                };
+            } else if (puntajeTotal <= 29) {
+                nivelInfo = {
+                    tag: "Nivel 3 • Carga Moderada",
+                    tagBg: "bg-amber-100 text-amber-800",
+                    icono: "ph-warning",
+                    iconoBg: "bg-amber-50 text-amber-700 border border-amber-200",
+                    titulo: "Tu mente y cuerpo resienten el ritmo",
+                    desc: "El desgaste comienza a pasar factura en tu energía diaria, tus patrones de sueño o tu nivel de paciencia. Es un llamado clave para reestructurar prioridades y poner límites.",
+                    sugerencias: [
+                        "<li>• <strong>Auditoría de límites:</strong> Identifica qué exigencias externas no te corresponden y aprende a decir 'no'.</li>",
+                        "<li>• <strong>Regulación somática:</strong> Prácticas de respiración consciente para descender la activación de la amígdala.</li>",
+                        "<li>• <strong>Espacios de descompresión:</strong> Asegura momentos en la semana donde no tengas ninguna obligación pendiente.</li>"
+                    ],
+                    servicio: "<strong>Recomendación Psique Lab:</strong> Transforma tus patrones de sobrecarga con nuestra <em>Asesoría Personalizada y Acompañamiento en Psicoterapia Breve</em>."
+                };
+            } else if (puntajeTotal <= 35) {
+                nivelInfo = {
+                    tag: "Nivel 4 • Alta Tensión Emocional",
+                    tagBg: "bg-orange-100 text-orange-800",
+                    icono: "ph-fire",
+                    iconoBg: "bg-orange-50 text-orange-700 border border-orange-200",
+                    titulo: "Operando en modo supervivencia",
+                    desc: "Te encuentras bajo una presión significativa. El cortisol elevado está afectando tu bienestar físico, tu claridad mental y tu capacidad de disfrute. Necesitas frenar conscientemente.",
+                    sugerencias: [
+                        "<li>• <strong>Simplificación radical:</strong> Reduce temporalmente tus compromisos no esenciales al mínimo absoluto.</li>",
+                        "<li>• <strong>Red de apoyo:</strong> Comparte lo que estás viviendo con personas de confianza o un profesional; no tienes que cargar todo solo/a.</li>",
+                        "<li>• <strong>Sueño y nutrición:</strong> Prioriza el descanso físico como prioridad absoluta de tu agenda.</li>"
+                    ],
+                    servicio: "<strong>Recomendación Psique Lab:</strong> Diseña un plan de rescate emocional y reestructuración de vida con nuestro <em>Taller Intensivo de Sanación y Límites Emocionales</em>."
+                };
+            } else {
+                nivelInfo = {
+                    tag: "Nivel 5 • Saturación / Burnout",
+                    tagBg: "bg-red-100 text-red-800",
+                    icono: "ph-shield-slash",
+                    iconoBg: "bg-red-50 text-red-700 border border-red-200",
+                    titulo: "Tu sistema está al límite absoluto",
+                    desc: "El agotamiento mental y emocional ha llegado a un punto crítico. Tu mente y cuerpo exigen una pausa profunda e innegociable. Es momento de priorizarte por completo.",
+                    sugerencias: [
+                        "<li>• <strong>Detención inmediata:</strong> Pide apoyo externo y evalúa licencias o espacios de desconexión total.</li>",
+                        "<li>• <strong>Acompañamiento profesional:</strong> Es altamente recomendable contar con guía especializada para sanar el desgaste crónico.</li>",
+                        "<li>• <strong>Compasión contigo mismo/a:</strong> Suelta la autoexigencia; tu salud mental es hoy la única prioridad válida.</li>"
+                    ],
+                    servicio: "<strong>Recomendación Psique Lab:</strong> Agenda una <em>Sesión de Orientación Prioritaria y Acompañamiento Terapéutico</em> para trazar una ruta de recuperación segura."
+                };
+            }
+
+            resultadoActualTexto = `${nivelInfo.tag} (Puntaje total: ${puntajeTotal}/40 - ${nivelInfo.titulo})`;
+
+            document.getElementById('res-nivel-tag').innerText = nivelInfo.tag;
+            document.getElementById('res-nivel-tag').className = `text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider ${nivelInfo.tagBg}`;
+            document.getElementById('res-titulo').innerText = nivelInfo.titulo;
+            document.getElementById('res-descripcion').innerText = nivelInfo.desc;
+            document.getElementById('res-sugerencias').innerHTML = nivelInfo.sugerencias.join('');
+            document.getElementById('res-servicio-recomendado').innerHTML = nivelInfo.servicio;
+
+            const iconoContainer = document.getElementById('res-icono-container');
+            iconoContainer.className = `w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 text-3xl shadow-sm ${nivelInfo.iconoBg}`;
+            iconoContainer.innerHTML = `<i class="ph ${nivelInfo.icono}"></i>`;
+        }
+
+        function reiniciarTest() {
+            preguntaActual = 0;
+            respuestasUsuario = Array(preguntas.length).fill(null);
+            document.getElementById('vista-resultado').classList.add('hidden');
+            document.getElementById('vista-intro').classList.remove('hidden');
+        }
+
+        // WhatsApp configurado con el resultado dinámico para mejor cierre de ventas
+        function contactarAsesoria() {
+            const numeroWhatsApp = "573114951646"; 
+            const mensaje = `Hola equipo de Psique Lab. Acabo de realizar el Test de Carga Emocional en su web. Mi resultado fue: *${resultadoActualTexto}*. Me gustaría recibir más información y asesoría sobre los servicios adecuados para mi situación.`;
+            const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
+            window.open(url, '_blank');
+        }
+
+        // Lógica de instalación PWA
+        let deferredPrompt;
+        const contenedorInstalar = document.getElementById('contenedor-instalar');
+        const btnInstalar = document.getElementById('btn-instalar');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            if (contenedorInstalar) {
+                contenedorInstalar.classList.remove('hidden');
+            }
+        });
+
+        if (btnInstalar) {
+            btnInstalar.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    deferredPrompt = null;
+                    contenedorInstalar.classList.add('hidden');
+                }
+            });
+        }
+
+        window.addEventListener('appinstalled', (evt) => {
+            if (contenedorInstalar) {
+                contenedorInstalar.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "Renova Institute - Test de Carga Emocional",
+  "short_name": "Test Renova",
+  "start_url": "Test de bienestar.html",
+  "display": "standalone",
+  "background_color": "#FDFBFA",
+  "theme_color": "#8C8660",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
