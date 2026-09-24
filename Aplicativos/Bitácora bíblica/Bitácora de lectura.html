@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitácora Bíblica | Renova Institute</title>
+    <meta name="description" content="Una bitácora privada para registrar tus lecturas, aprendizajes y promesas bíblicas.">
+    <meta name="theme-color" content="#8c8660">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Bitácora Bíblica">
+    <link rel="manifest" href="manifest.json">
+    <!-- Tailwind CSS for modern, responsive styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        rose: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            200: '#fecdd3',
+                            300: '#fda4af',
+                            400: '#fb7185',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                            700: '#be123c',
+                            800: '#9f1239',
+                            900: '#881337',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fff1f2;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #fecdd3;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #fda4af;
+        }
+        /* Paleta Renova para componentes estáticos y tarjetas generadas dinámicamente. */
+        [class*="bg-rose-"], [class*="bg-pink-"] { background-color: #f4f1e6 !important; }
+        [class*="text-rose-"], [class*="text-pink-"] { color: #706b4c !important; }
+        [class*="border-rose-"], [class*="border-pink-"] { border-color: #d9d4bd !important; }
+        [class*="from-rose-"], [class*="from-pink-"] { --tw-gradient-from: #8c8660 var(--tw-gradient-from-position) !important; }
+        [class*="to-pink-"], [class*="to-rose-"] { --tw-gradient-to: #706b4c var(--tw-gradient-to-position) !important; }
+        body { background: #fdfbfa !important; color: #54463c !important; }
+        ::-webkit-scrollbar-track { background: #f4f1e6; }
+        ::-webkit-scrollbar-thumb, ::-webkit-scrollbar-thumb:hover { background: #cfc6a6; }
+        @media (max-width: 640px) {
+            header > div > div:last-child {
+                max-width: 170px;
+                flex-wrap: wrap;
+                justify-content: flex-end;
+            }
+            header > div > div:last-child > a,
+            header > div > div:last-child > button,
+            header > div > div:last-child > label {
+                padding: .5rem .6rem;
+                font-size: 0;
+            }
+            header > div > div:last-child i { margin-right: 0; font-size: .9rem; }
+            header > div > div:last-child #promisesBadge { font-size: 10px; margin-left: .25rem; }
+        }
+    </style>
+</head>
+<body class="bg-[#FDFBFA] text-[#54463C] h-full flex flex-col antialiased">
+
+    <header class="bg-white/90 backdrop-blur-md border-b border-rose-100 sticky top-0 z-30 shadow-xs">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-2xl bg-[#8C8660]/10 flex items-center justify-center text-[#8C8660] shadow-sm">
+                    <i class="fa-solid fa-brain text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-[#8C8660] text-sm tracking-wider leading-tight">RENOVA INSTITUTE</h1>
+                    <p class="text-[9px] text-[#54463C] italic font-medium">Restauración integral · Neurociencia + Fe</p>
+                    <p class="text-xs text-[#706B4C] font-medium">Bitácora Bíblica</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <a href="../../Tienda.html" class="inline-flex items-center px-3 py-2 border border-[#8C8660]/30 text-xs font-semibold rounded-xl text-[#8C8660] bg-[#8C8660]/10 hover:bg-[#8C8660]/20 transition" title="Más recursos de Renova">
+                    <i class="fa-solid fa-store mr-1.5"></i> Tienda
+                </a>
+                <button id="installAppBtn" onclick="app.installApp()" class="hidden inline-flex items-center px-3 py-2 border border-[#8C8660]/30 text-xs font-semibold rounded-xl text-[#8C8660] bg-[#8C8660]/10 hover:bg-[#8C8660]/20 transition" title="Instalar bitácora">
+                    <i class="fa-solid fa-mobile-screen-button mr-1.5"></i> Instalar
+                </button>
+                <button aria-label="Ver promesas guardadas" onclick="app.openPromisesModal()" class="inline-flex items-center px-3.5 py-2 border border-[#8C8660]/30 text-xs font-semibold rounded-xl text-[#706B4C] bg-[#8C8660]/10 hover:bg-[#8C8660]/20 transition shadow-xs cursor-pointer">
+                    <i class="fa-solid fa-heart mr-1.5 text-[#8C8660]"></i> Promesas <span id="promisesBadge" class="ml-1.5 bg-[#8C8660] text-white px-1.5 py-0.5 rounded-full text-[10px]">0</span>
+                </button>
+                <button onclick="app.exportData()" class="inline-flex items-center px-3 py-1.5 border border-slate-200 text-xs font-medium rounded-lg text-slate-700 bg-white hover:bg-slate-50 transition shadow-xs cursor-pointer" title="Respaldar datos">
+                    <i class="fa-solid fa-download mr-1.5 text-slate-400"></i> Exportar
+                </button>
+                <label class="inline-flex items-center px-3 py-1.5 border border-slate-200 text-xs font-medium rounded-lg text-slate-700 bg-white hover:bg-slate-50 transition shadow-xs cursor-pointer" title="Restaurar datos">
+                    <i class="fa-solid fa-upload mr-1.5 text-slate-400"></i> Importar
+                    <input type="file" id="importFile" accept=".json" class="hidden" onchange="app.importData(event)">
+                </label>
+            </div>
+        </div>
+    </header>
+
+    <section class="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-7">
+        <div class="bg-white/90 rounded-2xl border border-[#d9d4bd] shadow-sm p-5 sm:p-6">
+            <p class="text-[10px] uppercase tracking-widest text-[#8C8660] font-bold mb-2">Cómo usar esta bitácora</p>
+            <h2 class="text-2xl font-bold text-[#54463C] mb-2">Lee, escucha y guarda lo que Dios pone en tu corazón</h2>
+            <p class="text-sm text-[#756b64] leading-relaxed max-w-4xl">Registra la fecha, los capítulos que estudiaste y el aprendizaje principal de tu tiempo devocional. También puedes guardar las promesas bíblicas que Dios te va dando para volver a ellas cuando necesites recordar su fidelidad. Escribir lo aprendido te ayuda a ordenar tus pensamientos, reconocer procesos y convertir una lectura en una práctica de meditación y obediencia.</p>
+            <div class="mt-4 grid gap-3 sm:grid-cols-2">
+                <div class="flex gap-2 text-xs text-[#756b64]"><i class="fa-solid fa-lock mt-0.5 text-[#8C8660]"></i><span>Tus registros se guardan solamente en el dispositivo donde usas esta bitácora.</span></div>
+                <div class="flex gap-2 text-xs text-[#756b64]"><i class="fa-solid fa-download mt-0.5 text-[#8C8660]"></i><span>Usa <strong>Exportar</strong> para descargar un archivo de respaldo antes de cambiar de dispositivo o formatearlo; luego podrás usar <strong>Importar</strong> para recuperar tus registros.</span></div>
+            </div>
+        </div>
+    </section>
+
+    <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Left Column: Forms (Tabs for Daily Study vs Promise) -->
+        <section class="lg:col-span-5 bg-white/90 backdrop-blur-sm rounded-2xl border border-rose-100 shadow-sm p-6 lg:sticky lg:top-24 space-y-5">
+            <!-- Mode Selector Tabs -->
+            <div class="flex bg-rose-50/70 p-1 rounded-xl border border-rose-100">
+                <button type="button" id="tabStudyBtn" onclick="app.switchTab('study')" class="flex-1 py-2 text-xs font-bold rounded-lg transition text-rose-800 bg-white shadow-xs cursor-pointer">
+                    <i class="fa-solid fa-pen-to-square mr-1"></i> Estudio Diario
+                </button>
+                <button type="button" id="tabPromiseBtn" onclick="app.switchTab('promise')" class="flex-1 py-2 text-xs font-semibold rounded-lg transition text-slate-600 hover:text-rose-700 cursor-pointer">
+                    <i class="fa-solid fa-heart mr-1"></i> Guardar Promesa
+                </button>
+            </div>
+
+            <!-- Form 1: Study Entry -->
+            <form id="studyForm" onsubmit="app.handleStudySubmit(event)" class="space-y-4">
+                <div class="flex items-center justify-between pb-2 border-b border-rose-100">
+                    <h2 id="formTitle" class="font-semibold text-slate-900 text-sm flex items-center">
+                        <i class="fa-solid fa-book-open text-rose-500 mr-2"></i> Nuevo Registro de Lectura
+                    </h2>
+                    <button id="cancelEditBtn" type="button" onclick="app.resetStudyForm()" class="hidden text-xs text-rose-600 font-medium hover:underline cursor-pointer">
+                        Cancelar
+                    </button>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Fecha de Estudio</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                            <i class="fa-regular fa-calendar"></i>
+                        </span>
+                        <input type="date" id="entryDate" required 
+                            class="w-full pl-10 pr-3 py-2 bg-rose-50/30 border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition">
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Capítulos Estudiados</label>
+                        <button type="button" onclick="app.addChapterBlock()" class="inline-flex items-center text-xs font-semibold text-rose-700 hover:text-rose-800 bg-rose-50 px-2.5 py-1 rounded-xl border border-rose-200/60 transition cursor-pointer">
+                            <i class="fa-solid fa-plus mr-1"></i> Añadir capítulo
+                        </button>
+                    </div>
+                    
+                    <div id="chaptersContainer" class="space-y-3 max-h-[360px] overflow-y-auto pr-1">
+                        <!-- Dynamic items inserted here -->
+                    </div>
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit" id="submitStudyBtn" class="w-full bg-gradient-to-r from-rose-600 to-pink-500 hover:from-rose-700 hover:to-pink-600 text-white font-medium py-2.5 px-4 rounded-xl text-sm transition shadow-md shadow-rose-600/20 flex items-center justify-center cursor-pointer">
+                        <i class="fa-solid fa-floppy-disk mr-2"></i> Guardar Registro Diario
+                    </button>
+                </div>
+            </form>
+
+            <!-- Form 2: Promise Entry (Hidden by default) -->
+            <form id="promiseForm" onsubmit="app.handlePromiseSubmit(event)" class="space-y-4 hidden">
+                <div class="flex items-center justify-between pb-2 border-b border-rose-100">
+                    <h2 id="promiseFormTitle" class="font-semibold text-slate-900 text-sm flex items-center">
+                        <i class="fa-solid fa-heart text-rose-500 mr-2"></i> Guardar Promesa Bíblica
+                    </h2>
+                    <button id="cancelPromiseEditBtn" type="button" onclick="app.resetPromiseForm()" class="hidden text-xs text-rose-600 font-medium hover:underline cursor-pointer">
+                        Cancelar
+                    </button>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Fecha</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                            <i class="fa-regular fa-calendar"></i>
+                        </span>
+                        <input type="date" id="promiseDate" required 
+                            class="w-full pl-10 pr-3 py-2 bg-rose-50/30 border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+                    <div class="sm:col-span-8">
+                        <label class="block text-[11px] font-medium text-slate-500 mb-1">Libro</label>
+                        <select id="promiseBook" required class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition cursor-pointer">
+                            <option value="">Selecciona libro...</option>
+                        </select>
+                    </div>
+                    <div class="sm:col-span-4">
+                        <label class="block text-[11px] font-medium text-slate-500 mb-1">Capítulo / Versículo</label>
+                        <input type="text" id="promiseVerse" required placeholder="Ej: 12:2 o 29:11"
+                            class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition">
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <label class="block text-[11px] font-medium text-slate-500">Texto de la Promesa (Versión Reina-Valera)</label>
+                    </div>
+                    <textarea id="promiseText" required rows="3" placeholder="Escribe o edita aquí el texto de tu promesa..."
+                        class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition"></textarea>
+                    <p class="text-[10px] text-slate-400 mt-1">Escribe la promesa que recibiste en tu tiempo con Dios para conservarla y volver a ella.</p>
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit" id="submitPromiseBtn" class="w-full bg-gradient-to-r from-rose-600 to-pink-500 hover:from-rose-700 hover:to-pink-600 text-white font-medium py-2.5 px-4 rounded-xl text-sm transition shadow-md shadow-rose-600/20 flex items-center justify-center cursor-pointer">
+                        <i class="fa-solid fa-heart mr-2"></i> Guardar Promesa
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <section class="lg:col-span-7 space-y-6">
+            <!-- Search & Filters Toolbar -->
+            <div class="bg-white/90 backdrop-blur-sm rounded-2xl border border-rose-100 shadow-sm p-4 sm:p-5 space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <!-- Global Search -->
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </span>
+                        <input type="text" id="searchInput" oninput="app.filterEntries()" placeholder="Buscar por palabra clave o libro..." 
+                            class="w-full pl-10 pr-4 py-2 bg-rose-50/30 border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition">
+                    </div>
+                    <!-- Book Filter Dropdown -->
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-book"></i>
+                        </span>
+                        <select id="bookFilter" onchange="app.filterEntries()" 
+                            class="w-full pl-10 pr-8 py-2 bg-rose-50/30 border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition appearance-none cursor-pointer">
+                            <option value="">Todos los libros</option>
+                        </select>
+                        <span class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-slate-400 text-xs">
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between text-xs text-slate-500 px-1">
+                    <span id="resultsCount">Mostrando todos los registros</span>
+                    <button onclick="app.resetFilters()" class="hover:text-rose-700 underline cursor-pointer">Limpiar filtros</button>
+                </div>
+            </div>
+
+            <!-- Entries Stream Container -->
+            <div id="entriesContainer" class="space-y-5">
+                <!-- Dynamically rendered entry cards -->
+            </div>
+        </section>
+    </main>
+
+    <section class="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 pb-10">
+        <div class="rounded-2xl bg-[#54463C] text-white p-6 sm:p-7 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
+            <div>
+                <p class="text-[10px] uppercase tracking-widest text-[#E4C8C2] font-bold mb-2">Sigue profundizando</p>
+                <h2 class="text-2xl font-bold mb-1">Tu estudio también puede tener acompañamiento</h2>
+                <p class="text-sm text-[#EAD5D0] max-w-2xl">Si deseas conversar sobre tus procesos, propósito y bienestar desde una mirada integral, conoce la sesión personalizada de Renova Institute.</p>
+            </div>
+            <a href="https://wa.me/573114951646?text=Hola%20Renova%20Institute.%20Estoy%20usando%20la%20Bit%C3%A1cora%20B%C3%ADblica%20y%20quiero%20conocer%20la%20Sesi%C3%B3n%20Personalizada%20de%20Psicolog%C3%ADa." target="_blank" rel="noopener" class="shrink-0 inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-[#E4C8C2] text-[#54463C] text-xs font-bold hover:bg-white transition">
+                <i class="fa-brands fa-whatsapp text-base"></i> Conversar por WhatsApp
+            </a>
+        </div>
+    </section>
+
+    <div id="promisesModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs opacity-0 pointer-events-none transition-all duration-300">
+        <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl border border-rose-100 overflow-hidden flex flex-col max-h-[85vh] transform scale-95 transition-all duration-300" id="promisesModalCard">
+            <!-- Modal Header -->
+            <div class="bg-gradient-to-r from-rose-500 to-pink-500 px-6 py-4 text-white flex items-center justify-between">
+                <div class="flex items-center space-x-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-white/25 flex items-center justify-center text-white shadow-xs">
+                        <i class="fa-solid fa-heart"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base">Mis Promesas Bíblicas Guardadas</h3>
+                        <p class="text-xs text-rose-100">Versículos seleccionados para meditación diaria</p>
+                    </div>
+                </div>
+                <button onclick="app.closePromisesModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition cursor-pointer">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <!-- Modal Body -->
+            <div class="p-6 overflow-y-auto space-y-4 flex-1 bg-rose-50/20" id="promisesModalContent">
+                <!-- Dynamically filled promises -->
+            </div>
+            <!-- Modal Footer -->
+            <div class="px-6 py-3 bg-white border-t border-slate-100 flex justify-between items-center">
+                <span id="modalPromisesCount" class="text-xs text-slate-500">0 promesas guardadas</span>
+                <button onclick="app.closePromisesModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition cursor-pointer">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div id="toastContent" class="bg-slate-900 text-white px-4 py-3 rounded-xl shadow-lg text-sm flex items-center space-x-3">
+            <i id="toastIcon" class="fa-solid fa-circle-check text-rose-400"></i>
+            <span id="toastMessage">Operación realizada con éxito</span>
+        </div>
+    </div>
+
+    <script>
+        // List of canonical Bible books for autocomplete/dropdown support
+        const bibleBooks = [
+            "Génesis", "Éxodo", "Levítico", "Números", "Deuteronomio", "Josué", "Jueces", "Rut", 
+            "1 Samuel", "2 Samuel", "1 Reyes", "2 Reyes", "1 Crónicas", "2 Crónicas", "Esdras", 
+            "Nehemías", "Ester", "Job", "Salmos", "Proverbios", "Eclesiastés", "Cantares", 
+            "Isaías", "Jeremías", "Lamentaciones", "Ezequiel", "Daniel", "Oseas", "Joel", "Amós", 
+            "Abdías", "Jonás", "Miqueas", "Nahum", "Habacuc", "Sofonías", "Hageo", "Zacarías", 
+            "Malaquías", "Mateo", "Marcos", "Lucas", "Juan", "Hechos", "Romanos", "1 Corintios", 
+            "2 Corintios", "Gálatas", "Efesios", "Filipenses", "Colosenses", "1 Tesalonicenses", 
+            "2 Tesalonicenses", "1 Timoteo", "2 Timoteo", "Tito", "Filemón", "Hebreos", "Santiago", 
+            "1 Pedro", "2 Pedro", "1 Juan", "2 Juan", "3 Juan", "Judas", "Apocalipsis"
+        ];
+
+        class BibleJournalApp {
+            constructor() {
+                this.entries = [];
+                this.promises = [];
+                this.editingStudyId = null;
+                this.editingPromiseId = null;
+                this.deferredPrompt = null;
+                this.init();
+            }
+
+            init() {
+                window.addEventListener('beforeinstallprompt', event => {
+                    event.preventDefault();
+                    this.deferredPrompt = event;
+                    document.getElementById('installAppBtn')?.classList.remove('hidden');
+                    document.getElementById('installAppBtn')?.classList.add('inline-flex');
+                });
+                window.addEventListener('appinstalled', () => {
+                    this.deferredPrompt = null;
+                    document.getElementById('installAppBtn')?.classList.add('hidden');
+                });
+                this.loadFromStorage();
+                this.setupDefaultDates();
+                this.populateBookDropdowns();
+                this.addChapterBlock(true);
+                this.renderEntries();
+                this.updatePromisesCount();
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.register('./sw.js').catch(() => {});
+                }
+            }
+
+            async installApp() {
+                if (!this.deferredPrompt) {
+                    this.showToast('En el navegador, usa “Instalar aplicación” o “Añadir a pantalla de inicio”.');
+                    return;
+                }
+                this.deferredPrompt.prompt();
+                await this.deferredPrompt.userChoice;
+                this.deferredPrompt = null;
+                document.getElementById('installAppBtn')?.classList.add('hidden');
+            }
+
+            setupDefaultDates() {
+                const today = new Date().toISOString().split('T')[0];
+                const entryDate = document.getElementById('entryDate');
+                const promiseDate = document.getElementById('promiseDate');
+                if (entryDate && !entryDate.value) entryDate.value = today;
+                if (promiseDate && !promiseDate.value) promiseDate.value = today;
+            }
+
+            loadFromStorage() {
+                try {
+                    const savedEntries = localStorage.getItem('bible_study_entries');
+                    const savedPromises = localStorage.getItem('bible_study_promises');
+
+                    if (savedEntries) {
+                        this.entries = JSON.parse(savedEntries);
+                    } else {
+                        this.entries = [];
+                    }
+
+                    if (savedPromises) {
+                        this.promises = JSON.parse(savedPromises);
+                    } else {
+                        this.promises = [];
+                    }
+                    this.saveToStorage();
+                } catch (e) {
+                    console.error("Error loading storage", e);
+                    this.entries = [];
+                    this.promises = [];
+                }
+            }
+
+            saveToStorage() {
+                try {
+                    localStorage.setItem('bible_study_entries', JSON.stringify(this.entries));
+                    localStorage.setItem('bible_study_promises', JSON.stringify(this.promises));
+                    this.populateBookDropdowns();
+                    this.updatePromisesCount();
+                } catch (e) {
+                    this.showToast("Error al guardar datos", "error");
+                }
+            }
+
+            switchTab(tab) {
+                const studyBtn = document.getElementById('tabStudyBtn');
+                const promiseBtn = document.getElementById('tabPromiseBtn');
+                const studyForm = document.getElementById('studyForm');
+                const promiseForm = document.getElementById('promiseForm');
+
+                if (tab === 'study') {
+                    studyBtn.className = "flex-1 py-2 text-xs font-bold rounded-lg transition text-rose-800 bg-white shadow-xs cursor-pointer";
+                    promiseBtn.className = "flex-1 py-2 text-xs font-semibold rounded-lg transition text-slate-600 hover:text-rose-700 cursor-pointer";
+                    studyForm.classList.remove('hidden');
+                    promiseForm.classList.add('hidden');
+                } else {
+                    promiseBtn.className = "flex-1 py-2 text-xs font-bold rounded-lg transition text-rose-800 bg-white shadow-xs cursor-pointer";
+                    studyBtn.className = "flex-1 py-2 text-xs font-semibold rounded-lg transition text-slate-600 hover:text-rose-700 cursor-pointer";
+                    promiseForm.classList.remove('hidden');
+                    studyForm.classList.add('hidden');
+                }
+            }
+
+            updatePromisesCount() {
+                const badge = document.getElementById('promisesBadge');
+                if (badge) badge.textContent = this.promises.length;
+            }
+
+            populateBookDropdowns() {
+                const promiseSelect = document.getElementById('promiseBook');
+                if (promiseSelect) {
+                    let pHtml = '<option value="">Selecciona libro...</option>';
+                    bibleBooks.forEach(b => {
+                        pHtml += `<option value="${b}">${b}</option>`;
+                    });
+                    const currentPVal = promiseSelect.value;
+                    promiseSelect.innerHTML = pHtml;
+                    promiseSelect.value = currentPVal;
+                }
+
+                const filterSelect = document.getElementById('bookFilter');
+                if (filterSelect) {
+                    const currentVal = filterSelect.value;
+                    const usedBooks = new Set();
+                    this.entries.forEach(entry => {
+                        entry.chapters.forEach(c => { if (c.book) usedBooks.add(c.book); });
+                    });
+                    this.promises.forEach(p => { if (p.book) usedBooks.add(p.book); });
+
+                    let html = '<option value="">Todos los libros (' + (usedBooks.size > 0 ? usedBooks.size + ' registrados' : '0') + ')</option>';
+                    const sortedBooks = Array.from(usedBooks).sort();
+                    if (sortedBooks.length > 0) {
+                        html += '<optgroup label="Tus Libros Registrados">';
+                        sortedBooks.forEach(book => {
+                            html += `<option value="${book}">${book}</option>`;
+                        });
+                        html += '</optgroup>';
+                    }
+                    html += '<optgroup label="Todos los Libros de la Biblia">';
+                    bibleBooks.forEach(book => {
+                        if (!usedBooks.has(book)) {
+                            html += `<option value="${book}">${book}</option>`;
+                        }
+                    });
+                    html += '</optgroup>';
+                    filterSelect.innerHTML = html;
+                    filterSelect.value = currentVal;
+                }
+            }
+
+            addChapterBlock(isInitial = false, data = { book: '', chapter: '', learning: '' }) {
+                const container = document.getElementById('chaptersContainer');
+                const index = container.children.length;
+                const blockId = 'block-' + Date.now() + '-' + Math.random().toString(36).substr(2, 4);
+
+                const div = document.createElement('div');
+                div.className = 'chapter-block bg-rose-50/20 border border-slate-200 rounded-xl p-3.5 relative space-y-2.5 transition group hover:border-rose-300';
+                div.setAttribute('data-block-id', blockId);
+
+                let bookOptions = '<option value="">Selecciona libro...</option>';
+                bibleBooks.forEach(b => {
+                    const selected = b === data.book ? 'selected' : '';
+                    bookOptions += `<option value="${b}" ${selected}>${b}</option>`;
+                });
+
+                div.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-rose-700 bg-rose-100 px-2 py-0.5 rounded-md">Capítulo #${index + 1}</span>
+                        ${container.children.length > 0 || !isInitial ? `
+                            <button type="button" onclick="app.removeChapterBlock('${blockId}')" class="text-slate-400 hover:text-rose-600 p-1 transition cursor-pointer" title="Eliminar este capítulo">
+                                <i class="fa-solid fa-trash-can text-xs"></i>
+                            </button>
+                        ` : ''}
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
+                        <div class="sm:col-span-8">
+                            <label class="block text-[11px] font-medium text-slate-500 mb-1">Libro</label>
+                            <select required class="chapter-book w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition cursor-pointer">
+                                ${bookOptions}
+                            </select>
+                        </div>
+                        <div class="sm:col-span-4">
+                            <label class="block text-[11px] font-medium text-slate-500 mb-1">Capítulo(s)</label>
+                            <input type="text" required placeholder="Ej: 6 o 30" value="${data.chapter || ''}"
+                                class="chapter-num w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-500 mb-1">Aprendizaje / Nota principal</label>
+                        <textarea required rows="2" placeholder="¿Qué te enseñó Dios hoy en este pasaje?"
+                            class="chapter-learning w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition">${data.learning || ''}</textarea>
+                    </div>
+                `;
+
+                container.appendChild(div);
+                this.updateBlockNumbers();
+            }
+
+            removeChapterBlock(blockId) {
+                const container = document.getElementById('chaptersContainer');
+                if (container.children.length <= 1) {
+                    this.showToast("Debes registrar al menos un capítulo en tu sesión", "error");
+                    return;
+                }
+                const block = container.querySelector(`[data-block-id="${blockId}"]`);
+                if (block) {
+                    block.remove();
+                    this.updateBlockNumbers();
+                }
+            }
+
+            updateBlockNumbers() {
+                const container = document.getElementById('chaptersContainer');
+                Array.from(container.children).forEach((block, idx) => {
+                    const badge = block.querySelector('span');
+                    if (badge) badge.textContent = `Capítulo #${idx + 1}`;
+                });
+            }
+
+            handleStudySubmit(e) {
+                e.preventDefault();
+                const date = document.getElementById('entryDate').value;
+                const container = document.getElementById('chaptersContainer');
+                const blockElements = container.querySelectorAll('.chapter-block');
+
+                const chapters = [];
+                blockElements.forEach(block => {
+                    chapters.push({
+                        book: block.querySelector('.chapter-book').value,
+                        chapter: block.querySelector('.chapter-num').value.trim(),
+                        learning: block.querySelector('.chapter-learning').value.trim()
+                    });
+                });
+
+                if (chapters.length === 0) {
+                    this.showToast("Añade al menos un capítulo", "error");
+                    return;
+                }
+
+                if (this.editingStudyId) {
+                    const index = this.entries.findIndex(en => en.id === this.editingStudyId);
+                    if (index !== -1) {
+                        this.entries[index] = { id: this.editingStudyId, date, chapters };
+                        this.showToast("Registro actualizado correctamente");
+                    }
+                    this.resetStudyForm();
+                } else {
+                    const newEntry = {
+                        id: 'entry-' + Date.now(),
+                        date,
+                        chapters
+                    };
+                    this.entries.unshift(newEntry);
+                    this.showToast("¡Registro de estudio guardado con éxito!");
+                    this.resetStudyForm();
+                    this.setupDefaultDates();
+                }
+
+                this.saveToStorage();
+                this.renderEntries();
+            }
+
+            handlePromiseSubmit(e) {
+                e.preventDefault();
+                const date = document.getElementById('promiseDate').value;
+                const book = document.getElementById('promiseBook').value;
+                const verse = document.getElementById('promiseVerse').value.trim();
+                const text = document.getElementById('promiseText').value.trim();
+
+                if (this.editingPromiseId) {
+                    const index = this.promises.findIndex(p => p.id === this.editingPromiseId);
+                    if (index !== -1) {
+                        this.promises[index] = { id: this.editingPromiseId, date, book, verse, text };
+                        this.showToast("Promesa actualizada correctamente");
+                    }
+                    this.resetPromiseForm();
+                } else {
+                    const newPromise = {
+                        id: 'promise-' + Date.now(),
+                        date,
+                        book,
+                        verse,
+                        text
+                    };
+                    this.promises.unshift(newPromise);
+                    this.showToast("¡Promesa bíblica guardada con éxito!");
+                    this.resetPromiseForm();
+                    this.setupDefaultDates();
+                }
+
+                this.saveToStorage();
+                this.renderEntries();
+            }
+
+            editStudyEntry(id) {
+                const entry = this.entries.find(en => en.id === id);
+                if (!entry) return;
+
+                this.switchTab('study');
+                this.editingStudyId = id;
+                document.getElementById('entryDate').value = entry.date;
+                
+                document.getElementById('formTitle').innerHTML = `<i class="fa-solid fa-pen-to-square text-rose-500 mr-2"></i> Editando Registro`;
+                document.getElementById('cancelEditBtn').classList.remove('hidden');
+                document.getElementById('submitStudyBtn').innerHTML = `<i class="fa-solid fa-check mr-2"></i> Actualizar Registro`;
+
+                const container = document.getElementById('chaptersContainer');
+                container.innerHTML = '';
+                entry.chapters.forEach(ch => {
+                    this.addChapterBlock(false, ch);
+                });
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            editPromiseEntry(id) {
+                const promise = this.promises.find(p => p.id === id);
+                if (!promise) return;
+
+                this.switchTab('promise');
+                this.editingPromiseId = id;
+                document.getElementById('promiseDate').value = promise.date;
+                document.getElementById('promiseBook').value = promise.book;
+                document.getElementById('promiseVerse').value = promise.verse;
+                document.getElementById('promiseText').value = promise.text;
+
+                document.getElementById('promiseFormTitle').innerHTML = `<i class="fa-solid fa-pen-to-square text-rose-500 mr-2"></i> Editando Promesa`;
+                document.getElementById('cancelPromiseEditBtn').classList.remove('hidden');
+                document.getElementById('submitPromiseBtn').innerHTML = `<i class="fa-solid fa-check mr-2"></i> Actualizar Promesa`;
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            deleteStudyEntry(id) {
+                if (window.confirm('¿Estás seguro de eliminar este registro de estudio?')) {
+                    this.entries = this.entries.filter(en => String(en.id) !== String(id));
+                    this.saveToStorage();
+                    this.renderEntries();
+                    this.showToast("Registro eliminado");
+                }
+            }
+
+            deletePromiseEntry(id) {
+                if (window.confirm('¿Estás seguro de eliminar esta promesa guardada?')) {
+                    this.promises = this.promises.filter(p => String(p.id) !== String(id));
+                    this.saveToStorage();
+                    this.renderEntries();
+                    this.showToast("Promesa eliminada");
+                }
+            }
+
+            resetStudyForm() {
+                this.editingStudyId = null;
+                document.getElementById('studyForm').reset();
+                document.getElementById('formTitle').innerHTML = `<i class="fa-solid fa-book-open text-rose-500 mr-2"></i> Nuevo Registro de Lectura`;
+                document.getElementById('cancelEditBtn').classList.add('hidden');
+                document.getElementById('submitStudyBtn').innerHTML = `<i class="fa-solid fa-floppy-disk mr-2"></i> Guardar Registro Diario`;
+                this.setupDefaultDates();
+                
+                const container = document.getElementById('chaptersContainer');
+                container.innerHTML = '';
+                this.addChapterBlock(true);
+            }
+
+            resetPromiseForm() {
+                this.editingPromiseId = null;
+                document.getElementById('promiseForm').reset();
+                document.getElementById('promiseFormTitle').innerHTML = `<i class="fa-solid fa-heart text-rose-500 mr-2"></i> Guardar Promesa Bíblica`;
+                document.getElementById('cancelPromiseEditBtn').classList.add('hidden');
+                document.getElementById('submitPromiseBtn').innerHTML = `<i class="fa-solid fa-heart mr-2"></i> Guardar Promesa`;
+                this.setupDefaultDates();
+            }
+
+            filterEntries() {
+                this.renderEntries();
+            }
+
+            resetFilters() {
+                document.getElementById('searchInput').value = '';
+                document.getElementById('bookFilter').value = '';
+                this.renderEntries();
+            }
+
+            formatDateReadable(dateStr) {
+                try {
+                    const [year, month, day] = dateStr.split('-');
+                    const date = new Date(year, month - 1, day);
+                    return date.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                } catch (e) {
+                    return dateStr;
+                }
+            }
+
+            renderEntries() {
+                const search = document.getElementById('searchInput').value.toLowerCase().trim();
+                const selectedBook = document.getElementById('bookFilter').value;
+                const container = document.getElementById('entriesContainer');
+                const countLabel = document.getElementById('resultsCount');
+
+                let filteredEntries = [...this.entries];
+                let filteredPromises = [...this.promises];
+
+                if (selectedBook) {
+                    filteredEntries = filteredEntries.filter(entry => 
+                        entry.chapters.some(ch => ch.book.toLowerCase() === selectedBook.toLowerCase())
+                    );
+                    filteredPromises = filteredPromises.filter(p => p.book.toLowerCase() === selectedBook.toLowerCase());
+                }
+
+                if (search) {
+                    filteredEntries = filteredEntries.filter(entry => {
+                        const dateMatch = entry.date.includes(search) || this.formatDateReadable(entry.date).toLowerCase().includes(search);
+                        const chapterMatch = entry.chapters.some(ch => 
+                            ch.book.toLowerCase().includes(search) || 
+                            ch.chapter.toLowerCase().includes(search) || 
+                            ch.learning.toLowerCase().includes(search)
+                        );
+                        return dateMatch || chapterMatch;
+                    });
+                    filteredPromises = filteredPromises.filter(p => {
+                        return p.book.toLowerCase().includes(search) || 
+                               p.verse.toLowerCase().includes(search) || 
+                               p.text.toLowerCase().includes(search) ||
+                               p.date.includes(search);
+                    });
+                }
+
+                const totalItems = filteredEntries.length + filteredPromises.length;
+                if(countLabel) countLabel.textContent = `Mostrando ${totalItems} elementos (${filteredEntries.length} estudios, ${filteredPromises.length} promesas)`;
+
+                if (totalItems === 0) {
+                    container.innerHTML = `
+                        <div class="bg-white/90 backdrop-blur-sm rounded-2xl border border-slate-200 p-12 text-center space-y-3 shadow-xs">
+                            <div class="w-12 h-12 bg-rose-50 text-rose-500 rounded-full flex items-center justify-center mx-auto text-xl">
+                                <i class="fa-solid fa-search"></i>
+                            </div>
+                            <h3 class="font-semibold text-slate-800 text-base">No se encontraron registros</h3>
+                            <p class="text-xs text-slate-500 max-w-sm mx-auto">Prueba buscando con otros términos o registra tu estudio diario o promesa bíblica usando el formulario de la izquierda.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                let html = '';
+
+                // Render standalone promises cards in the feed if they match filters
+                filteredPromises.forEach(p => {
+                    const readableDate = this.formatDateReadable(p.date);
+                    html += `
+                        <div class="bg-gradient-to-br from-rose-50/80 via-white to-pink-50/50 rounded-2xl border border-rose-200 shadow-sm overflow-hidden transition hover:shadow-md">
+                            <div class="bg-gradient-to-r from-rose-500 to-pink-500 px-5 py-3 text-white flex items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    <span class="w-7 h-7 rounded-lg bg-white/25 flex items-center justify-center text-xs">
+                                        <i class="fa-solid fa-heart"></i>
+                                    </span>
+                                    <div>
+                                        <h3 class="font-bold text-sm">Promesa Bíblica</h3>
+                                        <p class="text-[11px] text-rose-100 capitalize">${readableDate}</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-1">
+                                    <button type="button" onclick="app.editPromiseEntry('${p.id}')" title="Editar promesa" class="p-1.5 text-white/80 hover:text-white hover:bg-white/15 rounded-lg transition cursor-pointer">
+                                        <i class="fa-solid fa-pen text-xs"></i>
+                                    </button>
+                                    <button type="button" onclick="app.deletePromiseEntry('${p.id}')" title="Eliminar promesa" class="p-1.5 text-white/80 hover:text-white hover:bg-white/15 rounded-lg transition cursor-pointer">
+                                        <i class="fa-solid fa-trash-can text-xs"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="p-5 space-y-2">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-semibold bg-rose-100 text-rose-900 border border-rose-200">
+                                    <i class="fa-solid fa-book-open mr-1.5 text-rose-600 text-[10px]"></i> ${p.book} ${p.verse}
+                                </span>
+                                <p class="text-slate-800 text-sm leading-relaxed pl-2 border-l-2 border-rose-400 font-medium">
+                                    "${this.escapeHtml(p.text)}"
+                                </p>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                // Render study entries
+                filteredEntries.forEach(entry => {
+                    const readableDate = this.formatDateReadable(entry.date);
+                    html += `
+                        <div class="bg-white/90 backdrop-blur-sm rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition hover:shadow-md">
+                            <div class="bg-rose-50/40 px-5 py-3.5 border-b border-rose-100 flex items-center justify-between">
+                                <div class="flex items-center space-x-2.5">
+                                    <div class="w-8 h-8 rounded-lg bg-rose-100 text-rose-700 flex items-center justify-center font-semibold text-xs">
+                                        <i class="fa-regular fa-calendar-days"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-slate-900 text-sm capitalize">${readableDate}</h3>
+                                        <p class="text-[11px] text-slate-500">${entry.chapters.length} ${entry.chapters.length === 1 ? 'capítulo estudiado' : 'capítulos estudiados'}</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-1">
+                                    <button type="button" onclick="app.editStudyEntry('${entry.id}')" title="Editar este día" class="p-1.5 text-slate-400 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition cursor-pointer">
+                                        <i class="fa-solid fa-pen text-xs"></i>
+                                    </button>
+                                    <button type="button" onclick="app.deleteStudyEntry('${entry.id}')" title="Eliminar registro" class="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition cursor-pointer">
+                                        <i class="fa-solid fa-trash-can text-xs"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="p-5 divide-y divide-slate-100">
+                    `;
+
+                    entry.chapters.forEach((ch, idx) => {
+                        html += `
+                            <div class="${idx > 0 ? 'pt-4 mt-4' : ''}">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-semibold bg-rose-50 text-rose-900 border border-rose-200/60">
+                                        <i class="fa-solid fa-book-open mr-1.5 text-rose-500 text-[10px]"></i> ${ch.book} ${ch.chapter}
+                                    </span>
+                                </div>
+                                <p class="text-slate-700 text-sm leading-relaxed mt-2 pl-1 border-l-2 border-rose-300">
+                                    ${this.escapeHtml(ch.learning)}
+                                </p>
+                                <div id="exegesis-${entry.id}-${idx}" class="mt-3"></div>
+                            </div>
+                        `;
+                    });
+
+                    html += `
+                            </div>
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html;
+            }
+
+            /* Funciones de IA retiradas: la bitácora funciona de forma local y offline.
+            openAiAssistant() {
+                const modal = document.getElementById('aiAssistantModal');
+                if (!modal) {
+                    this.createAiAssistantModal();
+                } else {
+                    modal.classList.remove('opacity-0', 'pointer-events-none');
+                    document.getElementById('aiModalCard').classList.remove('scale-95');
+                    document.getElementById('aiModalCard').classList.add('scale-100');
+                }
+            }
+
+            closeAiAssistant() {
+                const modal = document.getElementById('aiAssistantModal');
+                if (modal) {
+                    modal.classList.add('opacity-0', 'pointer-events-none');
+                    document.getElementById('aiModalCard').classList.remove('scale-100');
+                    document.getElementById('aiModalCard').classList.add('scale-95');
+                }
+            }
+
+            createAiAssistantModal() {
+                const div = document.createElement('div');
+                div.id = 'aiAssistantModal';
+                div.className = 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs transition-all duration-300';
+                div.innerHTML = `
+                    <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl border border-rose-100 overflow-hidden flex flex-col h-[80vh] transform scale-95 transition-all duration-300" id="aiModalCard">
+                        <div class="bg-gradient-to-r from-rose-500 to-pink-500 px-6 py-4 text-white flex items-center justify-between">
+                            <div class="flex items-center space-x-2.5">
+                                <div class="w-8 h-8 rounded-xl bg-white/25 flex items-center justify-center text-white shadow-xs">
+                                    <i class="fa-solid fa-robot"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-base">Asistente de Estudio Bíblico IA</h3>
+                                    <p class="text-xs text-rose-100">Pregunta sobre pasajes, contexto histórico o doctrina con Gemini</p>
+                                </div>
+                            </div>
+                            <button onclick="app.closeAiAssistant()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition cursor-pointer">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                        <div id="aiChatMessages" class="p-6 overflow-y-auto space-y-4 flex-1 bg-rose-50/20">
+                            <div class="flex items-start space-x-3">
+                                <div class="w-8 h-8 rounded-full bg-rose-500 text-white flex items-center justify-center shrink-0 text-xs font-bold">IA</div>
+                                <div class="bg-white border border-rose-100 p-3.5 rounded-2xl shadow-xs text-sm text-slate-800 max-w-[85%]">
+                                            ¡Hola! Puedo ayudarte a formular preguntas de estudio, explorar el contexto de un pasaje y convertir tus notas en una reflexión. Recuerda contrastar cualquier respuesta con las Escrituras y fuentes confiables.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-white border-t border-slate-100 flex items-center space-x-2">
+                            <input type="text" id="aiChatInput" placeholder="Ej: ¿Cuál es el contexto de la carta a los Gálatas?" onkeydown="if(event.key==='Enter') app.sendAiMessage()"
+                                class="flex-1 px-4 py-2.5 bg-rose-50/30 border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition">
+                            <button onclick="app.sendAiMessage()" id="aiSendBtn" class="bg-gradient-to-r from-rose-600 to-pink-500 hover:from-rose-700 hover:to-pink-600 text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition shadow-md shadow-rose-600/20 cursor-pointer">
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(div);
+                setTimeout(() => {
+                    div.classList.remove('opacity-0', 'pointer-events-none');
+                }, 10);
+            }
+
+            async sendAiMessage() {
+                const input = document.getElementById('aiChatInput');
+                const container = document.getElementById('aiChatMessages');
+                const btn = document.getElementById('aiSendBtn');
+                const text = input.value.trim();
+
+                if (!text) return;
+
+                if (!this.aiEndpoint) {
+                    this.showToast("El asistente IA requiere una conexión segura del sitio. La bitácora funciona plenamente sin esta función.", "error");
+                    return;
+                }
+
+                input.value = '';
+                btn.disabled = true;
+
+                // Append User Message
+                container.innerHTML += `
+                    <div class="flex items-start justify-end space-x-3">
+                        <div class="bg-rose-600 text-white p-3.5 rounded-2xl shadow-xs text-sm max-w-[85%]">
+                            ${this.escapeHtml(text)}
+                        </div>
+                        <div class="w-8 h-8 rounded-full bg-slate-800 text-white flex items-center justify-center shrink-0 text-xs font-bold">Tú</div>
+                    </div>
+                `;
+                container.scrollTop = container.scrollHeight;
+
+                // Append loading bubble
+                const loadingId = 'loading-' + Date.now();
+                container.innerHTML += `
+                    <div id="${loadingId}" class="flex items-start space-x-3">
+                        <div class="w-8 h-8 rounded-full bg-rose-500 text-white flex items-center justify-center shrink-0 text-xs font-bold">IA</div>
+                        <div class="bg-white border border-rose-100 p-3.5 rounded-2xl shadow-xs text-sm text-slate-500 flex items-center space-x-2">
+                            <i class="fa-solid fa-spinner animate-spin text-rose-500"></i>
+                            <span>Buscando en las Escrituras y consultando Gemini...</span>
+                        </div>
+                    </div>
+                `;
+                container.scrollTop = container.scrollHeight;
+
+                try {
+                    const systemPrompt = "Eres un respetado teólogo cristiano y erudito bíblico empático y profundo. Respondes con rigor bíblico, doctrina sana y un tono edificante, útil para la devoción personal y el estudio.";
+                    const apiKey = "";
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+                    const payload = {
+                        contents: [{ parts: [{ text: text }] }],
+                        tools: [{ "google_search": {} }],
+                        systemInstruction: { parts: [{ text: systemPrompt }] }
+                    };
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const result = await response.json();
+                    const candidate = result.candidates?.[0];
+                    const loadingEl = document.getElementById(loadingId);
+                    if (loadingEl) loadingEl.remove();
+
+                    if (candidate && candidate.content?.parts?.[0]?.text) {
+                        const reply = candidate.content.parts[0].text.trim();
+                        container.innerHTML += `
+                            <div class="flex items-start space-x-3">
+                                <div class="w-8 h-8 rounded-full bg-rose-500 text-white flex items-center justify-center shrink-0 text-xs font-bold">IA</div>
+                                <div class="bg-white border border-rose-100 p-3.5 rounded-2xl shadow-xs text-sm text-slate-800 max-w-[85%] leading-relaxed space-y-2">
+                                    ${this.escapeHtml(reply).replace(/\n/g, '<br>')}
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        throw new Error("Respuesta vacía");
+                    }
+                } catch (e) {
+                    const loadingEl = document.getElementById(loadingId);
+                    if (loadingEl) loadingEl.remove();
+                    container.innerHTML += `
+                        <div class="flex items-start space-x-3">
+                            <div class="w-8 h-8 rounded-full bg-rose-500 text-white flex items-center justify-center shrink-0 text-xs font-bold">IA</div>
+                            <div class="bg-rose-50 border border-rose-200 p-3.5 rounded-2xl shadow-xs text-sm text-rose-800 max-w-[85%]">
+                                Lo siento, hubo un problema al conectar con el servicio de IA. Por favor intenta de nuevo.
+                            </div>
+                        </div>
+                    `;
+                } finally {
+                    btn.disabled = false;
+                    container.scrollTop = container.scrollHeight;
+                }
+            }
+
+            async generateExegesis(book, chapter, learning, button) {
+                const containerId = button?.closest('div').nextElementSibling?.nextElementSibling || button?.parentElement.nextElementSibling.nextElementSibling;
+                if (!containerId) return;
+
+                if (!this.aiEndpoint) {
+                    containerId.innerHTML = '<div class="bg-rose-50 border border-rose-200 rounded-xl p-3 text-xs text-rose-700">La exégesis automática requiere un backend seguro. Puedes profundizar este pasaje manualmente desde tu estudio.</div>';
+                    return;
+                }
+
+                containerId.innerHTML = `
+                    <div class="bg-rose-50/60 border border-rose-200 rounded-xl p-4 text-xs text-rose-700 flex items-center space-x-2.5 animate-pulse">
+                        <i class="fa-solid fa-wand-magic-sparkles text-rose-500 text-sm"></i>
+                        <span>Generando exégesis detallada y reflexión pastoral con Gemini para ${book} ${chapter}...</span>
+                    </div>
+                `;
+
+                try {
+                    const prompt = `Analiza el pasaje bíblico ${book} ${chapter} teniendo en cuenta esta nota de estudio personal: "${learning}". Proporciona una exégesis breve y una aplicación práctica para la vida cristiana (en formato HTML estructurado con subtítulos en negrita).`;
+                    const systemPrompt = "Eres un erudito bíblico y pastor experto en exégesis bíblica. Proporciona análisis profundos, claros y edificantes.";
+                    const apiKey = "";
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+                    const payload = {
+                        contents: [{ parts: [{ text: prompt }] }],
+                        tools: [{ "google_search": {} }],
+                        systemInstruction: { parts: [{ text: systemPrompt }] }
+                    };
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const result = await response.json();
+                    const candidate = result.candidates?.[0];
+                    if (candidate && candidate.content?.parts?.[0]?.text) {
+                        const exegesisText = candidate.content.parts[0].text.trim();
+                        containerId.innerHTML = `
+                            <div class="bg-gradient-to-br from-rose-50/60 via-white to-pink-50/40 border border-rose-200 rounded-xl p-4 space-y-2 text-slate-800 text-xs shadow-xs relative">
+                                <div class="flex items-center justify-between border-b border-rose-100 pb-2">
+                                    <span class="font-bold text-rose-700 flex items-center">
+                                        <i class="fa-solid fa-wand-magic-sparkles mr-1.5 text-rose-500"></i> Exégesis y Aplicación Pastoral (${book} ${chapter})
+                                    </span>
+                                    <button onclick="this.closest('div').parentElement.innerHTML=''" class="text-slate-400 hover:text-slate-600 cursor-pointer">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </button>
+                                </div>
+                                <div class="leading-relaxed space-y-1.5 pt-1">
+                                    ${this.escapeHtml(exegesisText).replace(/\n/g, '<br>')}
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        throw new Error();
+                    }
+                } catch (e) {
+                    containerId.innerHTML = `
+                        <div class="bg-rose-50 border border-rose-200 rounded-xl p-3 text-xs text-rose-700 flex items-center justify-between">
+                            <span>No se pudo generar la exégesis en este momento.</span>
+                            <button onclick="this.closest('div').remove()" class="underline">Cerrar</button>
+                        </div>
+                    `;
+                }
+            }
+
+            */
+
+            openPromisesModal() {
+                const modal = document.getElementById('promisesModal');
+                const modalCard = document.getElementById('promisesModalCard');
+                const content = document.getElementById('promisesModalContent');
+                const countBadge = document.getElementById('modalPromisesCount');
+
+                if(countBadge) countBadge.textContent = `${this.promises.length} promesas guardadas en total`;
+
+                if (this.promises.length === 0) {
+                    content.innerHTML = `
+                        <div class="text-center py-12 space-y-3">
+                            <div class="w-12 h-12 bg-rose-100 text-rose-500 rounded-full flex items-center justify-center mx-auto text-xl">
+                                <i class="fa-solid fa-heart-crack"></i>
+                            </div>
+                            <h4 class="font-semibold text-slate-800 text-sm">Aún no hay promesas guardadas</h4>
+                            <p class="text-xs text-slate-500 max-w-xs mx-auto">Selecciona la pestaña "Guardar Promesa" en el formulario de la izquierda para registrar tus versículos promesa favoritos.</p>
+                        </div>
+                    `;
+                } else {
+                    let html = '';
+                    const sorted = [...this.promises].sort((a, b) => new Date(b.date) - new Date(a.date));
+                    sorted.forEach(p => {
+                        const readableDate = this.formatDateReadable(p.date);
+                        html += `
+                            <div class="bg-white rounded-xl p-4 border border-rose-200 shadow-xs space-y-2 relative overflow-hidden">
+                                <div class="absolute top-0 left-0 bottom-0 w-1 bg-gradient-to-b from-rose-500 to-pink-500"></div>
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md border border-rose-200">
+                                        <i class="fa-solid fa-book-open mr-1 text-rose-500"></i> ${p.book} ${p.verse}
+                                    </span>
+                                    <span class="text-slate-400 capitalize text-[11px]"><i class="fa-regular fa-calendar mr-1"></i> ${readableDate}</span>
+                                </div>
+                                <p class="text-slate-800 text-sm leading-relaxed pl-1 font-medium">
+                                    "${this.escapeHtml(p.text)}"
+                                </p>
+                            </div>
+                        `;
+                    });
+                    content.innerHTML = html;
+                }
+
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                modalCard.classList.remove('scale-95');
+                modalCard.classList.add('scale-100');
+            }
+
+            closePromisesModal() {
+                const modal = document.getElementById('promisesModal');
+                const modalCard = document.getElementById('promisesModalCard');
+
+                modal.classList.add('opacity-0', 'pointer-events-none');
+                modalCard.classList.remove('scale-100');
+                modalCard.classList.add('scale-95');
+            }
+
+            escapeHtml(text) {
+                const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+                return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+            }
+
+            showToast(message, type = 'success') {
+                const toast = document.getElementById('toast');
+                const messageEl = document.getElementById('toastMessage');
+                const iconEl = document.getElementById('toastIcon');
+
+                messageEl.textContent = message;
+                iconEl.className = type === 'error' ? 'fa-solid fa-circle-exclamation text-rose-400' : 'fa-solid fa-circle-check text-rose-400';
+
+                toast.classList.remove('translate-y-20', 'opacity-0');
+                setTimeout(() => {
+                    toast.classList.add('translate-y-20', 'opacity-0');
+                }, 3500);
+            }
+
+            exportData() {
+                const backup = { entries: this.entries, promises: this.promises };
+                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backup, null, 2));
+                const downloadAnchor = document.createElement('a');
+                downloadAnchor.setAttribute("href", dataStr);
+                downloadAnchor.setAttribute("download", `bitacora_biblica_renova_${new Date().toISOString().split('T')[0]}.json`);
+                document.body.appendChild(downloadAnchor);
+                downloadAnchor.click();
+                downloadAnchor.remove();
+                this.showToast("Datos exportados con éxito");
+            }
+
+            importData(event) {
+                const fileReader = new FileReader();
+                if (event.target.files[0]) {
+                    fileReader.readAsText(event.target.files[0], "UTF-8");
+                    fileReader.onload = (e) => {
+                        try {
+                            const imported = JSON.parse(e.target.result);
+                            if (imported && (Array.isArray(imported.entries) || Array.isArray(imported.promises))) {
+                                if(imported.entries) this.entries = imported.entries;
+                                if(imported.promises) this.promises = imported.promises;
+                            } else if (Array.isArray(imported)) {
+                                this.entries = imported;
+                            }
+                            this.saveToStorage();
+                            this.renderEntries();
+                            this.showToast("¡Datos importados correctamente!");
+                        } catch (err) {
+                            this.showToast("Error al leer el archivo JSON", "error");
+                        }
+                    };
+                }
+            }
+        }
+
+        let app;
+        document.addEventListener('DOMContentLoaded', () => {
+            app = new BibleJournalApp();
+        });
+    </script>
+</body>
+</html>
