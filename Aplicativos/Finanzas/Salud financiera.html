@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Salud Financiera | Renova Institute</title>
+    
+    <!-- Configuración para PWA (Instalación en celular) -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#8C8660">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Renova Finanzas">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <style>
+        .fade-in { animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .custom-shadow { box-shadow: 0 10px 40px -10px rgba(140, 134, 96, 0.15); }
+        input[type="range"] { accent-color: #8C8660; }
+    </style>
+</head>
+<body class="bg-[#FDFBFA] text-[#54463C] min-h-screen flex flex-col font-sans">
+
+    <!-- Header Actualizado -->
+    <header class="bg-white/70 backdrop-blur-lg shadow-sm border-b border-gray-100/50 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-6 h-16 flex justify-between items-center">
+            <!-- Logo y Marca -->
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-full bg-[#8C8660]/10 flex items-center justify-center text-[#8C8660]">
+                    <i class="ph ph-brain text-lg"></i>
+                </div>
+                <div>
+                    <span class="block text-xs font-bold text-[#8C8660] tracking-wider uppercase">RENOVA INSTITUTE</span>
+                    <span class="block text-[9px] text-gray-400 italic font-medium">Restauración integral • Neurociencia + Fe</span>
+                </div>
+            </div>
+
+            <!-- Botón de Tienda ("Para más recursos") -->
+            <div class="flex items-center gap-2">
+                <a href="../../tienda.html" style="cursor: pointer;" class="bg-[#8C8660]/10 hover:bg-[#8C8660]/20 text-[#8C8660] px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 select-none">
+                    <i class="ph ph-storefront text-base"></i> Para más recursos
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 flex items-center justify-center p-4 py-8">
+        <div class="w-full max-w-4xl bg-white rounded-[32px] custom-shadow border border-gray-100 overflow-hidden p-6 md:p-10">
+            
+            <!-- DESCRIPCIÓN Y SELECTOR DE MONEDA -->
+            <div class="text-center mb-6">
+                <h1 class="text-2xl md:text-3xl font-bold text-[#54463C] mb-2">Simulador de Estrés y Mayordomía Financiera</h1>
+                <p class="text-gray-500 text-xs md:text-sm max-w-xl mx-auto mb-4">Ajusta los controles deslizantes según tu realidad económica y observa en tiempo real cómo impactan tu sistema nervioso, tu paz mental y tu bienestar.</p>
+                
+                <!-- Selector de Moneda Interactivo -->
+                <div class="inline-flex bg-gray-100 p-1 rounded-2xl gap-1 text-xs font-bold">
+                    <button onclick="cambiarMoneda('COP')" id="btn-COP" style="cursor: pointer;" class="px-4 py-2 rounded-xl bg-white text-[#8C8660] shadow-sm transition-all select-none">COP ($)</button>
+                    <button onclick="cambiarMoneda('USD')" id="btn-USD" style="cursor: pointer;" class="px-4 py-2 rounded-xl text-gray-500 hover:text-[#54463C] transition-all select-none">USD ($)</button>
+                    <button onclick="cambiarMoneda('EUR')" id="btn-EUR" style="cursor: pointer;" class="px-4 py-2 rounded-xl text-gray-500 hover:text-[#54463C] transition-all select-none">EUR (€)</button>
+                </div>
+            </div>
+
+            <!-- BOTÓN DE INSTALACIÓN RÁPIDA (PWA) -->
+            <div id="contenedor-instalar" class="hidden mb-6 text-center">
+                <button id="btn-instalar" style="cursor: pointer;" class="w-full bg-gradient-to-r from-amber-700 to-[#8C8660] text-white py-3 px-4 rounded-2xl font-bold text-xs shadow-md hover:opacity-95 transition-all flex items-center justify-center gap-2 border border-amber-600/30 select-none">
+                    <i class="ph ph-device-mobile text-lg animate-bounce pointer-events-none"></i>
+                    <span class="pointer-events-none">¡Instala este Simulador en tu celular con 1 clic!</span>
+                </button>
+            </div>
+
+            <!-- Estructura de Panel Único (Dashboard) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                <!-- COLUMNA IZQUIERDA: CONTROLES DESLIZANTES (6 Cols) -->
+                <div class="lg:col-span-6 space-y-5 bg-gray-50 p-5 md:p-6 rounded-2xl border border-gray-100">
+                    <h3 class="font-bold text-gray-700 text-xs uppercase tracking-wide flex items-center gap-2">
+                        <i class="ph ph-sliders text-[#8C8660] text-base"></i> Ajusta tus valores mensuales
+                    </h3>
+
+                    <!-- Ingreso Total -->
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="text-xs font-bold text-gray-600">Ingreso Mensual Total</label>
+                            <span id="val-ingreso" class="font-bold text-[#8C8660] text-sm"></span>
+                        </div>
+                        <input type="range" id="range-ingreso" class="w-full h-2 bg-gray-200 rounded-lg cursor-pointer" oninput="actualizarSimulador()">
+                    </div>
+
+                    <!-- Gastos de Vida -->
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="text-xs font-bold text-gray-600">Gastos Básicos (Arriendo, Servicios, Mercado)</label>
+                            <span id="val-gastos" class="font-bold text-blue-600 text-sm"></span>
+                        </div>
+                        <input type="range" id="range-gastos" class="w-full h-2 bg-gray-200 rounded-lg cursor-pointer" oninput="actualizarSimulador()">
+                    </div>
+
+                    <!-- Pago de Deudas -->
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="text-xs font-bold text-gray-600">Pago de Deudas (Tarjetas, Préstamos)</label>
+                            <span id="val-deudas" class="font-bold text-red-500 text-sm"></span>
+                        </div>
+                        <input type="range" id="range-deudas" class="w-full h-2 bg-gray-200 rounded-lg cursor-pointer" oninput="actualizarSimulador()">
+                    </div>
+
+                    <!-- Generosidad / Diezmos -->
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="text-xs font-bold text-gray-600">Generosidad / Propósito (Diezmos, Ayudas)</label>
+                            <span id="val-dar" class="font-bold text-[#8C8660] text-sm"></span>
+                        </div>
+                        <input type="range" id="range-dar" class="w-full h-2 bg-gray-200 rounded-lg cursor-pointer" oninput="actualizarSimulador()">
+                    </div>
+                </div>
+
+                <!-- COLUMNA DERECHA: DIAGNÓSTICO DINÁMICO EN VIVO (6 Cols) -->
+                <div class="lg:col-span-6 flex flex-col justify-between space-y-5">
+                    
+                    <!-- Tarjeta de Semáforo Cerebral -->
+                    <div id="card-alerta" class="p-5 rounded-2xl border transition-all duration-300 bg-amber-50/50 border-amber-200">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div id="icon-alerta" class="p-2 rounded-xl bg-amber-100 text-amber-700 font-bold text-lg"><i class="ph ph-warning"></i></div>
+                            <div>
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">Nivel de Carga Mental y Estrés</span>
+                                <h4 id="txt-estado" class="font-bold text-base text-gray-800">Evaluando...</h4>
+                            </div>
+                        </div>
+                        <p id="txt-explicacion" class="text-xs text-gray-600 leading-relaxed mt-2"></p>
+                    </div>
+
+                    <!-- Principio Bíblico y Neurociencia -->
+                    <div class="bg-gray-50 p-4 md:p-5 rounded-2xl border border-gray-100 space-y-3">
+                        <div>
+                            <span class="text-[10px] font-bold text-[#8C8660] uppercase tracking-wider block mb-0.5"><i class="ph ph-brain"></i> Perspectiva Neuronal</span>
+                            <p id="txt-neuro" class="text-xs text-gray-600 leading-relaxed"></p>
+                        </div>
+                        <div class="border-t border-gray-200 pt-2">
+                            <span class="text-[10px] font-bold text-amber-700 uppercase tracking-wider block mb-0.5"><i class="ph ph-book-open"></i> Sabiduría Financiera y Fe</span>
+                            <p id="txt-fe" class="text-xs text-gray-700 italic leading-relaxed"></p>
+                        </div>
+                    </div>
+
+                    <!-- Botón de Conversión WhatsApp -->
+                    <button onclick="contactarAsesoria()" style="cursor: pointer;" class="w-full bg-[#25D366] text-white px-6 py-3.5 rounded-xl font-bold shadow-lg shadow-[#25D366]/20 hover:bg-[#128C7E] transition-all flex justify-center items-center gap-2 text-xs select-none">
+                        <i class="ph ph-whatsapp-logo text-lg pointer-events-none"></i> <span class="pointer-events-none">Quiero sanar mis finanzas con Renova</span>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        let monedaActual = 'COP';
+        let estadoActual = '';
+
+        const configuracionMonedas = {
+            COP: {
+                simbolo: 'COP',
+                locale: 'es-CO',
+                ingreso: { min: 1300000, max: 15000000, step: 100000, val: 3500000 },
+                gastos: { min: 500000, max: 10000000, step: 50000, val: 1800000 },
+                deudas: { min: 0, max: 6000000, step: 50000, val: 900000 },
+                dar: { min: 0, max: 2000000, step: 25000, val: 350000 }
+            },
+            USD: {
+                simbolo: 'USD',
+                locale: 'en-US',
+                ingreso: { min: 400, max: 5000, step: 50, val: 1200 },
+                gastos: { min: 200, max: 3500, step: 25, val: 650 },
+                deudas: { min: 0, max: 2000, step: 25, val: 300 },
+                dar: { min: 0, max: 800, step: 10, val: 120 }
+            },
+            EUR: {
+                simbolo: 'EUR',
+                locale: 'de-DE',
+                ingreso: { min: 400, max: 5000, step: 50, val: 1300 },
+                gastos: { min: 200, max: 3500, step: 25, val: 700 },
+                deudas: { min: 0, max: 2000, step: 25, val: 250 },
+                dar: { min: 0, max: 800, step: 10, val: 130 }
+            }
+        };
+
+        function cambiarMoneda(nuevaMoneda) {
+            monedaActual = nuevaMoneda;
+            
+            ['COP', 'USD', 'EUR'].forEach(m => {
+                const btn = document.getElementById(`btn-${m}`);
+                if (m === nuevaMoneda) {
+                    btn.className = "px-4 py-2 rounded-xl bg-white text-[#8C8660] shadow-sm transition-all select-none";
+                } else {
+                    btn.className = "px-4 py-2 rounded-xl text-gray-500 hover:text-[#54463C] transition-all select-none";
+                }
+            });
+
+            const cfg = configuracionMonedas[nuevaMoneda];
+            
+            const rIngreso = document.getElementById('range-ingreso');
+            rIngreso.min = cfg.ingreso.min; rIngreso.max = cfg.ingreso.max; rIngreso.step = cfg.ingreso.step; rIngreso.value = cfg.ingreso.val;
+
+            const rGastos = document.getElementById('range-gastos');
+            rGastos.min = cfg.gastos.min; rGastos.max = cfg.gastos.max; rGastos.step = cfg.gastos.step; rGastos.value = cfg.gastos.val;
+
+            const rDeudas = document.getElementById('range-deudas');
+            rDeudas.min = cfg.deudas.min; rDeudas.max = cfg.deudas.max; rDeudas.step = cfg.deudas.step; rDeudas.value = cfg.deudas.val;
+
+            const rDar = document.getElementById('range-dar');
+            rDar.min = cfg.dar.min; rDar.max = cfg.dar.max; rDar.step = cfg.dar.step; rDar.value = cfg.dar.val;
+
+            actualizarSimulador();
+        }
+
+        function formatearMoneda(valor) {
+            const cfg = configuracionMonedas[monedaActual];
+            return new Intl.NumberFormat(cfg.locale, { style: 'currency', currency: cfg.simbolo, maximumFractionDigits: 0 }).format(valor);
+        }
+
+        function actualizarSimulador() {
+            const ingreso = parseFloat(document.getElementById('range-ingreso').value);
+            const gastos = parseFloat(document.getElementById('range-gastos').value);
+            const deudas = parseFloat(document.getElementById('range-deudas').value);
+            const dar = parseFloat(document.getElementById('range-dar').value);
+
+            document.getElementById('val-ingreso').innerText = formatearMoneda(ingreso);
+            document.getElementById('val-gastos').innerText = formatearMoneda(gastos);
+            document.getElementById('val-deudas').innerText = formatearMoneda(deudas);
+            document.getElementById('val-dar').innerText = formatearMoneda(dar);
+
+            const pctDeudas = (deudas / ingreso) * 100;
+            const pctDar = (dar / ingreso) * 100;
+            const balanceRestante = ingreso - (gastos + deudas + dar);
+
+            const cardAlerta = document.getElementById('card-alerta');
+            const iconAlerta = document.getElementById('icon-alerta');
+            const txtEstado = document.getElementById('txt-estado');
+            const txtExplicacion = document.getElementById('txt-explicacion');
+            const txtNeuro = document.getElementById('txt-neuro');
+            const txtFe = document.getElementById('txt-fe');
+
+            // ESCALA DE NIVELES EVALUADA EN ORDEN RIGUROSO (1, 2, 3, 4)
+            if (balanceRestante >= (ingreso * 0.15) && pctDeudas <= 40) {
+                // Nivel 1: Saludable
+                estadoActual = "saludable";
+                cardAlerta.className = "p-5 rounded-2xl border transition-all duration-300 bg-emerald-50 border-emerald-200";
+                iconAlerta.className = "p-2 rounded-xl bg-emerald-100 text-emerald-700 font-bold text-lg";
+                iconAlerta.innerHTML = '<i class="ph ph-check-circle"></i>';
+                txtEstado.innerText = "Nivel 1: Mayordomía en Equilibrio";
+                txtExplicacion.innerText = "Tus finanzas poseen un excelente margen de resiliencia. Cuentas con espacio suficiente para ahorrar, dar con propósito y vivir con total tranquilidad.";
+                txtNeuro.innerHTML = "Un margen financiero saludable reduce drásticamente la inflamación neuronal por estrés y permite activar el pensamiento a largo plazo.";
+                txtFe.innerHTML = "«Bienaventurado el hombre que teme a Jehová, y en sus mandamientos deleita en gran manera... Bien le va al hombre que tiene misericordia y presta; gobierna sus asuntos con juicio.» (Salmo 112:1, 5)";
+
+            } else if (balanceRestante >= 0 && balanceRestante < (ingreso * 0.15) && pctDeudas <= 40) {
+                // Nivel 2: Margen Ajustado
+                estadoActual = "margen_ajustado";
+                cardAlerta.className = "p-5 rounded-2xl border transition-all duration-300 bg-amber-50 border-amber-200";
+                iconAlerta.className = "p-2 rounded-xl bg-amber-100 text-amber-700 font-bold text-lg";
+                iconAlerta.innerHTML = '<i class="ph ph-sliders"></i>';
+                txtEstado.innerText = "Nivel 2: Margen Ajustado (Vulnerable)";
+                txtExplicacion.innerText = "Cubres tus gastos básicos al límite, pero posees un margen muy reducido para imprevistos. Cualquier alteración menor genera picos de ansiedad repentina.";
+                txtNeuro.innerHTML = "La ausencia de un colchón de ahorro preventivo activa una secreción sostenida de adrenalina, impidiendo que el cerebro alcance un descanso profundo y reparador.";
+                txtFe.innerHTML = "«El prudente ve el mal y se esconde, mas los simples pasan y sufren el daño.» (Proverbios 22:3)";
+
+            } else if (pctDeudas > 40 && balanceRestante >= 0) {
+                // Nivel 3: Sobrecarga por Deudas
+                estadoActual = "deudas_altas";
+                cardAlerta.className = "p-5 rounded-2xl border transition-all duration-300 bg-orange-50 border-orange-200";
+                iconAlerta.className = "p-2 rounded-xl bg-orange-100 text-orange-600 font-bold text-lg";
+                iconAlerta.innerHTML = '<i class="ph ph-credit-card"></i>';
+                txtEstado.innerText = "Nivel 3: Sobrecarga Financiera";
+                txtExplicacion.innerText = "Destinas una porción considerable de tus ingresos al pago de compromisos adquiridos. Estás trabajando fuertemente para cubrir el pasado, lo que genera fatiga mental crónica y desgaste emocional.";
+                txtNeuro.innerHTML = "Cargar con deudas pesadas genera fatiga decisional constante; tu mente desperdicia energía valiosa calculando cómo cubrir compromisos semana a semana.";
+                txtFe.innerHTML = "«El rico se enseñorea de los pobres, y el que toma prestado es siervo del que presta.» (Proverbios 22:7)";
+
+            } else {
+                // Nivel 4: Déficit Crítico (Incluye validación reflexiva y cálida del principio de dar)
+                estadoActual = "deficit";
+                cardAlerta.className = "p-5 rounded-2xl border transition-all duration-300 bg-red-50 border-red-200";
+                iconAlerta.className = "p-2 rounded-xl bg-red-100 text-red-600 font-bold text-lg";
+                iconAlerta.innerHTML = '<i class="ph ph-warning-octagon"></i>';
+                txtEstado.innerText = "Nivel 4: Déficit Crítico (Alerta Roja)";
+                
+                if (pctDar < 10) {
+                    txtExplicacion.innerText = "Estás gastando más de lo que ingresas y notas que la generosidad ha quedado en un segundo plano. A veces, en medio de la escasez, nuestro instinto humano es retener por miedo; sin embargo, los tiempos difíciles son una invitación a pausar y reflexionar si estamos honrando a Dios con las primicias de nuestros recursos, recordando que hay más alegría y libertad en dar que en aferrarnos al control.";
+                    txtFe.innerHTML = "«Honra a Jehová con tus bienes, y con las primicias de todos tus frutos; y serán tus graneros llenos con abundancia...» (Proverbios 3:9-10). Recuerda las palabras del Señor Jesús: «Más bienaventurado es dar que recibir» (Hechos 20:35).";
+                } else {
+                    txtExplicacion.innerText = "Estás gastando más de lo que ingresas al mes. Esto mantiene tu sistema nervioso en alerta máxima permanente, agotando tu salud física y mental frente a los compromisos actuales.";
+                    txtFe.innerHTML = "«Los pensamientos del diligente ciertamente tienden a la abundancia; mas todo el que se apresura alocadamente, de cierto va a la pobreza.» (Proverbios 21:5)";
+                }
+                
+                txtNeuro.innerHTML = "El cerebro detecta la escasez crónica como una amenaza física para la supervivencia, bloqueando la corteza prefrontal, la creatividad y la resolución lógica de problemas.";
+            }
+        }
+
+        function contactarAsesoria() {
+            const numeroWhatsApp = "573114951646"; 
+            let mensaje = "Hola equipo de Renova Institute. Estuve probando el Simulador de Estrés y Mayordomía Financiera. ";
+            
+            if (estadoActual === "deficit") {
+                mensaje += "Me di cuenta de que estoy en déficit crítico y necesito orientación urgente para ordenar mis cuentas y finanzas. ";
+            } else if (estadoActual === "deudas_altas") {
+                mensaje += "El peso de las deudas me está generando sobrecarga mental y quiero aprender a salir de este ciclo. ";
+            } else if (estadoActual === "margen_ajustado") {
+                mensaje += "Mis finanzas están muy justas y quiero aprender principios efectivos de mayordomía. ";
+            } else {
+                mensaje += "Quiero llevar mis finanzas y mi paz mental al siguiente nivel con Renova Institute. ";
+            }
+            
+            mensaje += "Me interesa recibir información sobre sus programas y talleres.";
+            
+            const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
+            window.open(url, '_blank');
+        }
+
+        window.onload = function() {
+            cambiarMoneda('COP');
+        };
+
+        // Lógica para la instalación de la PWA
+        let deferredPrompt;
+        const contenedorInstalar = document.getElementById('contenedor-instalar');
+        const btnInstalar = document.getElementById('btn-instalar');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            if (contenedorInstalar) {
+                contenedorInstalar.classList.remove('hidden');
+            }
+        });
+
+        if (btnInstalar) {
+            btnInstalar.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    deferredPrompt = null;
+                    contenedorInstalar.classList.add('hidden');
+                }
+            });
+        }
+
+        window.addEventListener('appinstalled', (evt) => {
+            if (contenedorInstalar) {
+                contenedorInstalar.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
