@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#173f3b">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Pausa Activa">
+    <link rel="manifest" href="manifest.json">
+    <title>Sopa de Letras | Renova Institute</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        :root { --ink:#173f3b; --ink-soft:#48615e; --cream:#f7f3ea; --paper:#fffdf8; --mint:#dceee5; --sage:#79ae98; --coral:#ee8069; --gold:#e8b85a; --line:rgba(23,63,59,.12); --shadow:0 24px 70px rgba(31,62,54,.14); }
+        * { box-sizing:border-box; }
+        body { margin:0; min-width:320px; color:var(--ink); background:var(--cream); font-family:"DM Sans",sans-serif; }
+        body::before { content:""; position:fixed; inset:0; pointer-events:none; opacity:.34; background-image:radial-gradient(rgba(23,63,59,.12) .7px,transparent .7px); background-size:17px 17px; mask-image:linear-gradient(to bottom,black,transparent 70%); }
+        button,a { font:inherit; } button { border:0; cursor:pointer; }
+        .shell { position:relative; z-index:1; width:min(1120px,calc(100% - 32px)); margin:0 auto; }
+        header { padding:24px 0 18px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+        .brand { display:flex; align-items:center; gap:11px; text-decoration:none; color:var(--ink); }
+        .brand-mark { display:grid; place-items:center; width:40px; height:40px; color:var(--cream); background:var(--ink); border-radius:13px; font-size:22px; transform:rotate(-5deg); }
+        .brand strong { display:block; font-size:11px; letter-spacing:.15em; } .brand span span { display:block; margin-top:3px; color:var(--ink-soft); font-size:11px; }
+        .store-link { display:inline-flex; align-items:center; gap:8px; padding:10px 14px; color:var(--ink); background:rgba(255,255,255,.62); border:1px solid var(--line); border-radius:12px; text-decoration:none; font-size:12px; font-weight:700; transition:.2s ease; }
+        .store-link:hover { background:var(--paper); transform:translateY(-2px); }
+        main { padding:30px 0 60px; } .intro { max-width:700px; margin:0 auto 28px; text-align:center; animation:rise .6s ease both; }
+        .eyebrow { display:inline-flex; align-items:center; gap:7px; color:var(--coral); font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
+        h1 { margin:12px 0 10px; font-family:Fraunces,Georgia,serif; font-size:clamp(36px,6vw,62px); line-height:.98; letter-spacing:-.03em; } .intro p { max-width:550px; margin:0 auto; color:var(--ink-soft); font-size:15px; line-height:1.65; }
+        .game { display:grid; grid-template-columns:minmax(0,1.25fr) minmax(290px,.75fr); gap:18px; align-items:start; }
+        .board-panel,.side-panel { background:rgba(255,253,248,.9); border:1px solid rgba(23,63,59,.1); box-shadow:var(--shadow); border-radius:25px; }
+        .board-panel { padding:clamp(16px,3vw,28px); animation:rise .7s .08s ease both; } .board-top { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:17px; }
+        .board-title { display:flex; align-items:center; gap:10px; font-weight:700; font-size:14px; } .board-title i { color:var(--coral); font-size:21px; } .round-pill { padding:7px 10px; color:var(--ink-soft); background:var(--mint); border-radius:99px; font-size:11px; font-weight:700; }
+        #grid { display:grid; grid-template-columns:repeat(12,1fr); width:min(100%,620px); aspect-ratio:1; margin:0 auto; padding:8px; gap:4px; background:#e9f3ed; border:1px solid rgba(23,63,59,.12); border-radius:19px; touch-action:none; user-select:none; }
+        .cell { display:grid; place-items:center; min-width:0; aspect-ratio:1; color:var(--ink); background:var(--paper); border-radius:8px; font-size:clamp(14px,2.7vw,22px); font-weight:700; line-height:1; transition:transform .16s ease,background .16s ease,color .16s ease; }
+        .cell.selecting { color:var(--paper); background:var(--ink); transform:scale(1.08); } .cell.found { color:var(--ink); background:var(--gold); animation:pop .4s ease both; } .cell.hint { color:var(--paper); background:var(--coral); animation:pulse 1s ease 2; }
+        .board-help { display:flex; align-items:center; justify-content:center; gap:7px; margin:17px 0 0; color:var(--ink-soft); font-size:12px; } .board-help i { color:var(--coral); font-size:16px; }
+        .side-panel { padding:21px; animation:rise .7s .16s ease both; } .stats { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-bottom:22px; } .stat { padding:13px; background:var(--mint); border-radius:15px; } .stat span { display:block; color:var(--ink-soft); font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; } .stat strong { display:block; margin-top:5px; font-family:Fraunces,Georgia,serif; font-size:25px; }
+        .section-heading { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; } .section-heading h2 { margin:0; font-family:Fraunces,Georgia,serif; font-size:23px; } .section-heading span { color:var(--ink-soft); font-size:11px; }
+        #word-list { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:0; padding:0; list-style:none; } .word { display:flex; align-items:center; gap:7px; padding:9px 10px; color:var(--ink-soft); background:#fbfaf4; border:1px solid var(--line); border-radius:11px; font-size:12px; font-weight:700; transition:.25s ease; } .word i { color:#a5b6ae; font-size:17px; } .word.done { color:var(--ink); background:#f9e9b8; border-color:#e9c875; text-decoration:line-through; } .word.done i { color:var(--ink); }
+        .progress-wrap { margin:20px 0 18px; } .progress-label { display:flex; justify-content:space-between; margin-bottom:7px; color:var(--ink-soft); font-size:11px; font-weight:700; } .progress-track { height:8px; overflow:hidden; background:#e7e6dd; border-radius:99px; } #progress-bar { width:0; height:100%; background:var(--coral); border-radius:inherit; transition:width .35s ease; }
+        .actions { display:grid; grid-template-columns:1fr 1fr; gap:9px; } .action { display:inline-flex; align-items:center; justify-content:center; gap:7px; padding:12px 10px; color:var(--ink); background:var(--paper); border:1px solid var(--line); border-radius:12px; font-size:12px; font-weight:700; transition:.2s ease; } .action:hover { border-color:var(--sage); transform:translateY(-2px); } .action.primary { color:var(--paper); background:var(--ink); border-color:var(--ink); }
+        .note { display:flex; gap:10px; margin-top:20px; padding-top:16px; color:var(--ink-soft); border-top:1px solid var(--line); font-size:11px; line-height:1.55; } .note i { flex:0 0 auto; color:var(--coral); font-size:19px; }
+        .insight { display:none; margin-top:18px; padding:16px; background:#eef6ef; border:1px solid rgba(121,174,152,.35); border-radius:16px; animation:rise .45s ease both; }
+        .insight.show { display:block; }
+        .insight-kicker { display:flex; align-items:center; gap:7px; color:var(--coral); font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; }
+        .insight h3 { margin:8px 0 5px; font-family:Fraunces,Georgia,serif; font-size:21px; }
+        .insight p { margin:0; color:var(--ink-soft); font-size:12px; line-height:1.5; }
+        .insight .verse { margin-top:10px; padding-top:10px; color:var(--ink); border-top:1px solid rgba(23,63,59,.12); font-size:11px; font-style:italic; line-height:1.5; }
+        .sales-card { display:none; margin-top:18px; padding:17px; color:var(--paper); background:var(--ink); border-radius:17px; animation:rise .5s ease both; }
+        .sales-card.show { display:block; }
+        .sales-card-kicker { display:flex; align-items:center; gap:7px; color:#f1cb79; font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
+        .sales-card h3 { margin:8px 0 5px; font-family:Fraunces,Georgia,serif; font-size:20px; }
+        .sales-card p { margin:0; color:rgba(255,253,248,.75); font-size:11px; line-height:1.5; }
+        .sales-actions { display:flex; gap:8px; margin-top:13px; }
+        .sales-actions a { display:inline-flex; align-items:center; justify-content:center; gap:6px; padding:9px 11px; border-radius:10px; font-size:11px; font-weight:700; text-decoration:none; }
+        .sales-actions .store { color:var(--ink); background:#f9e9b8; }
+        .sales-actions .whatsapp { color:var(--paper); border:1px solid rgba(255,253,248,.35); }
+        .complete { display:none; margin-top:18px; padding:15px; color:var(--ink); background:#f9e9b8; border-radius:15px; font-size:12px; line-height:1.5; } .complete.show { display:block; animation:rise .45s ease both; } .complete strong { display:block; margin-bottom:3px; font-family:Fraunces,Georgia,serif; font-size:19px; }
+        @keyframes rise { from { opacity:0; transform:translateY(13px); } to { opacity:1; transform:translateY(0); } } @keyframes pop { 0% { transform:scale(.8); } 70% { transform:scale(1.15); } 100% { transform:scale(1); } } @keyframes pulse { 0%,100% { box-shadow:0 0 0 0 rgba(238,128,105,0); } 50% { box-shadow:0 0 0 6px rgba(238,128,105,.2); } }
+        @media (max-width:760px) { .shell { width:min(100% - 22px,560px); } header { padding-top:16px; } .brand span span { display:none; } .store-link { padding:9px 10px; font-size:0; } .store-link i { font-size:18px; } main { padding-top:26px; } .intro { margin-bottom:22px; } .intro p { font-size:13px; } .game { grid-template-columns:1fr; } .side-panel { padding:18px; } }
+        @media (max-width:380px) { #grid { gap:3px; padding:6px; } .cell { border-radius:6px; font-size:13px; } }
+    </style>
+</head>
+<body>
+    <div class="shell">
+        <header>
+            <a class="brand" href="../../index.html"><span class="brand-mark"><i class="ph ph-sparkle"></i></span><span><strong>RENOVA INSTITUTE</strong><span>Pausa activa para tu mente</span></span></a>
+            <a class="store-link" href="../../Tienda.html"><i class="ph ph-storefront"></i><span>Más recursos</span></a>
+        </header>
+        <main>
+            <section class="intro"><span class="eyebrow"><i class="ph ph-sun-dim"></i> Un respiro de atención</span><h1>Encuentra tu centro</h1><p>Regálate unos minutos de calma. Busca las palabras escondidas y deja que tu atención vuelva, suavemente, al presente.</p></section>
+            <section class="game" aria-label="Sopa de letras de atención plena">
+                <div class="board-panel"><div class="board-top"><div class="board-title"><i class="ph ph-grid-four"></i><span>Sopa de letras</span></div><span class="round-pill">Ronda <span id="round-number">1</span></span></div><div id="grid" role="grid" aria-label="Cuadrícula de letras"></div><p class="board-help"><i class="ph ph-hand-pointer"></i><span>Arrastra sobre una palabra para encontrarla</span></p></div>
+                <aside class="side-panel"><div class="stats"><div class="stat"><span>Encontradas</span><strong id="found-count">0/8</strong></div><div class="stat"><span>Tiempo</span><strong id="timer">00:00</strong></div></div><div class="section-heading"><h2>Tu búsqueda</h2><span id="remaining-label">8 por encontrar</span></div><ul id="word-list"></ul><div class="progress-wrap"><div class="progress-label"><span>Progreso</span><span id="progress-percent">0%</span></div><div class="progress-track"><div id="progress-bar"></div></div></div><div class="actions"><button class="action" id="hint-button" type="button"><i class="ph ph-lightbulb"></i> Darme una pista</button><button class="action primary" id="new-game-button" type="button"><i class="ph ph-arrows-clockwise"></i> Nueva ronda</button></div><div class="insight" id="insight-card"><div class="insight-kicker"><i class="ph ph-sparkle"></i> Una idea para llevar contigo</div><h3 id="insight-title"></h3><p id="insight-tip"></p><div class="verse" id="insight-verse"></div></div><div class="complete" id="complete-message"><strong>Lo hiciste muy bien.</strong>Encontraste todas las palabras. Quédate un instante con esta sensación de claridad.</div><div class="sales-card" id="sales-card"><div class="sales-card-kicker"><i class="ph ph-arrow-circle-up-right"></i> Tu siguiente paso</div><h3>Haz espacio para seguir avanzando</h3><p>Si esta pausa te ayudó, una sesión personalizada puede ayudarte a convertir esta claridad en cambios sostenibles, con acompañamiento profesional y humano.</p><div class="sales-actions"><a class="store" href="../../Tienda.html"><i class="ph ph-storefront"></i> Más recursos</a><a class="whatsapp" href="https://wa.me/573114951646?text=Hola%20Renova%20Institute.%20Prob%C3%A9%20la%20sopa%20de%20letras%20y%20quiero%20conocer%20la%20Sesi%C3%B3n%20Personalizada%20de%20Psicolog%C3%ADa." target="_blank"><i class="ph ph-whatsapp-logo"></i> Preguntar</a></div></div><div class="note"><i class="ph ph-heart"></i><span>No hay prisa. Este pequeño juego está diseñado para entrenar tu atención, no para exigirte.</span></div></aside>
+            </section>
+        </main>
+    </div>
+    <script>
+        const size = 12;
+        const wordBank = ['CALMA', 'ENFOQUE', 'RESPIRA', 'GRACIA', 'PRESENTE', 'ESPERANZA', 'RENUEVA', 'PAZ'];
+        const insights = {
+            CALMA: { tip:'Antes de responder o decidir, haz una pausa de tres respiraciones lentas. La calma devuelve espacio a tu criterio.', verse:'«Estad quietos, y conoced que yo soy Dios.» — Salmo 46:10' },
+            ENFOQUE: { tip:'Elige una sola tarea para los próximos diez minutos y aleja una distracción visible. La atención también se entrena.', verse:'«Todo tiene su tiempo, y todo lo que se quiere debajo del cielo tiene su hora.» — Eclesiastés 3:1' },
+            RESPIRA: { tip:'Inhala contando cuatro y exhala contando seis, cinco veces. Una exhalación más larga le comunica seguridad a tu cuerpo.', verse:'«En Dios he confiado; no temeré.» — Salmo 56:11' },
+            GRACIA: { tip:'Háblate como le hablarías a alguien que amas. El progreso sostenido nace de la verdad, pero también de la compasión.', verse:'«Bástate mi gracia; porque mi poder se perfecciona en la debilidad.» — 2 Corintios 12:9' },
+            PRESENTE: { tip:'Nombra tres cosas que ves, dos que escuchas y una que sientes. Este gesto sencillo te trae de vuelta al ahora.', verse:'«Este es el día que hizo Jehová; nos gozaremos y alegraremos en él.» — Salmo 118:24' },
+            ESPERANZA: { tip:'Escribe una acción pequeña que sí puedas hacer hoy. La esperanza se fortalece cuando encuentra un siguiente paso concreto.', verse:'«Porque yo sé los pensamientos que tengo acerca de vosotros... pensamientos de paz, y no de mal.» — Jeremías 29:11' },
+            RENUEVA: { tip:'Cambia una rutina automática por una elección consciente. Lo pequeño, repetido con intención, también transforma la mente.', verse:'«Transformaos por medio de la renovación de vuestro entendimiento.» — Romanos 12:2' },
+            PAZ: { tip:'Protege cinco minutos sin notificaciones al final del día. La paz necesita límites para poder quedarse.', verse:'«Y la paz de Dios... guardará vuestros corazones y vuestros pensamientos.» — Filipenses 4:7' }
+        };
+        const directions = [[1,0],[0,1],[1,1],[1,-1],[-1,0],[0,-1],[-1,-1],[-1,1]];
+        const letters = 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ';
+        const gridElement = document.getElementById('grid');
+        const wordListElement = document.getElementById('word-list');
+        const foundCountElement = document.getElementById('found-count');
+        const remainingLabel = document.getElementById('remaining-label');
+        const progressBar = document.getElementById('progress-bar');
+        const progressPercent = document.getElementById('progress-percent');
+        const timerElement = document.getElementById('timer');
+        const completeMessage = document.getElementById('complete-message');
+        const insightCard = document.getElementById('insight-card');
+        const insightTitle = document.getElementById('insight-title');
+        const insightTip = document.getElementById('insight-tip');
+        const insightVerse = document.getElementById('insight-verse');
+        const salesCard = document.getElementById('sales-card');
+        let board = [], placements = new Map(), foundWords = new Set(), selectedCells = [], isSelecting = false, startedAt = 0, timerId, round = 0;
+
+        function createBoard() {
+            board = Array.from({ length:size }, () => Array(size).fill(''));
+            placements = new Map();
+            wordBank.forEach(word => {
+                let placed = false;
+                for (let attempt = 0; attempt < 300 && !placed; attempt++) {
+                    const direction = directions[Math.floor(Math.random() * directions.length)];
+                    const row = Math.floor(Math.random() * size), col = Math.floor(Math.random() * size);
+                    const cells = word.split('').map((_, index) => [row + direction[0] * index, col + direction[1] * index]);
+                    if (cells.every(([cellRow, cellCol], index) => cellRow >= 0 && cellRow < size && cellCol >= 0 && cellCol < size && (!board[cellRow][cellCol] || board[cellRow][cellCol] === word[index]))) {
+                        cells.forEach(([cellRow, cellCol], index) => { board[cellRow][cellCol] = word[index]; });
+                        placements.set(word, cells); placed = true;
+                    }
+                }
+            });
+            board = board.map(row => row.map(letter => letter || letters[Math.floor(Math.random() * letters.length)]));
+        }
+        function render() {
+            gridElement.innerHTML = '';
+            board.forEach((row, rowIndex) => row.forEach((letter, colIndex) => { const cell = document.createElement('div'); cell.className = 'cell'; cell.textContent = letter; cell.dataset.row = rowIndex; cell.dataset.col = colIndex; cell.setAttribute('role', 'gridcell'); gridElement.appendChild(cell); }));
+            wordListElement.innerHTML = wordBank.map(word => `<li class="word${foundWords.has(word) ? ' done' : ''}" data-word="${word}"><i class="ph ${foundWords.has(word) ? 'ph-check-circle' : 'ph-circle'}"></i>${word}</li>`).join('');
+            updateProgress();
+        }
+        function getCell(row, col) { return gridElement.querySelector(`[data-row="${row}"][data-col="${col}"]`); }
+        function clearSelection() { selectedCells.forEach(([row, col]) => getCell(row, col)?.classList.remove('selecting')); selectedCells = []; }
+        function cellFromPoint(event) { return document.elementFromPoint(event.clientX, event.clientY)?.closest('.cell'); }
+        function cellsBetween(start, end) { const rowDelta = end[0] - start[0], colDelta = end[1] - start[1], distance = Math.max(Math.abs(rowDelta), Math.abs(colDelta)); if (!(rowDelta === 0 || colDelta === 0 || Math.abs(rowDelta) === Math.abs(colDelta))) return []; const rowStep = rowDelta === 0 ? 0 : rowDelta / distance, colStep = colDelta === 0 ? 0 : colDelta / distance; return Array.from({ length:distance + 1 }, (_, index) => [start[0] + rowStep * index, start[1] + colStep * index]); }
+        function updateSelection(cell) { if (!cell || !selectedCells.length) return; const start = selectedCells[0], end = [Number(cell.dataset.row), Number(cell.dataset.col)], next = cellsBetween(start, end); if (!next.length) return; clearSelection(); selectedCells = next; selectedCells.forEach(([row, col]) => getCell(row, col)?.classList.add('selecting')); }
+        function finishSelection() { if (!isSelecting) return; isSelecting = false; const selectedWord = selectedCells.map(([row, col]) => board[row][col]).join(''), reversedWord = selectedWord.split('').reverse().join(''); const match = wordBank.find(word => !foundWords.has(word) && (word === selectedWord || word === reversedWord)); clearSelection(); if (!match) return; foundWords.add(match); placements.get(match)?.forEach(([row, col]) => getCell(row, col)?.classList.add('found')); showInsight(match); renderWordList(); updateProgress(); if (foundWords.size >= 3) salesCard.classList.add('show'); if (foundWords.size === wordBank.length) completeMessage.classList.add('show'); }
+        function showInsight(word) { const insight = insights[word]; insightTitle.textContent = word; insightTip.textContent = insight.tip; insightVerse.textContent = insight.verse; insightCard.classList.remove('show'); requestAnimationFrame(() => insightCard.classList.add('show')); }
+        function renderWordList() { wordBank.forEach(word => { const item = wordListElement.querySelector(`[data-word="${word}"]`); if (item) { item.classList.toggle('done', foundWords.has(word)); item.querySelector('i').className = `ph ${foundWords.has(word) ? 'ph-check-circle' : 'ph-circle'}`; } }); }
+        function updateProgress() { const total = wordBank.length, found = foundWords.size, percentage = Math.round(found / total * 100); foundCountElement.textContent = `${found}/${total}`; remainingLabel.textContent = found === total ? 'Completado' : `${total - found} por encontrar`; progressPercent.textContent = `${percentage}%`; progressBar.style.width = `${percentage}%`; }
+        function formatTime() { const elapsed = Math.floor((Date.now() - startedAt) / 1000); return `${String(Math.floor(elapsed / 60)).padStart(2,'0')}:${String(elapsed % 60).padStart(2,'0')}`; }
+        function showHint() { const available = wordBank.filter(word => !foundWords.has(word)); if (!available.length) return; const word = available[Math.floor(Math.random() * available.length)], firstCell = placements.get(word)[0], cell = getCell(...firstCell); cell.classList.add('hint'); setTimeout(() => cell.classList.remove('hint'), 2200); }
+        function newGame() { clearInterval(timerId); round++; foundWords = new Set(); insightCard.classList.remove('show'); salesCard.classList.remove('show'); completeMessage.classList.remove('show'); document.getElementById('round-number').textContent = round; createBoard(); render(); startedAt = Date.now(); timerElement.textContent = '00:00'; timerId = setInterval(() => { timerElement.textContent = formatTime(); }, 1000); }
+        gridElement.addEventListener('pointerdown', event => { const cell = event.target.closest('.cell'); if (!cell) return; event.preventDefault(); isSelecting = true; selectedCells = [[Number(cell.dataset.row), Number(cell.dataset.col)]]; cell.classList.add('selecting'); gridElement.setPointerCapture?.(event.pointerId); });
+        gridElement.addEventListener('pointermove', event => { if (isSelecting) updateSelection(cellFromPoint(event)); });
+        gridElement.addEventListener('pointerup', finishSelection); gridElement.addEventListener('pointercancel', () => { isSelecting = false; clearSelection(); });
+        document.getElementById('hint-button').addEventListener('click', showHint); document.getElementById('new-game-button').addEventListener('click', newGame); newGame();
+    </script>
+</body>
+</html>
