@@ -47,6 +47,7 @@
         .form-header { display: flex; justify-content: space-between; gap: 12px; align-items: start; margin-bottom: 18px; }
         .form-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
         .field { display: grid; gap: 5px; }
+        .field[hidden] { display: none; }
         .field.full { grid-column: 1 / -1; }
         .field.wide { grid-column: span 2; }
         label { color: var(--muted); font: 700 11px Arial, sans-serif; letter-spacing: .03em; }
@@ -138,6 +139,7 @@
                         <div class="field"><label for="id">ID único</label><input id="id" name="id" required></div>
                         <div class="field"><label for="cat">Categoría</label><select id="cat" name="cat"><option>Personalizados</option><option>Grupales</option><option>Servicios</option><option>Productos</option><option>Gratuitos</option></select></div>
                         <div class="field full"><label for="nombre">Nombre</label><input id="nombre" name="nombre" required></div>
+                        <div class="field full" id="urlRecursoField" hidden><label for="urlRecurso">URL privada del recurso gratuito</label><input id="urlRecurso" type="url" placeholder="https://..."><span class="hint">Se guarda solo en este navegador. No se publica en la tienda ni crea un enlace para clientes.</span></div>
                         <div class="field full"><label for="imagen">Imagen del producto (URL o imagen embebida)</label><input id="imagen" name="imagen" placeholder="images/portada.jpg o selecciona un archivo"><input id="imagenArchivo" type="file" accept="image/*" style="margin-top: 6px;"><img id="imagenVista" alt="Vista previa del producto" hidden style="display:block; max-width:160px; max-height:120px; margin-top:10px; border-radius:7px; object-fit:cover;"></div>
                         <div class="field"><label for="grupoEtario">Grupo de edad</label><input id="grupoEtario" name="grupoEtario"></div>
                         <div class="field"><label for="enfoque">Enfoque</label><input id="enfoque" name="enfoque"></div>
@@ -392,6 +394,30 @@
         let htmlGenerado = '';
 
         const $ = selector => document.querySelector(selector);
+        const claveRecursosPrivados = 'renova-recursos-gratuitos';
+
+        function leerRecursosPrivados() {
+            try {
+                return JSON.parse(localStorage.getItem(claveRecursosPrivados) || '{}');
+            } catch {
+                return {};
+            }
+        }
+
+        function guardarUrlRecurso(id, url) {
+            const recursos = leerRecursosPrivados();
+            if (url) recursos[id] = url;
+            else delete recursos[id];
+            localStorage.setItem(claveRecursosPrivados, JSON.stringify(recursos));
+        }
+
+        function actualizarCampoUrlRecurso() {
+            const esGratuito = $('#cat').value === 'Gratuitos';
+            $('#urlRecursoField').hidden = !esGratuito;
+            if (esGratuito) {
+                $('#urlRecurso').value = leerRecursosPrivados()[$('#id').value.trim()] || '';
+            }
+        }
 
         function actualizarEstadoArchivos() {
             const tiendaCargada = Boolean(htmlOriginal);
@@ -438,6 +464,7 @@
         $('#eliminarBtn').addEventListener('click', eliminarProducto);
         $('#cancelarBtn').addEventListener('click', cargarFormulario);
         $('#productoForm').addEventListener('submit', guardarProducto);
+        $('#cat').addEventListener('change', actualizarCampoUrlRecurso);
 
         function extraerCatalogo(html) {
             const coincidencia = html.match(/const\s+catalogo\s*=\s*(\[[\s\S]*?\])\s*;/);
@@ -506,6 +533,7 @@
             $('#cuposDisponibles').value = producto.cuposDisponibles ?? '';
             $('#incluye').value = Array.isArray(producto.incluye) ? producto.incluye.join('\n') : '';
             $('#infoFechaTexto').value = producto.infoFecha?.texto || '';
+            actualizarCampoUrlRecurso();
             mostrarVistaPreviaProducto(producto.imagen || '');
         }
 
@@ -538,6 +566,8 @@
             if (!producto.id || !producto.nombre) return alert('El ID y el nombre son obligatorios.');
             const duplicado = productos.findIndex((item, indice) => item.id === producto.id && indice !== indiceSeleccionado);
             if (duplicado !== -1) return alert('Ese ID ya pertenece a otro producto.');
+            if (productoEnEdicion.id !== producto.id) guardarUrlRecurso(productoEnEdicion.id, '');
+            if (producto.cat === 'Gratuitos') guardarUrlRecurso(producto.id, $('#urlRecurso').value.trim());
             productos[indiceSeleccionado] = producto;
             generarSalida();
             renderizarLista();

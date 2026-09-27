@@ -1,7 +1,7 @@
 {
   "name": "Simulador Financiero | Renova Institute",
   "short_name": "Renova Finanzas",
-  "start_url": "Salud financiera.html",
+  "start_url": "Finanzas.html",
   "display": "standalone",
   "background_color": "#FDFBFA",
   "theme_color": "#8C8660",

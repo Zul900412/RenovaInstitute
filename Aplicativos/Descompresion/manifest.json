@@ -1,10 +1,10 @@
 {
-  "name": "Sopa de Letras | Renova Institute",
-  "short_name": "Sopa Renova",
-  "start_url": "Sopa de letras.html",
+  "name": "Diario de Descompresión | Renova Institute",
+  "short_name": "Renova Diario",
+  "start_url": "Descompresion.html",
   "display": "standalone",
-  "background_color": "#f7f3ea",
-  "theme_color": "#173f3b",
+  "background_color": "#FDFBFA",
+  "theme_color": "#8C8660",
   "icons": [
     {
       "src": "icono-192.png",

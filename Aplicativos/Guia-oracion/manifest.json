@@ -1,7 +1,7 @@
 {
-  "name": "Diario de Descompresión | Renova Institute",
-  "short_name": "Renova Diario",
-  "start_url": "Descompresión.html",
+  "name": "Guía de Oración | Renova Institute",
+  "short_name": "Renova Oración",
+  "start_url": "Guia-oracion.html",
   "display": "standalone",
   "background_color": "#FDFBFA",
   "theme_color": "#8C8660",

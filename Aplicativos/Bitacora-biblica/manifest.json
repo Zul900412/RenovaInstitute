@@ -2,7 +2,7 @@
   "name": "Bitácora Bíblica | Renova Institute",
   "short_name": "Bitácora Renova",
   "description": "Una bitácora privada para registrar lecturas, aprendizajes y promesas bíblicas.",
-  "start_url": "Bitáacora de lectura.html",
+  "start_url": "Bitacora-biblica.html",
   "display": "standalone",
   "background_color": "#fff8f8",
   "theme_color": "#8c8660",
