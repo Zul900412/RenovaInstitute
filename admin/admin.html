@@ -156,8 +156,10 @@
                         <div class="field"><label for="incluye">Qué incluye (un elemento por línea)</label><textarea id="incluye" name="incluye"></textarea></div>
 
                         <div class="section-title">Precio, fechas y cupos</div>
-                        <div class="field"><label for="precio">Precio actual</label><input id="precio" name="precio" type="number" min="0" step="1000"></div>
-                        <div class="field"><label for="precioFull">Precio normal (opcional)</label><input id="precioFull" name="precioFull" type="number" min="0" step="1000"></div>
+                        <div class="field"><label for="precio">Precio actual por sesión o producto</label><input id="precio" name="precio" type="number" min="0" step="1000"></div>
+                        <div class="field"><label for="precioFull">Precio normal por sesión o producto</label><input id="precioFull" name="precioFull" type="number" min="0" step="1000"></div>
+                        <div class="field"><label for="cantidadSesiones">Cantidad de sesiones del pack</label><input id="cantidadSesiones" name="cantidadSesiones" type="number" min="1" step="1" placeholder="Ej: 5, 10 o 15"><span class="hint">La tienda multiplica el precio por sesión por esta cantidad.</span></div>
+                        <div class="field"><label for="precioDesde">Mostrar inversión “Desde”</label><select id="precioDesde"><option value="false">No</option><option value="true">Sí, es un mínimo (ej. 15 o más)</option></select></div>
                         <div class="field"><label for="fechaInicio">Fecha de inicio</label><input id="fechaInicio" name="fechaInicio" placeholder="Ej: Fecha de inicio: 20 de agosto"></div>
                         <div class="field"><label for="horario">Horario</label><input id="horario" name="horario"></div>
                         <div class="field"><label for="duracion">Duración o sesiones</label><input id="duracion" name="duracion"></div>
@@ -529,6 +531,8 @@
             $('#visibilidad').value = producto.visible === false ? 'oculto' : 'visible';
             $('#precio').value = producto.precio ?? 0;
             $('#precioFull').value = producto.precioFull ?? '';
+            $('#cantidadSesiones').value = producto.cantidadSesiones ?? '';
+            $('#precioDesde').value = producto.precioDesde ? 'true' : 'false';
             $('#cuposTotales').value = producto.cuposTotales ?? '';
             $('#cuposDisponibles').value = producto.cuposDisponibles ?? '';
             $('#incluye').value = Array.isArray(producto.incluye) ? producto.incluye.join('\n') : '';
@@ -544,6 +548,11 @@
             if (!producto.imagen) delete producto.imagen;
             const precioFull = Number($('#precioFull').value || 0);
             if (precioFull) producto.precioFull = precioFull;
+            const cantidadSesiones = Number($('#cantidadSesiones').value || 0);
+            if (cantidadSesiones > 0) producto.cantidadSesiones = Math.floor(cantidadSesiones);
+            else delete producto.cantidadSesiones;
+            if ($('#precioDesde').value === 'true' && cantidadSesiones > 1) producto.precioDesde = true;
+            else delete producto.precioDesde;
             const total = Number($('#cuposTotales').value || 0);
             const disponibles = Number($('#cuposDisponibles').value || 0);
             if (total) producto.cuposTotales = total;
