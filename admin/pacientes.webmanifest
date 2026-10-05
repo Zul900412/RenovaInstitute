@@ -1,0 +1,19 @@
+{
+  "name": "Pacientes | Renova Institute",
+  "short_name": "Pacientes",
+  "description": "Panel local para gestionar agenda, sesiones, pagos y tareas de pacientes.",
+  "start_url": "./Pacientes.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f2ee",
+  "theme_color": "#77734f",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "./pacientes-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
