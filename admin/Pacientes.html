@@ -145,6 +145,17 @@
         .meta-box small { display: block; margin-bottom: 3px; color: var(--muted); font: 700 9px Arial, sans-serif; letter-spacing: .06em; text-transform: uppercase; }
         .meta-box strong { font-size: 13px; overflow-wrap: anywhere; }
         .subsection { margin-top: 16px; padding-top: 15px; border-top: 1px solid var(--line); }
+        .purchase-card { margin-top: 10px; padding: 13px; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+        .purchase-card:first-child { margin-top: 0; }
+        .purchase-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+        .purchase-head strong { display: block; }
+        .purchase-head small { display: block; margin-top: 3px; color: var(--muted); font: 11px Arial, sans-serif; }
+        .purchase-totals { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
+        .purchase-total { padding: 8px; border-radius: 7px; background: #f8f6f2; }
+        .purchase-total small { display: block; color: var(--muted); font: 700 9px Arial, sans-serif; text-transform: uppercase; }
+        .purchase-total strong { display: block; margin-top: 3px; font-size: 12px; overflow-wrap: anywhere; }
+        .purchase-payments { margin-top: 8px; }
+        .purchase-payments .agenda-item { grid-template-columns: 70px minmax(0, 1fr); padding: 8px 0; }
         .history-card { margin-top: 9px; padding: 12px; border: 1px solid var(--line); border-radius: 9px; background: #fff; }
         .history-card summary { color: var(--olive-dark); cursor: pointer; font: 700 12px Arial, sans-serif; }
         .history-card pre { overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; color: var(--muted); font: 11px/1.5 Arial, sans-serif; }
@@ -172,6 +183,7 @@
             .field.full, .section-label { grid-column: auto; }
             .weekday-schedule { grid-template-columns: repeat(3, minmax(0, 1fr)); }
             .weekday-toggle { grid-column: 1 / -1; }
+            .purchase-totals { grid-template-columns: 1fr; }
             .dialog-head { padding: 17px 17px 12px; }
             .dialog-body { padding: 15px 17px; }
             .dialog-foot { padding: 12px 17px 17px; }
@@ -317,7 +329,7 @@
                 <div class="field"><label for="patientEmail">Correo electrónico</label><input id="patientEmail" type="email" autocomplete="email"></div>
                 <div class="field"><label for="patientPhone">Teléfono</label><input id="patientPhone" type="tel" autocomplete="tel"></div>
                 <div class="field"><label for="packageTotal">Sesiones adquiridas</label><input id="packageTotal" type="number" min="0" step="1" value="0"></div>
-                <div class="field"><label for="initialPayment">Pago recibido al registrar</label><input id="initialPayment" type="number" min="0" step="1" value="0"></div>
+                <div class="field"><label for="initialPayment">Pago recibido al registrar (sin asignar)</label><input id="initialPayment" type="number" min="0" step="1" value="0"></div>
                 <div class="section-label">Plan de sesiones · opcional</div>
                 <div class="field"><label for="patientAppointmentDate">Fecha de inicio</label><input id="patientAppointmentDate" type="date"></div>
                 <div class="field" id="patientSingleSchedule"><label for="patientAppointmentStart">Hora de inicio (sesión única)</label><input id="patientAppointmentStart" type="time" value="09:00"></div>
@@ -374,6 +386,45 @@
             <p class="inline-note">Cada día seleccionado tendrá su propio horario y cantidad de sesiones. Todas las fechas se combinarán en una sola serie numerada cronológicamente; podrás reprogramar y completar cada sesión por separado desde el calendario.</p>
         </div>
         <div class="dialog-foot"><button class="button secondary" type="button" data-close="patientDialog">Cancelar</button><button class="button" type="submit">Guardar paciente</button></div>
+    </form>
+</dialog>
+
+<dialog id="acquisitionDialog">
+    <form id="acquisitionForm">
+        <div class="dialog-head"><div><p class="eyebrow">Compra del paciente</p><h2 style="margin:0">Registrar adquisición</h2></div><button class="icon-button" type="button" data-close="acquisitionDialog" aria-label="Cerrar">×</button></div>
+        <div class="dialog-body">
+            <input id="acquisitionPatientId" type="hidden">
+            <input id="acquisitionRequireSessions" type="hidden">
+            <div class="form-grid">
+                <div class="field full"><label for="acquisitionProduct">Taller, pack o producto</label><select id="acquisitionProduct"><option value="">Otro / personalizado</option></select></div>
+                <div class="field full" id="acquisitionCustomNameField"><label for="acquisitionCustomName">Nombre de la adquisición *</label><input id="acquisitionCustomName" required maxlength="160" placeholder="Ej. Pack de 8 sesiones"></div>
+                <div class="field"><label for="acquisitionSessions">Sesiones incluidas (opcional)</label><input id="acquisitionSessions" type="number" min="0" step="1" value="0"></div>
+                <div class="field"><label for="acquisitionTotal">Costo total (CLP) *</label><input id="acquisitionTotal" type="number" min="0" step="1" required value="0"></div>
+                <div class="section-label">Abono inicial · opcional</div>
+                <div class="field"><label for="acquisitionInitialPayment">Monto recibido (CLP)</label><input id="acquisitionInitialPayment" type="number" min="0" step="1" value="0"></div>
+                <div class="field"><label for="acquisitionInitialDate">Fecha del abono</label><input id="acquisitionInitialDate" type="date"></div>
+                <div class="field full"><label for="acquisitionInitialMethod">Método de pago</label><input id="acquisitionInitialMethod" maxlength="80" placeholder="Transferencia, efectivo, etc."></div>
+            </div>
+            <p class="hint">El precio sugerido del catálogo se puede ajustar al valor realmente acordado. Las sesiones incluidas se suman al paquete del paciente.</p>
+        </div>
+        <div class="dialog-foot"><button class="button secondary" type="button" data-close="acquisitionDialog">Cancelar</button><button class="button" type="submit">Guardar adquisición</button></div>
+    </form>
+</dialog>
+
+<dialog id="paymentDialog">
+    <form id="paymentForm">
+        <div class="dialog-head"><div><p class="eyebrow">Abono de adquisición</p><h2 style="margin:0">Registrar abono</h2></div><button class="icon-button" type="button" data-close="paymentDialog" aria-label="Cerrar">×</button></div>
+        <div class="dialog-body">
+            <div class="form-grid">
+                <div class="field full"><label for="paymentAcquisition">Adquisición</label><select id="paymentAcquisition" required></select></div>
+                <div class="field"><label for="paymentBalance">Pendiente actual</label><input id="paymentBalance" readonly></div>
+                <div class="field"><label for="paymentAmount">Monto recibido (CLP) *</label><input id="paymentAmount" type="number" min="1" step="1" required></div>
+                <div class="field"><label for="paymentDate">Fecha del abono *</label><input id="paymentDate" type="date" required></div>
+                <div class="field"><label for="paymentMethod">Método de pago</label><input id="paymentMethod" maxlength="80" placeholder="Transferencia, efectivo, etc."></div>
+                <div class="field full"><label for="paymentNote">Nota (opcional)</label><input id="paymentNote" maxlength="240"></div>
+            </div>
+        </div>
+        <div class="dialog-foot"><button class="button secondary" type="button" data-close="paymentDialog">Cancelar</button><button class="button" type="submit">Guardar abono</button></div>
     </form>
 </dialog>
 
@@ -495,6 +546,7 @@
     let currentPrompt = '';
     let activeRecognition = null;
     let workshopCatalog = [];
+    let purchaseCatalog = [];
     let toastTimer;
 
     function dateKey(date) {
@@ -579,6 +631,12 @@
             if (!match) throw new Error('No se encontró el catálogo de productos en Tienda.html.');
             const products = JSON.parse(match[1]);
             if (!Array.isArray(products)) throw new Error('El catálogo de Tienda.html no contiene una lista válida.');
+            purchaseCatalog = products.filter(product =>
+                product.id && product.nombre &&
+                product.visible !== false &&
+                product.estado !== 'espera'
+            );
+            $('#acquisitionProduct').innerHTML = `<option value="">Otro / personalizado</option>${purchaseCatalog.map(product => `<option value="${escapeHtml(product.id)}">${escapeHtml(product.nombre)} · ${escapeHtml(product.cat || 'Producto')}</option>`).join('')}`;
             workshopCatalog = products.filter(product =>
                 ['Grupales', 'Personalizados'].includes(product.cat) &&
                 product.visible !== false &&
@@ -721,34 +779,60 @@
             return;
         }
         const nextAppointment = state.appointments.filter(item => item.patientId === patient.id && item.status === 'scheduled' && item.date >= today).sort((a, b) => `${a.date}T${a.start}`.localeCompare(`${b.date}T${b.start}`))[0];
-        const payments = [...(patient.payments || [])].sort((a, b) => `${b.date}`.localeCompare(`${a.date}`));
+        const unassignedPayments = [...(patient.payments || [])].sort((a, b) => `${b.date}`.localeCompare(`${a.date}`));
+        const acquisitions = patient.acquisitions || [];
         const appointments = state.appointments.filter(item => item.patientId === patient.id).sort((a, b) => `${b.date}T${b.start}`.localeCompare(`${a.date}T${a.start}`));
         const tasks = patient.tasks || [];
-        const totalPaid = (patient.payments || []).reduce((sum, payment) => sum + Number(payment.amount || 0), 0);
+        const acquisitionTotal = acquisitions.reduce((sum, acquisition) => sum + Number(acquisition.total || 0), 0);
+        const acquisitionPaid = acquisitions.reduce((sum, acquisition) => sum + acquisitionPayments(acquisition).reduce((paid, payment) => paid + Number(payment.amount || 0), 0), 0);
+        const acquisitionBalance = acquisitions.reduce((sum, acquisition) => sum + purchaseBalance(acquisition), 0);
         $('#patientDetail').innerHTML = `<div class="panel">
             <div class="panel-heading"><div class="detail-hero"><span class="avatar">${escapeHtml(initials(patient.name))}</span><div><h2>${escapeHtml(patient.name)}</h2><p class="hint">${escapeHtml(patient.email || 'Sin correo')} ${patient.phone ? `· ${escapeHtml(patient.phone)}` : ''}</p></div></div>
                 <button class="button secondary small" type="button" data-edit-patient="${escapeHtml(patient.id)}">Editar ficha</button></div>
             <div class="detail-meta">
                 <div class="meta-box"><small>Sesiones adquiridas</small><strong>${Number(patient.sessionsPurchased || 0)}</strong></div>
                 <div class="meta-box"><small>Sesiones restantes</small><strong>${remainingSessions(patient)}</strong></div>
+                <div class="meta-box"><small>Costo total de adquisiciones</small><strong>${formatMoney(acquisitionTotal)}</strong></div>
+                <div class="meta-box"><small>Abonado a adquisiciones</small><strong>${formatMoney(acquisitionPaid)}</strong></div>
+                <div class="meta-box"><small>Pendiente de pago</small><strong>${formatMoney(acquisitionBalance)}</strong></div>
                 <div class="meta-box"><small>Sesiones completadas</small><strong>${completedCount(patient.id)}</strong></div>
-                <div class="meta-box"><small>Total de pagos registrados</small><strong>${formatMoney(totalPaid)}</strong></div>
             </div>
             ${patient.notes ? `<p class="hint">${escapeHtml(patient.notes)}</p>` : ''}
             <div class="button-row">
                 <button class="button small" type="button" data-add-session="${escapeHtml(patient.id)}">+ Sesión</button>
-                <button class="button secondary small" type="button" data-add-payment="${escapeHtml(patient.id)}">Registrar pago</button>
-                <button class="button secondary small" type="button" data-add-package="${escapeHtml(patient.id)}">Añadir sesiones</button>
+                <button class="button secondary small" type="button" data-add-acquisition="${escapeHtml(patient.id)}">+ Adquisición</button>
+                <button class="button secondary small" type="button" data-add-payment="${escapeHtml(patient.id)}" ${acquisitions.every(acquisition => purchaseBalance(acquisition) <= 0) ? 'disabled' : ''}>Registrar abono</button>
+                <button class="button secondary small" type="button" data-add-package="${escapeHtml(patient.id)}">+ Pack de sesiones</button>
                 <button class="button secondary small" type="button" data-add-task="${escapeHtml(patient.id)}">Asignar tarea</button>
             </div>
             <section class="subsection"><div class="panel-heading"><div><h3>Próxima sesión</h3></div>${nextAppointment ? `<button class="button secondary small" type="button" data-open-appointment="${escapeHtml(nextAppointment.id)}">Ver ficha</button>` : ''}</div>
                 ${nextAppointment ? `<p class="hint">${escapeHtml(fullDateTime(nextAppointment.date, nextAppointment.start))} · pendiente: ${escapeHtml(nextAppointment.nextTopic || patient.pendingTopic || 'Sin temas pendientes anotados')}</p>` : `<p class="hint">${patient.pendingTopic ? `Pendiente para retomar: ${escapeHtml(patient.pendingTopic)}. ` : ''}No hay una próxima sesión agendada.</p>`}
             </section>
-            <section class="subsection"><h3>Pagos registrados</h3>${payments.length ? payments.map(payment => `<div class="agenda-item"><div class="agenda-time">${escapeHtml(formatDate(payment.date, { day: 'numeric', month: 'short' }))}</div><div class="agenda-detail"><strong>${formatMoney(payment.amount)}</strong><small>${escapeHtml(payment.method || 'Sin método')}${payment.note ? ` · ${escapeHtml(payment.note)}` : ''}</small></div></div>`).join('') : '<p class="hint">No hay pagos registrados.</p>'}</section>
+            <section class="subsection"><div class="panel-heading"><div><h3>Adquisiciones y pagos</h3><p class="hint">Cada abono queda asociado a un taller, pack o producto.</p></div><button class="button secondary small" type="button" data-add-acquisition="${escapeHtml(patient.id)}">+ Añadir</button></div>
+                ${acquisitions.length ? acquisitions.map(acquisition => {
+                    const payments = [...acquisitionPayments(acquisition)].sort((a, b) => `${b.date}`.localeCompare(`${a.date}`));
+                    const paid = payments.reduce((sum, payment) => sum + Number(payment.amount || 0), 0);
+                    return `<article class="purchase-card">
+                        <div class="purchase-head"><div><strong>${escapeHtml(acquisition.title || 'Adquisición')}</strong><small>${acquisition.sessions ? `${Number(acquisition.sessions)} sesiones · ` : ''}Adquirido: ${escapeHtml(formatDate(acquisition.date))}</small></div><button class="button secondary small" type="button" data-add-payment="${escapeHtml(patient.id)}" data-acquisition-id="${escapeHtml(acquisition.id)}" ${purchaseBalance(acquisition) <= 0 ? 'disabled' : ''}>Abonar</button></div>
+                        <div class="purchase-totals"><div class="purchase-total"><small>Costo</small><strong>${formatMoney(acquisition.total)}</strong></div><div class="purchase-total"><small>Abonado</small><strong>${formatMoney(paid)}</strong></div><div class="purchase-total"><small>Pendiente</small><strong>${formatMoney(purchaseBalance(acquisition))}</strong></div></div>
+                        <div class="purchase-payments">${payments.length ? payments.map(payment => `<div class="agenda-item"><div class="agenda-time">${escapeHtml(formatDate(payment.date, { day: 'numeric', month: 'short', year: 'numeric' }))}</div><div class="agenda-detail"><strong>${formatMoney(payment.amount)}</strong><small>${escapeHtml(payment.method || 'Sin método')}${payment.note ? ` · ${escapeHtml(payment.note)}` : ''}</small></div></div>`).join('') : '<p class="hint" style="margin:9px 0 0">Aún no hay abonos para esta adquisición.</p>'}</div>
+                    </article>`;
+                }).join('') : '<p class="hint">Aún no hay adquisiciones. Añade un taller, pack, producto o servicio para llevar su saldo.</p>'}
+            </section>
+            ${unassignedPayments.length ? `<section class="subsection"><h3>Pagos anteriores sin asignar</h3><p class="hint">Estos pagos ya estaban registrados antes de vincular abonos a adquisiciones; no se descuentan de un saldo específico.</p>${unassignedPayments.map(payment => `<div class="agenda-item"><div class="agenda-time">${escapeHtml(formatDate(payment.date, { day: 'numeric', month: 'short', year: 'numeric' }))}</div><div class="agenda-detail"><strong>${formatMoney(payment.amount)}</strong><small>${escapeHtml(payment.method || 'Sin método')}${payment.note ? ` · ${escapeHtml(payment.note)}` : ''}</small></div></div>`).join('')}</section>` : ''}
             <section class="subsection"><h3>Sesiones e historial de resúmenes</h3>${appointments.length ? appointments.map(item => `<div class="history-card"><details><summary>${escapeHtml(formatDate(item.date))} · ${escapeHtml(item.start)}${item.seriesTotal > 1 ? ` · Sesión ${item.seriesSession} de ${item.seriesTotal}` : ''} · ${escapeHtml(item.status === 'completed' ? 'Completada' : item.status === 'cancelled' ? 'Cancelada' : 'Programada')} · ${(item.summaryHistory || []).length} resumen(es)</summary>${item.development ? `<p><strong>Preparación / desarrollo:</strong> ${escapeHtml(item.development)}</p>` : ''}<p class="hint">${escapeHtml(item.nextTopic ? `Para la siguiente sesión: ${item.nextTopic}` : item.notes || 'Sin notas')}</p>${(item.summaryHistory || []).map(entry => `<pre>${escapeHtml(entry.createdAt ? new Date(entry.createdAt).toLocaleString('es') : 'Resumen')}\n${escapeHtml(entry.prompt)}</pre>`).join('')}${item.summary ? `<p><strong>Resumen guardado:</strong> ${escapeHtml(item.summary)}</p>` : ''}<button class="button secondary small" type="button" data-open-appointment="${escapeHtml(item.id)}">Abrir sesión</button></details></div>`).join('') : '<p class="hint">Aún no hay sesiones registradas.</p>'}</section>
             <section class="subsection"><h3>Tareas asignadas</h3>${tasks.length ? tasks.map((task, index) => taskCard(patient, task, index)).join('') : '<p class="hint">No hay tareas asignadas.</p>'}</section>
             <section class="subsection"><button class="button danger small" type="button" data-delete-patient="${escapeHtml(patient.id)}">Eliminar paciente y sus datos</button></section>
         </div>`;
+    }
+
+    function acquisitionPayments(acquisition) {
+        return Array.isArray(acquisition.payments) ? acquisition.payments : [];
+    }
+
+    function purchaseBalance(acquisition) {
+        const paid = acquisitionPayments(acquisition).reduce((sum, payment) => sum + Number(payment.amount || 0), 0);
+        return Math.max(0, Number(acquisition.total || 0) - paid);
     }
 
     function formatMoney(amount) {
@@ -1331,7 +1415,9 @@
         const id = $('#editPatientId').value;
         const name = $('#patientName').value.trim();
         const sessionsPurchased = Math.max(0, Math.floor(Number($('#packageTotal').value || 0)));
+        const initialPayment = Number($('#initialPayment').value || 0);
         if (!name) return showToast('El nombre del paciente es obligatorio.', true);
+        if (!Number.isSafeInteger(initialPayment) || initialPayment < 0) return showToast('El pago inicial debe ser un monto válido en pesos chilenos.', true);
         const appointmentDate = $('#patientAppointmentDate').value;
         const appointmentStart = $('#patientAppointmentStart').value;
         const appointmentEnd = $('#patientAppointmentEnd').value;
@@ -1395,7 +1481,6 @@
                 tasks: [],
                 pendingTopic: ''
             };
-            const initialPayment = Number($('#initialPayment').value || 0);
             if (initialPayment > 0) patient.payments.push({ id: makeId('pago'), date: today, amount: initialPayment, method: 'Sin especificar', note: 'Pago inicial' });
             state.patients.push(patient);
             selectedPatientId = patient.id;
@@ -1409,27 +1494,137 @@
         persistAndRender(`${id ? 'Ficha actualizada.' : 'Paciente registrado.'}${appointments.length ? ` ${appointments.length} sesión(es) agendada(s) en el calendario.` : ''}`);
     }
 
-    function registerPayment(patientId) {
+    function openAcquisitionDialog(patientId, isSessionPackage = false) {
         const patient = patientFor(patientId);
         if (!patient) return;
-        const raw = window.prompt(`Monto recibido para ${patient.name} (en CLP):`);
-        if (raw === null) return;
-        const amount = Number(raw.replace(/[^\d-]/g, ''));
-        if (!Number.isSafeInteger(amount) || amount <= 0) return showToast('Ingresa un monto válido en pesos chilenos, mayor que cero.', true);
-        const method = window.prompt('Método de pago (opcional):', 'Transferencia');
-        patient.payments.push({ id: makeId('pago'), date: today, amount, method: method === null ? 'Sin especificar' : method.trim() || 'Sin especificar', note: '' });
-        persistAndRender('Pago registrado.');
+        $('#acquisitionForm').reset();
+        $('#acquisitionPatientId').value = patientId;
+        $('#acquisitionRequireSessions').value = isSessionPackage ? 'true' : '';
+        $('#acquisitionProduct').value = '';
+        $('#acquisitionCustomNameField').hidden = false;
+        $('#acquisitionCustomName').value = isSessionPackage ? 'Pack de sesiones' : '';
+        $('#acquisitionSessions').value = isSessionPackage ? 1 : 0;
+        $('#acquisitionTotal').value = 0;
+        $('#acquisitionInitialPayment').value = 0;
+        $('#acquisitionInitialDate').value = today;
+        $('#acquisitionInitialMethod').value = 'Transferencia';
+        $('#acquisitionDialog').showModal();
+        if (isSessionPackage) $('#acquisitionSessions').focus();
+    }
+
+    function updateAcquisitionProduct() {
+        const product = purchaseCatalog.find(item => item.id === $('#acquisitionProduct').value);
+        const isCustom = !product;
+        $('#acquisitionCustomNameField').hidden = !isCustom;
+        $('#acquisitionCustomName').required = isCustom;
+        if (!product) return;
+        const sessions = workshopSessions(product) || (product.cat === 'Servicios' ? 1 : 0);
+        const price = Number(product.precio || 0) * Math.max(1, Number(product.cantidadSesiones) || 1);
+        if (!Number.isSafeInteger(price) || price < 0) {
+            $('#acquisitionTotal').value = '';
+            return showToast('El precio de este producto no es válido. Ingresa el costo acordado manualmente.', true);
+        }
+        $('#acquisitionCustomName').value = product.nombre;
+        $('#acquisitionSessions').value = sessions;
+        $('#acquisitionTotal').value = price;
+    }
+
+    function saveAcquisition(event) {
+        event.preventDefault();
+        const patient = patientFor($('#acquisitionPatientId').value);
+        if (!patient) return showToast('No se encontró la ficha del paciente.', true);
+        const product = purchaseCatalog.find(item => item.id === $('#acquisitionProduct').value);
+        const title = (product ? product.nombre : $('#acquisitionCustomName').value).trim();
+        const sessions = Number($('#acquisitionSessions').value || 0);
+        const total = Number($('#acquisitionTotal').value);
+        const initialPayment = Number($('#acquisitionInitialPayment').value || 0);
+        const requireSessions = $('#acquisitionRequireSessions').value === 'true';
+        if (!title) return showToast('Indica el nombre de la adquisición.', true);
+        if (!Number.isInteger(sessions) || sessions < 0) return showToast('Las sesiones incluidas deben ser un número entero igual o mayor que cero.', true);
+        if (requireSessions && sessions <= 0) return showToast('Indica cuántas sesiones incluye el pack.', true);
+        if (!Number.isSafeInteger(total) || total < 0) return showToast('Ingresa un costo total válido en pesos chilenos.', true);
+        if (!Number.isSafeInteger(initialPayment) || initialPayment < 0 || initialPayment > total) return showToast('El abono inicial debe ser válido y no superar el costo total.', true);
+        const initialDate = $('#acquisitionInitialDate').value;
+        if (initialPayment > 0 && !initialDate) return showToast('Indica la fecha del abono inicial.', true);
+        const acquisition = {
+            id: makeId('adquisicion'),
+            productId: product ? product.id : '',
+            title,
+            category: product ? product.cat || '' : 'Personalizado',
+            sessions,
+            total,
+            date: today,
+            payments: []
+        };
+        if (initialPayment > 0) acquisition.payments.push({
+            id: makeId('pago'),
+            date: initialDate,
+            amount: initialPayment,
+            method: $('#acquisitionInitialMethod').value.trim() || 'Sin especificar',
+            note: 'Abono inicial'
+        });
+        if (!Array.isArray(patient.acquisitions)) patient.acquisitions = [];
+        patient.acquisitions.push(acquisition);
+        if (sessions > 0) patient.sessionsPurchased = Number(patient.sessionsPurchased || 0) + sessions;
+        $('#acquisitionDialog').close();
+        persistAndRender('Adquisición registrada.');
+    }
+
+    function registerPayment(patientId, acquisitionId = '') {
+        const patient = patientFor(patientId);
+        if (!patient) return;
+        const due = (patient.acquisitions || []).filter(acquisition => purchaseBalance(acquisition) > 0);
+        if (!due.length) {
+            showToast('Registra primero una adquisición con saldo pendiente.', true);
+            openAcquisitionDialog(patientId);
+            return;
+        }
+        $('#paymentForm').reset();
+        $('#paymentAcquisition').innerHTML = due.map(acquisition => `<option value="${escapeHtml(acquisition.id)}">${escapeHtml(acquisition.title || 'Adquisición')} · ${escapeHtml(formatDate(acquisition.date))} · Pendiente ${formatMoney(purchaseBalance(acquisition))}</option>`).join('');
+        $('#paymentAcquisition').value = due.some(item => item.id === acquisitionId) ? acquisitionId : due[0].id;
+        $('#paymentDate').value = today;
+        $('#paymentMethod').value = 'Transferencia';
+        $('#paymentAmount').value = '';
+        $('#paymentAmount').max = String(purchaseBalance(due.find(item => item.id === $('#paymentAcquisition').value)));
+        $('#paymentBalance').value = formatMoney(purchaseBalance(due.find(item => item.id === $('#paymentAcquisition').value)));
+        $('#paymentDialog').dataset.patientId = patientId;
+        $('#paymentDialog').showModal();
+    }
+
+    function updatePaymentBalance() {
+        const patient = patientFor($('#paymentDialog').dataset.patientId);
+        const acquisition = patient && (patient.acquisitions || []).find(item => item.id === $('#paymentAcquisition').value);
+        if (!acquisition) return;
+        const balance = purchaseBalance(acquisition);
+        $('#paymentBalance').value = formatMoney(balance);
+        $('#paymentAmount').max = String(balance);
+    }
+
+    function saveAcquisitionPayment(event) {
+        event.preventDefault();
+        const patient = patientFor($('#paymentDialog').dataset.patientId);
+        const acquisition = patient && (patient.acquisitions || []).find(item => item.id === $('#paymentAcquisition').value);
+        if (!acquisition) return showToast('Selecciona una adquisición válida.', true);
+        const amount = Number($('#paymentAmount').value);
+        const date = $('#paymentDate').value;
+        const balance = purchaseBalance(acquisition);
+        if (!Number.isSafeInteger(amount) || amount <= 0) return showToast('Ingresa un abono válido en pesos chilenos, mayor que cero.', true);
+        if (amount > balance) return showToast(`El abono no puede superar el saldo pendiente de ${formatMoney(balance)}.`, true);
+        if (!date) return showToast('Indica la fecha del abono.', true);
+        if (!Array.isArray(acquisition.payments)) acquisition.payments = [];
+        acquisition.payments.push({
+            id: makeId('pago'),
+            date,
+            amount,
+            method: $('#paymentMethod').value.trim() || 'Sin especificar',
+            note: $('#paymentNote').value.trim()
+        });
+        $('#paymentDialog').close();
+        persistAndRender('Abono registrado.');
     }
 
     function addPackage(patientId) {
-        const patient = patientFor(patientId);
-        if (!patient) return;
-        const raw = window.prompt(`¿Cuántas sesiones nuevas adquirió ${patient.name}?`);
-        if (raw === null) return;
-        const count = Number(raw);
-        if (!Number.isInteger(count) || count <= 0) return showToast('Ingresa una cantidad válida de sesiones.', true);
-        patient.sessionsPurchased = Number(patient.sessionsPurchased || 0) + count;
-        persistAndRender(`${count} sesiones añadidas al paquete.`);
+        openAcquisitionDialog(patientId, true);
     }
 
     function addTask() {
@@ -1460,7 +1655,7 @@
 
     function deletePatient(patientId) {
         const patient = patientFor(patientId);
-        if (!patient || !window.confirm(`Eliminar a ${patient.name} y todos sus datos locales (pagos, sesiones, resúmenes y tareas)? Esta acción no se puede deshacer.`)) return;
+        if (!patient || !window.confirm(`Eliminar a ${patient.name} y todos sus datos locales (adquisiciones, pagos, sesiones, resúmenes y tareas)? Esta acción no se puede deshacer.`)) return;
         state.patients = state.patients.filter(item => item.id !== patientId);
         state.appointments = state.appointments.filter(item => item.patientId !== patientId);
         selectedPatientId = '';
@@ -1468,7 +1663,7 @@
     }
 
     function exportBackup() {
-        const file = new Blob([JSON.stringify({ application: 'Renova Pacientes', version: 1, exportedAt: new Date().toISOString(), data: state }, null, 2)], { type: 'application/json' });
+        const file = new Blob([JSON.stringify({ application: 'Renova Pacientes', version: 2, exportedAt: new Date().toISOString(), data: state }, null, 2)], { type: 'application/json' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(file);
         link.download = `renova-pacientes-${today}.json`;
@@ -1483,9 +1678,17 @@
             const data = backup.data;
             if (!data || !Array.isArray(data.patients) || !Array.isArray(data.appointments) || !Array.isArray(data.slots)) throw new Error('El archivo no tiene el formato de copia de seguridad esperado.');
             const validPatients = data.patients.every(patient => patient && typeof patient.id === 'string' && typeof patient.name === 'string' && Array.isArray(patient.payments || []) && Array.isArray(patient.tasks || []));
+            const validAcquisitions = data.patients.every(patient => patient.acquisitions === undefined || Array.isArray(patient.acquisitions) && patient.acquisitions.every(acquisition =>
+                acquisition && typeof acquisition.id === 'string' && typeof acquisition.title === 'string' &&
+                Number.isSafeInteger(Number(acquisition.total)) && Number(acquisition.total) >= 0 &&
+                Array.isArray(acquisition.payments || []) && (acquisition.payments || []).every(payment =>
+                    payment && typeof payment.id === 'string' && typeof payment.date === 'string' &&
+                    Number.isSafeInteger(Number(payment.amount)) && Number(payment.amount) > 0
+                )
+            ));
             const validAppointments = data.appointments.every(item => item && typeof item.id === 'string' && typeof item.patientId === 'string' && typeof item.date === 'string');
             const validSlots = data.slots.every(item => item && typeof item.id === 'string' && typeof item.date === 'string' && ['open', 'blocked'].includes(item.type));
-            if (!validPatients || !validAppointments || !validSlots) throw new Error('La copia tiene registros incompletos o no válidos.');
+            if (!validPatients || !validAcquisitions || !validAppointments || !validSlots) throw new Error('La copia tiene registros incompletos o no válidos.');
             if (!window.confirm(`Importar reemplazará los datos locales actuales por ${data.patients.length} pacientes del archivo. ¿Continuar?`)) return;
             state = data;
             selectedPatientId = '';
@@ -1516,6 +1719,10 @@
             renderPatientSeriesPreview();
         });
         $('#patientForm').addEventListener('submit', savePatient);
+        $('#acquisitionForm').addEventListener('submit', saveAcquisition);
+        $('#acquisitionProduct').addEventListener('change', updateAcquisitionProduct);
+        $('#paymentForm').addEventListener('submit', saveAcquisitionPayment);
+        $('#paymentAcquisition').addEventListener('change', updatePaymentBalance);
         $('#appointmentForm').addEventListener('submit', saveAppointment);
         $('#appointmentDialog').addEventListener('close', () => {
             if (!activeRecognition) return;
@@ -1568,7 +1775,8 @@
             if (target.dataset.selectPatient) { selectedPatientId = target.dataset.selectPatient; setView('pacientes'); renderDirectory(); return; }
             if (target.dataset.editPatient) { const patient = patientFor(target.dataset.editPatient); if (patient) openPatientDialog(patient); return; }
             if (target.dataset.addSession) { setView('agenda'); openAppointmentDialog(null, target.dataset.addSession, selectedDate); return; }
-            if (target.dataset.addPayment) { registerPayment(target.dataset.addPayment); return; }
+            if (target.dataset.addAcquisition) { openAcquisitionDialog(target.dataset.addAcquisition); return; }
+            if (target.dataset.addPayment) { registerPayment(target.dataset.addPayment, target.dataset.acquisitionId || ''); return; }
             if (target.dataset.addPackage) { addPackage(target.dataset.addPackage); return; }
             if (target.dataset.addTask) { openTaskDialog(target.dataset.addTask); return; }
             if (target.dataset.deletePatient) { deletePatient(target.dataset.deletePatient); return; }
