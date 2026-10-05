@@ -1,4 +1,4 @@
-const CACHE_NAME = 'renova-pacientes-v3';
+const CACHE_NAME = 'renova-pacientes-v5';
 const APP_FILES = [
     './Pacientes.html',
     './pacientes.webmanifest',

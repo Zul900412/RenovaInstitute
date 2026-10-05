@@ -89,11 +89,19 @@
         textarea { min-height: 90px; resize: vertical; }
         input:focus, select:focus, textarea:focus { outline: 2px solid #77734f33; border-color: var(--olive); }
         .field { display: grid; gap: 5px; }
+        .field[hidden] { display: none; }
         .field label { color: var(--muted); font: 700 10px Arial, sans-serif; letter-spacing: .04em; }
         .inline input[type="checkbox"] { width: 16px; min-height: 16px; margin: 0; accent-color: var(--olive); }
         .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
         .field.full { grid-column: 1 / -1; }
         .section-label { grid-column: 1 / -1; margin: 8px 0 -3px; padding-top: 12px; border-top: 1px solid var(--line); color: var(--olive-dark); font: 700 10px Arial, sans-serif; letter-spacing: .1em; text-transform: uppercase; }
+        .weekday-schedules { display: grid; gap: 7px; }
+        .weekday-schedule { display: grid; grid-template-columns: minmax(100px, .8fr) repeat(3, minmax(90px, 1fr)); align-items: end; gap: 8px; padding: 9px; border: 1px solid var(--line); border-radius: 9px; background: #fff; }
+        .weekday-schedule:not(.enabled) .field { opacity: .55; }
+        .weekday-schedule .field label { font-size: 9px; }
+        .weekday-schedule .field input { min-height: 35px; padding: 6px 8px; }
+        .weekday-toggle { display: flex; align-items: center; gap: 7px; min-height: 35px; color: var(--ink) !important; font-size: 12px !important; }
+        .series-total { color: var(--olive-dark); font: 700 12px Arial, sans-serif; }
         dialog { width: min(680px, calc(100% - 24px)); max-height: min(90vh, 900px); overflow: auto; border: 1px solid var(--line); border-radius: 14px; padding: 0; background: var(--paper); color: var(--ink); box-shadow: 0 22px 70px #332c2850; }
         dialog::backdrop { background: #302c286e; backdrop-filter: blur(3px); }
         .dialog-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 15px; padding: 20px 22px 13px; border-bottom: 1px solid var(--line); }
@@ -162,6 +170,8 @@
             .day-count { display: none; }
             .form-grid { grid-template-columns: 1fr; }
             .field.full, .section-label { grid-column: auto; }
+            .weekday-schedule { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .weekday-toggle { grid-column: 1 / -1; }
             .dialog-head { padding: 17px 17px 12px; }
             .dialog-body { padding: 15px 17px; }
             .dialog-foot { padding: 12px 17px 17px; }
@@ -310,24 +320,58 @@
                 <div class="field"><label for="initialPayment">Pago recibido al registrar</label><input id="initialPayment" type="number" min="0" step="1" value="0"></div>
                 <div class="section-label">Plan de sesiones · opcional</div>
                 <div class="field"><label for="patientAppointmentDate">Fecha de inicio</label><input id="patientAppointmentDate" type="date"></div>
-                <div class="field"><label for="patientAppointmentStart">Hora de inicio</label><input id="patientAppointmentStart" type="time" value="09:00"></div>
-                <div class="field"><label for="patientAppointmentEnd">Hora de término</label><input id="patientAppointmentEnd" type="time" value="10:00"></div>
-                <div class="field"><label for="patientAppointmentCount">Sesiones a agendar</label><input id="patientAppointmentCount" type="number" min="1" max="104" step="1" value="1"></div>
-                <div class="field full"><label>Días de repetición (opcional; sin seleccionar, solo se agenda la fecha de inicio)</label>
-                    <div class="toolbar" id="patientWeekdays">
-                        <label class="inline"><input type="checkbox" value="1"> Lun</label>
-                        <label class="inline"><input type="checkbox" value="2"> Mar</label>
-                        <label class="inline"><input type="checkbox" value="3"> Mié</label>
-                        <label class="inline"><input type="checkbox" value="4"> Jue</label>
-                        <label class="inline"><input type="checkbox" value="5"> Vie</label>
-                        <label class="inline"><input type="checkbox" value="6"> Sáb</label>
-                        <label class="inline"><input type="checkbox" value="0"> Dom</label>
+                <div class="field" id="patientSingleSchedule"><label for="patientAppointmentStart">Hora de inicio (sesión única)</label><input id="patientAppointmentStart" type="time" value="09:00"></div>
+                <div class="field" id="patientSingleScheduleEnd"><label for="patientAppointmentEnd">Hora de término (sesión única)</label><input id="patientAppointmentEnd" type="time" value="10:00"></div>
+                <div class="field full"><label>Días de repetición (define horario y cantidad para cada día)</label>
+                    <div class="weekday-schedules" id="patientWeekdays">
+                        <div class="weekday-schedule" data-weekday-row>
+                            <label class="weekday-toggle"><input type="checkbox" data-day-enabled value="1"> Lunes</label>
+                            <div class="field"><label>Sesiones</label><input type="number" data-day-count min="1" max="104" step="1" value="1" disabled></div>
+                            <div class="field"><label>Inicio</label><input type="time" data-day-start value="09:00" disabled></div>
+                            <div class="field"><label>Término</label><input type="time" data-day-end value="10:00" disabled></div>
+                        </div>
+                        <div class="weekday-schedule" data-weekday-row>
+                            <label class="weekday-toggle"><input type="checkbox" data-day-enabled value="2"> Martes</label>
+                            <div class="field"><label>Sesiones</label><input type="number" data-day-count min="1" max="104" step="1" value="1" disabled></div>
+                            <div class="field"><label>Inicio</label><input type="time" data-day-start value="09:00" disabled></div>
+                            <div class="field"><label>Término</label><input type="time" data-day-end value="10:00" disabled></div>
+                        </div>
+                        <div class="weekday-schedule" data-weekday-row>
+                            <label class="weekday-toggle"><input type="checkbox" data-day-enabled value="3"> Miércoles</label>
+                            <div class="field"><label>Sesiones</label><input type="number" data-day-count min="1" max="104" step="1" value="1" disabled></div>
+                            <div class="field"><label>Inicio</label><input type="time" data-day-start value="09:00" disabled></div>
+                            <div class="field"><label>Término</label><input type="time" data-day-end value="10:00" disabled></div>
+                        </div>
+                        <div class="weekday-schedule" data-weekday-row>
+                            <label class="weekday-toggle"><input type="checkbox" data-day-enabled value="4"> Jueves</label>
+                            <div class="field"><label>Sesiones</label><input type="number" data-day-count min="1" max="104" step="1" value="1" disabled></div>
+                            <div class="field"><label>Inicio</label><input type="time" data-day-start value="09:00" disabled></div>
+                            <div class="field"><label>Término</label><input type="time" data-day-end value="10:00" disabled></div>
+                        </div>
+                        <div class="weekday-schedule" data-weekday-row>
+                            <label class="weekday-toggle"><input type="checkbox" data-day-enabled value="5"> Viernes</label>
+                            <div class="field"><label>Sesiones</label><input type="number" data-day-count min="1" max="104" step="1" value="1" disabled></div>
+                            <div class="field"><label>Inicio</label><input type="time" data-day-start value="09:00" disabled></div>
+                            <div class="field"><label>Término</label><input type="time" data-day-end value="10:00" disabled></div>
+                        </div>
+                        <div class="weekday-schedule" data-weekday-row>
+                            <label class="weekday-toggle"><input type="checkbox" data-day-enabled value="6"> Sábado</label>
+                            <div class="field"><label>Sesiones</label><input type="number" data-day-count min="1" max="104" step="1" value="1" disabled></div>
+                            <div class="field"><label>Inicio</label><input type="time" data-day-start value="09:00" disabled></div>
+                            <div class="field"><label>Término</label><input type="time" data-day-end value="10:00" disabled></div>
+                        </div>
+                        <div class="weekday-schedule" data-weekday-row>
+                            <label class="weekday-toggle"><input type="checkbox" data-day-enabled value="0"> Domingo</label>
+                            <div class="field"><label>Sesiones</label><input type="number" data-day-count min="1" max="104" step="1" value="1" disabled></div>
+                            <div class="field"><label>Inicio</label><input type="time" data-day-start value="09:00" disabled></div>
+                            <div class="field"><label>Término</label><input type="time" data-day-end value="10:00" disabled></div>
+                        </div>
                     </div>
                 </div>
                 <div class="field full hint" id="patientSeriesPreview" aria-live="polite"></div>
                 <div class="field full"><label for="patientNotes">Notas administrativas</label><textarea id="patientNotes" placeholder="Información de contacto o seguimiento administrativo. Evita datos que no necesites conservar."></textarea></div>
             </div>
-            <p class="inline-note">Al elegir días de repetición, se agendará la cantidad indicada en orden cronológico. Cada fecha será una sesión independiente que podrás reprogramar y completar por separado desde el calendario.</p>
+            <p class="inline-note">Cada día seleccionado tendrá su propio horario y cantidad de sesiones. Todas las fechas se combinarán en una sola serie numerada cronológicamente; podrás reprogramar y completar cada sesión por separado desde el calendario.</p>
         </div>
         <div class="dialog-foot"><button class="button secondary" type="button" data-close="patientDialog">Cancelar</button><button class="button" type="submit">Guardar paciente</button></div>
     </form>
@@ -736,6 +780,15 @@
         renderDayAgenda();
     }
 
+    function changeCalendarMonth(offset) {
+        const [year, month, day] = selectedDate.split('-').map(Number);
+        const targetMonth = new Date(year, month - 1 + offset, 1);
+        const lastDay = new Date(targetMonth.getFullYear(), targetMonth.getMonth() + 1, 0).getDate();
+        selectedDate = dateKey(new Date(targetMonth.getFullYear(), targetMonth.getMonth(), Math.min(day, lastDay)));
+        visibleMonth = new Date(targetMonth.getFullYear(), targetMonth.getMonth(), 1);
+        renderCalendar();
+    }
+
     function renderDayAgenda() {
         $('#agendaDateTitle').textContent = formatDate(selectedDate, { weekday: 'long', day: 'numeric', month: 'long' });
         const items = [
@@ -792,8 +845,14 @@
         $('#patientAppointmentDate').value = '';
         $('#patientAppointmentStart').value = '09:00';
         $('#patientAppointmentEnd').value = '10:00';
-        $('#patientAppointmentCount').value = 1;
-        $$('#patientWeekdays input').forEach(input => { input.checked = false; });
+        $$('#patientWeekdays [data-weekday-row]').forEach(row => {
+            row.querySelector('[data-day-enabled]').checked = false;
+            row.querySelector('[data-day-count]').value = 1;
+            row.querySelector('[data-day-start]').value = '09:00';
+            row.querySelector('[data-day-end]').value = '10:00';
+            updatePatientScheduleRow(row);
+        });
+        updatePatientSingleScheduleVisibility();
         renderPatientSeriesPreview();
         $('#patientDialog').showModal();
     }
@@ -855,31 +914,87 @@
         return `${String(Math.floor(total / 60)).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`;
     }
 
-    function selectedPatientDays() {
-        return $$('#patientWeekdays input:checked').map(input => Number(input.value));
+    function updatePatientScheduleRow(row) {
+        const enabled = row.querySelector('[data-day-enabled]').checked;
+        row.classList.toggle('enabled', enabled);
+        row.querySelectorAll('[data-day-count], [data-day-start], [data-day-end]').forEach(input => { input.disabled = !enabled; });
+    }
+
+    function selectedPatientSchedules() {
+        return $$('#patientWeekdays [data-weekday-row]').flatMap(row => {
+            const toggle = row.querySelector('[data-day-enabled]');
+            if (!toggle.checked) return [];
+            return [{
+                weekday: Number(toggle.value),
+                count: Number(row.querySelector('[data-day-count]').value),
+                start: row.querySelector('[data-day-start]').value,
+                end: row.querySelector('[data-day-end]').value
+            }];
+        });
+    }
+
+    function updatePatientSingleScheduleVisibility() {
+        const hasWeeklySchedule = selectedPatientSchedules().length > 0;
+        $('#patientSingleSchedule').hidden = hasWeeklySchedule;
+        $('#patientSingleScheduleEnd').hidden = hasWeeklySchedule;
+    }
+
+    function patientScheduleDates(startDate, schedules) {
+        const remaining = new Map(schedules.map(schedule => [schedule.weekday, schedule.count]));
+        const dates = [];
+        for (let offset = 0; offset <= 730 && remaining.size; offset += 1) {
+            const date = new Date(`${startDate}T00:00:00`);
+            date.setDate(date.getDate() + offset);
+            const weekday = date.getDay();
+            const count = remaining.get(weekday) || 0;
+            if (!count) continue;
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const schedule = schedules.find(item => item.weekday === weekday);
+            dates.push({
+                date: `${year}-${month}-${day}`,
+                start: schedule.start,
+                end: schedule.end
+            });
+            if (count === 1) remaining.delete(weekday);
+            else remaining.set(weekday, count - 1);
+        }
+        return dates.sort((a, b) => a.date.localeCompare(b.date) || a.start.localeCompare(b.start));
     }
 
     function renderPatientSeriesPreview() {
         const date = $('#patientAppointmentDate').value;
-        const weekdays = selectedPatientDays();
-        const count = Number($('#patientAppointmentCount').value);
+        const schedules = selectedPatientSchedules();
         if (!date) {
-            $('#patientSeriesPreview').textContent = 'Selecciona una fecha de inicio para agendar sesiones.';
+            $('#patientSeriesPreview').textContent = schedules.length
+                ? 'Selecciona una fecha de inicio para calcular la serie.'
+                : 'Selecciona una fecha de inicio para agendar una sesión.';
             return;
         }
-        if (!weekdays.length) {
-            $('#patientSeriesPreview').textContent = count > 1
-                ? 'Selecciona uno o más días de repetición para agendar varias sesiones.'
-                : 'Sin días de repetición, se agendará una sesión en la fecha de inicio.';
+        if (!schedules.length) {
+            $('#patientSeriesPreview').textContent = `Se agendará una sesión el ${formatDate(date)} · ${$('#patientAppointmentStart').value}–${$('#patientAppointmentEnd').value}.`;
             return;
         }
-        if (!Number.isInteger(count) || count < 1 || count > 104) {
-            $('#patientSeriesPreview').textContent = 'Indica entre 1 y 104 sesiones.';
+        const invalidSchedule = schedules.find(schedule =>
+            !Number.isInteger(schedule.count) || schedule.count < 1 || schedule.count > 104 ||
+            !schedule.start || !schedule.end || schedule.end <= schedule.start
+        );
+        const total = schedules.reduce((sum, schedule) => sum + schedule.count, 0);
+        if (invalidSchedule) {
+            $('#patientSeriesPreview').textContent = 'Revisa las cantidades y los horarios de cada día seleccionado.';
             return;
         }
-        const dates = workshopDates(date, weekdays, count);
-        const preview = dates.slice(0, 4).map(value => formatDate(value, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })).join(' · ');
-        $('#patientSeriesPreview').textContent = `${dates.length} sesiones individuales: ${preview}${dates.length > 4 ? ' · …' : ''}. Podrás reprogramar cada una desde el calendario.`;
+        if (total > 104) {
+            $('#patientSeriesPreview').textContent = 'El total combinado no puede superar 104 sesiones.';
+            return;
+        }
+        const dates = patientScheduleDates(date, schedules);
+        const preview = dates.slice(0, 4).map(item =>
+            `${formatDate(item.date, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })} ${item.start}–${item.end}`
+        ).join(' · ');
+        const sessionLabel = dates.length === 1 ? 'sesión' : 'sesiones';
+        $('#patientSeriesPreview').innerHTML = `<span class="series-total">Total: ${dates.length} ${sessionLabel}</span> · ${escapeHtml(preview)}${dates.length > 4 ? ' · …' : ''}. Todas se numerarán juntas y podrás reprogramarlas individualmente.`;
     }
 
     function validateAppointment(candidate, additionalAppointments = []) {
@@ -1220,28 +1335,33 @@
         const appointmentDate = $('#patientAppointmentDate').value;
         const appointmentStart = $('#patientAppointmentStart').value;
         const appointmentEnd = $('#patientAppointmentEnd').value;
-        const sessionCount = Number($('#patientAppointmentCount').value);
-        const weekdays = selectedPatientDays();
+        const schedules = selectedPatientSchedules();
         const appointments = [];
         const patientId = id || makeId('paciente');
-        if (!Number.isInteger(sessionCount) || sessionCount < 1 || sessionCount > 104) return showToast('Indica entre 1 y 104 sesiones para agendar.', true);
-        if (sessionCount > 1 && !weekdays.length) return showToast('Selecciona uno o más días de repetición para agendar varias sesiones.', true);
-        if (!appointmentDate && weekdays.length) return showToast('Elige una fecha de inicio para crear la serie de sesiones.', true);
-        if (appointmentDate && appointmentEnd <= appointmentStart) return showToast('La hora de término debe ser posterior a la hora de inicio.', true);
+        const totalSessions = schedules.reduce((sum, schedule) => sum + schedule.count, 0);
+        if (schedules.some(schedule =>
+            !Number.isInteger(schedule.count) || schedule.count < 1 || schedule.count > 104 ||
+            !schedule.start || !schedule.end || schedule.end <= schedule.start
+        )) return showToast('Revisa la cantidad y el horario de cada día seleccionado.', true);
+        if (schedules.length && totalSessions > 104) return showToast('El total combinado no puede superar 104 sesiones.', true);
+        if (!appointmentDate && schedules.length) return showToast('Elige una fecha de inicio para crear la serie de sesiones.', true);
+        if (appointmentDate && !schedules.length && appointmentEnd <= appointmentStart) return showToast('La hora de término debe ser posterior a la hora de inicio.', true);
         if (appointmentDate) {
-            const dates = weekdays.length ? workshopDates(appointmentDate, weekdays, sessionCount) : [appointmentDate];
-            if (dates.length !== (weekdays.length ? sessionCount : 1)) return showToast('No se pudo calcular toda la serie dentro de dos años.', true);
+            const dates = schedules.length
+                ? patientScheduleDates(appointmentDate, schedules)
+                : [{ date: appointmentDate, start: appointmentStart, end: appointmentEnd }];
+            if (dates.length !== (schedules.length ? totalSessions : 1)) return showToast('No se pudo calcular toda la serie dentro de dos años.', true);
             const seriesId = dates.length > 1 ? makeId('serie-paciente') : '';
-            for (const [index, sessionDate] of dates.entries()) {
+            for (const [index, session] of dates.entries()) {
                 const appointment = {
                     id: makeId('sesion'),
                     patientId,
                     seriesId,
                     seriesSession: index + 1,
                     seriesTotal: dates.length,
-                    date: sessionDate,
-                    start: appointmentStart,
-                    end: appointmentEnd,
+                    date: session.date,
+                    start: session.start,
+                    end: session.end,
                     status: 'scheduled',
                     notes: '',
                     development: '',
@@ -1250,7 +1370,7 @@
                     summaryHistory: []
                 };
                 const problem = validateAppointment(appointment, appointments);
-                if (problem) return showToast(`${formatDate(sessionDate)}: ${problem} No se agendó ninguna sesión de la serie.`, true);
+                if (problem) return showToast(`${formatDate(session.date)}: ${problem} No se agendó ninguna sesión de la serie.`, true);
                 appointments.push(appointment);
             }
         }
@@ -1384,8 +1504,17 @@
         $('#patientsNewButton').addEventListener('click', () => openPatientDialog());
         $('#patientSearch').addEventListener('input', renderDirectory);
         $('#patientAppointmentDate').addEventListener('input', renderPatientSeriesPreview);
-        $('#patientAppointmentCount').addEventListener('input', renderPatientSeriesPreview);
-        $('#patientWeekdays').addEventListener('change', renderPatientSeriesPreview);
+        $('#patientAppointmentStart').addEventListener('input', renderPatientSeriesPreview);
+        $('#patientAppointmentEnd').addEventListener('input', renderPatientSeriesPreview);
+        $('#patientWeekdays').addEventListener('input', renderPatientSeriesPreview);
+        $('#patientWeekdays').addEventListener('change', event => {
+            const toggle = event.target.closest('[data-day-enabled]');
+            if (toggle) {
+                updatePatientScheduleRow(toggle.closest('[data-weekday-row]'));
+                updatePatientSingleScheduleVisibility();
+            }
+            renderPatientSeriesPreview();
+        });
         $('#patientForm').addEventListener('submit', savePatient);
         $('#appointmentForm').addEventListener('submit', saveAppointment);
         $('#appointmentDialog').addEventListener('close', () => {
@@ -1407,9 +1536,9 @@
         $('#calendarNewSession').addEventListener('click', () => openAppointmentDialog(null, '', selectedDate));
         $('#agendaNewSlot').addEventListener('click', () => openSlotDialog(selectedDate));
         $('#tasksNewButton').addEventListener('click', () => openTaskDialog());
-        $('#previousMonth').addEventListener('click', () => { visibleMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() - 1, 1); renderCalendar(); });
-        $('#nextMonth').addEventListener('click', () => { visibleMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + 1, 1); renderCalendar(); });
-        $('#todayButton').addEventListener('click', () => { selectedDate = today; visibleMonth = new Date(); renderCalendar(); });
+        $('#previousMonth').addEventListener('click', () => changeCalendarMonth(-1));
+        $('#nextMonth').addEventListener('click', () => changeCalendarMonth(1));
+        $('#todayButton').addEventListener('click', () => { selectedDate = dateKey(new Date()); visibleMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1); renderCalendar(); });
         $('#taskPatientFilter').addEventListener('change', renderTasks);
         $('#taskStatusFilter').addEventListener('change', renderTasks);
         $('#dictateButton').addEventListener('click', dictateNotes);
