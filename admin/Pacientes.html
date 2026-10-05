@@ -308,13 +308,26 @@
                 <div class="field"><label for="patientPhone">Teléfono</label><input id="patientPhone" type="tel" autocomplete="tel"></div>
                 <div class="field"><label for="packageTotal">Sesiones adquiridas</label><input id="packageTotal" type="number" min="0" step="1" value="0"></div>
                 <div class="field"><label for="initialPayment">Pago recibido al registrar</label><input id="initialPayment" type="number" min="0" step="1" value="0"></div>
-                <div class="section-label">Próxima cita · opcional</div>
-                <div class="field"><label for="patientAppointmentDate">Fecha</label><input id="patientAppointmentDate" type="date"></div>
+                <div class="section-label">Plan de sesiones · opcional</div>
+                <div class="field"><label for="patientAppointmentDate">Fecha de inicio</label><input id="patientAppointmentDate" type="date"></div>
                 <div class="field"><label for="patientAppointmentStart">Hora de inicio</label><input id="patientAppointmentStart" type="time" value="09:00"></div>
-                <div class="field"><label for="patientAppointmentDuration">Duración en minutos</label><input id="patientAppointmentDuration" type="number" min="5" max="480" step="5" value="60"></div>
+                <div class="field"><label for="patientAppointmentEnd">Hora de término</label><input id="patientAppointmentEnd" type="time" value="10:00"></div>
+                <div class="field"><label for="patientAppointmentCount">Sesiones a agendar</label><input id="patientAppointmentCount" type="number" min="1" max="104" step="1" value="1"></div>
+                <div class="field full"><label>Días de repetición (opcional; sin seleccionar, solo se agenda la fecha de inicio)</label>
+                    <div class="toolbar" id="patientWeekdays">
+                        <label class="inline"><input type="checkbox" value="1"> Lun</label>
+                        <label class="inline"><input type="checkbox" value="2"> Mar</label>
+                        <label class="inline"><input type="checkbox" value="3"> Mié</label>
+                        <label class="inline"><input type="checkbox" value="4"> Jue</label>
+                        <label class="inline"><input type="checkbox" value="5"> Vie</label>
+                        <label class="inline"><input type="checkbox" value="6"> Sáb</label>
+                        <label class="inline"><input type="checkbox" value="0"> Dom</label>
+                    </div>
+                </div>
+                <div class="field full hint" id="patientSeriesPreview" aria-live="polite"></div>
                 <div class="field full"><label for="patientNotes">Notas administrativas</label><textarea id="patientNotes" placeholder="Información de contacto o seguimiento administrativo. Evita datos que no necesites conservar."></textarea></div>
             </div>
-            <p class="inline-note">Si completas fecha y hora, la cita queda agendada en el calendario al guardar. Las sesiones restantes se calculan con las sesiones adquiridas menos las completadas.</p>
+            <p class="inline-note">Al elegir días de repetición, se agendará la cantidad indicada en orden cronológico. Cada fecha será una sesión independiente que podrás reprogramar y completar por separado desde el calendario.</p>
         </div>
         <div class="dialog-foot"><button class="button secondary" type="button" data-close="patientDialog">Cancelar</button><button class="button" type="submit">Guardar paciente</button></div>
     </form>
@@ -326,17 +339,19 @@
         <div class="dialog-body">
             <input id="appointmentId" type="hidden">
             <div class="form-grid">
-                <div class="field full"><label for="appointmentPatient">Paciente *</label><select id="appointmentPatient" required></select></div>
+                <div class="field full" id="appointmentPatientField"><label for="appointmentPatient">Paciente *</label><select id="appointmentPatient" required></select></div>
+                <div class="field full hint" id="appointmentWorkshopInfo" hidden></div>
                 <div class="field"><label for="appointmentDate">Fecha *</label><input id="appointmentDate" type="date" required></div>
                 <div class="field"><label for="appointmentStart">Hora de inicio *</label><input id="appointmentStart" type="time" required></div>
                 <div class="field"><label for="appointmentEnd">Hora de término *</label><input id="appointmentEnd" type="time" required></div>
                 <div class="field"><label for="appointmentStatus">Estado</label><select id="appointmentStatus"><option value="scheduled">Programada</option><option value="completed">Completada</option><option value="cancelled">Cancelada</option></select></div>
                 <div class="field full"><label for="appointmentNotes">Detalles y temas tratados</label><textarea id="appointmentNotes" placeholder="Registra aquí los temas que quieras recordar de la sesión."></textarea></div>
-                <div class="field full"><label for="appointmentNext">Pendiente o tema para la siguiente sesión</label><textarea id="appointmentNext" placeholder="¿Qué conviene retomar la próxima vez?"></textarea></div>
-                <div class="field full"><label for="appointmentSummary">Resumen de la sesión (puedes pegar aquí el resultado de Gemini o ChatGPT)</label><textarea id="appointmentSummary" placeholder="El resumen que pegues aquí quedará guardado en esta ficha local."></textarea></div>
+                <div class="field full"><label for="appointmentDevelopment">Preparación y desarrollo individual de esta sesión</label><textarea id="appointmentDevelopment" placeholder="Objetivo, estructura, ejercicios, materiales o desarrollo preparado para esta fecha."></textarea></div>
+                <div class="field full" id="appointmentNextField"><label for="appointmentNext">Pendiente o tema para la siguiente sesión</label><textarea id="appointmentNext" placeholder="¿Qué conviene retomar la próxima vez?"></textarea></div>
+                <div class="field full" id="appointmentSummaryField"><label for="appointmentSummary">Resumen de la sesión (puedes pegar aquí el resultado de Gemini o ChatGPT)</label><textarea id="appointmentSummary" placeholder="El resumen que pegues aquí quedará guardado en esta ficha local."></textarea></div>
             </div>
-            <div class="banner-note">El audio dictado depende del navegador y puede procesarse mediante un servicio externo. Para dictar, confirma el aviso; el dashboard no envía tus notas a una IA. El prompt se genera localmente y solo se comparte si tú lo copias o abres Gemini/ChatGPT.</div>
-            <div class="button-row">
+            <div class="banner-note" id="appointmentPrivacyNote">El audio dictado depende del navegador y puede procesarse mediante un servicio externo. Para dictar, confirma el aviso; el dashboard no envía tus notas a una IA. El prompt se genera localmente y solo se comparte si tú lo copias o abres Gemini/ChatGPT.</div>
+            <div class="button-row" id="appointmentTools">
                 <button class="button secondary small" type="button" id="dictateButton" aria-pressed="false">
                     <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="2.5" width="6" height="12" rx="3"></rect><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3.5M8.5 21.5h7"></path></svg>
                     <span id="dictateButtonLabel">Iniciar dictado</span>
@@ -605,7 +620,7 @@
         if (!patient) return '';
         return `<button type="button" class="list-card" data-open-appointment="${escapeHtml(item.id)}">
             <span class="avatar">${escapeHtml(initials(patient.name))}</span>
-            <span class="list-main"><strong>${escapeHtml(patient.name)}</strong><small>${escapeHtml(fullDateTime(item.date, item.start))} · ${escapeHtml(item.status === 'completed' ? 'Completada' : 'Programada')}</small></span>
+            <span class="list-main"><strong>${escapeHtml(patient.name)}</strong><small>${escapeHtml(fullDateTime(item.date, item.start))} · ${escapeHtml(item.status === 'completed' ? 'Completada' : 'Programada')}${item.seriesTotal > 1 ? ` · Sesión ${item.seriesSession} de ${item.seriesTotal}` : ''}</small></span>
             <span class="pill">${escapeHtml(item.end)}</span>
         </button>`;
     }
@@ -686,7 +701,7 @@
                 ${nextAppointment ? `<p class="hint">${escapeHtml(fullDateTime(nextAppointment.date, nextAppointment.start))} · pendiente: ${escapeHtml(nextAppointment.nextTopic || patient.pendingTopic || 'Sin temas pendientes anotados')}</p>` : `<p class="hint">${patient.pendingTopic ? `Pendiente para retomar: ${escapeHtml(patient.pendingTopic)}. ` : ''}No hay una próxima sesión agendada.</p>`}
             </section>
             <section class="subsection"><h3>Pagos registrados</h3>${payments.length ? payments.map(payment => `<div class="agenda-item"><div class="agenda-time">${escapeHtml(formatDate(payment.date, { day: 'numeric', month: 'short' }))}</div><div class="agenda-detail"><strong>${formatMoney(payment.amount)}</strong><small>${escapeHtml(payment.method || 'Sin método')}${payment.note ? ` · ${escapeHtml(payment.note)}` : ''}</small></div></div>`).join('') : '<p class="hint">No hay pagos registrados.</p>'}</section>
-            <section class="subsection"><h3>Sesiones e historial de resúmenes</h3>${appointments.length ? appointments.map(item => `<div class="history-card"><details><summary>${escapeHtml(formatDate(item.date))} · ${escapeHtml(item.start)} · ${escapeHtml(item.status === 'completed' ? 'Completada' : item.status === 'cancelled' ? 'Cancelada' : 'Programada')} · ${(item.summaryHistory || []).length} resumen(es)</summary><p class="hint">${escapeHtml(item.nextTopic ? `Para la siguiente sesión: ${item.nextTopic}` : item.notes || 'Sin notas')}</p>${(item.summaryHistory || []).map(entry => `<pre>${escapeHtml(entry.createdAt ? new Date(entry.createdAt).toLocaleString('es') : 'Resumen')}\n${escapeHtml(entry.prompt)}</pre>`).join('')}${item.summary ? `<p><strong>Resumen guardado:</strong> ${escapeHtml(item.summary)}</p>` : ''}<button class="button secondary small" type="button" data-open-appointment="${escapeHtml(item.id)}">Abrir sesión</button></details></div>`).join('') : '<p class="hint">Aún no hay sesiones registradas.</p>'}</section>
+            <section class="subsection"><h3>Sesiones e historial de resúmenes</h3>${appointments.length ? appointments.map(item => `<div class="history-card"><details><summary>${escapeHtml(formatDate(item.date))} · ${escapeHtml(item.start)}${item.seriesTotal > 1 ? ` · Sesión ${item.seriesSession} de ${item.seriesTotal}` : ''} · ${escapeHtml(item.status === 'completed' ? 'Completada' : item.status === 'cancelled' ? 'Cancelada' : 'Programada')} · ${(item.summaryHistory || []).length} resumen(es)</summary>${item.development ? `<p><strong>Preparación / desarrollo:</strong> ${escapeHtml(item.development)}</p>` : ''}<p class="hint">${escapeHtml(item.nextTopic ? `Para la siguiente sesión: ${item.nextTopic}` : item.notes || 'Sin notas')}</p>${(item.summaryHistory || []).map(entry => `<pre>${escapeHtml(entry.createdAt ? new Date(entry.createdAt).toLocaleString('es') : 'Resumen')}\n${escapeHtml(entry.prompt)}</pre>`).join('')}${item.summary ? `<p><strong>Resumen guardado:</strong> ${escapeHtml(item.summary)}</p>` : ''}<button class="button secondary small" type="button" data-open-appointment="${escapeHtml(item.id)}">Abrir sesión</button></details></div>`).join('') : '<p class="hint">Aún no hay sesiones registradas.</p>'}</section>
             <section class="subsection"><h3>Tareas asignadas</h3>${tasks.length ? tasks.map((task, index) => taskCard(patient, task, index)).join('') : '<p class="hint">No hay tareas asignadas.</p>'}</section>
             <section class="subsection"><button class="button danger small" type="button" data-delete-patient="${escapeHtml(patient.id)}">Eliminar paciente y sus datos</button></section>
         </div>`;
@@ -730,10 +745,10 @@
         $('#dayAgenda').innerHTML = items.length ? items.map(item => {
             if (item.kind === 'appointment') {
                 if (item.workshopId) {
-                    return `<div class="agenda-item"><div class="agenda-time">${escapeHtml(item.start)}<br>${escapeHtml(item.end)}</div><div class="agenda-detail"><strong>${escapeHtml(item.workshopTitle || 'Taller')}</strong><small>Taller · Sesión ${item.workshopSession} de ${item.workshopTotal}</small><button type="button" class="button danger small" style="margin-top:7px" data-delete-workshop-series="${escapeHtml(item.workshopSeriesId)}">Eliminar toda la serie</button></div></div>`;
+                    return `<div class="agenda-item"><div class="agenda-time">${escapeHtml(item.start)}<br>${escapeHtml(item.end)}</div><div class="agenda-detail"><strong>${escapeHtml(item.workshopTitle || 'Taller')}</strong><small>Taller · Sesión ${item.workshopSession} de ${item.workshopTotal}${item.development ? ` · Preparación: ${escapeHtml(item.development.slice(0, 110))}${item.development.length > 110 ? '…' : ''}` : ''}</small><div class="button-row" style="margin-top:7px"><button type="button" class="button secondary small" data-open-appointment="${escapeHtml(item.id)}">Preparar / editar sesión</button><button type="button" class="button danger small" data-delete-workshop-series="${escapeHtml(item.workshopSeriesId)}">Eliminar serie</button></div></div></div>`;
                 }
                 const patient = patientFor(item.patientId);
-                return `<div class="agenda-item"><div class="agenda-time">${escapeHtml(item.start)}<br>${escapeHtml(item.end)}</div><div class="agenda-detail"><strong>${escapeHtml(patient ? patient.name : 'Paciente eliminado')}</strong><small>${escapeHtml(item.status === 'completed' ? 'Sesión completada' : 'Sesión programada')}${item.nextTopic ? ` · Próxima: ${escapeHtml(item.nextTopic)}` : ''}</small><button type="button" class="button secondary small" style="margin-top:7px" data-open-appointment="${escapeHtml(item.id)}">Abrir ficha</button></div></div>`;
+                return `<div class="agenda-item"><div class="agenda-time">${escapeHtml(item.start)}<br>${escapeHtml(item.end)}</div><div class="agenda-detail"><strong>${escapeHtml(patient ? patient.name : 'Paciente eliminado')}</strong><small>${escapeHtml(item.status === 'completed' ? 'Sesión completada' : 'Sesión programada')}${item.seriesTotal > 1 ? ` · Sesión ${item.seriesSession} de ${item.seriesTotal}` : ''}${item.nextTopic ? ` · Próxima: ${escapeHtml(item.nextTopic)}` : ''}</small><button type="button" class="button secondary small" style="margin-top:7px" data-open-appointment="${escapeHtml(item.id)}">Abrir y editar sesión</button></div></div>`;
             }
             const open = item.type === 'open';
             return `<div class="agenda-item"><div class="agenda-time">${escapeHtml(item.start)}<br>${escapeHtml(item.end)}</div><div class="agenda-detail"><strong><span class="pill ${open ? 'green' : 'red'}">${open ? 'Disponible' : 'No disponible'}</span></strong><small>${escapeHtml(item.label || (open ? 'Horario abierto' : 'Horario bloqueado'))}</small><button type="button" class="button ghost small" style="margin-top:5px" data-delete-slot="${escapeHtml(item.id)}">Quitar</button></div></div>`;
@@ -776,37 +791,56 @@
         $('#patientNotes').value = patient ? patient.notes || '' : '';
         $('#patientAppointmentDate').value = '';
         $('#patientAppointmentStart').value = '09:00';
-        $('#patientAppointmentDuration').value = 60;
+        $('#patientAppointmentEnd').value = '10:00';
+        $('#patientAppointmentCount').value = 1;
+        $$('#patientWeekdays input').forEach(input => { input.checked = false; });
+        renderPatientSeriesPreview();
         $('#patientDialog').showModal();
     }
 
     function openAppointmentDialog(item = null, patientId = '', date = selectedDate) {
-        if (!state.patients.length) {
+        const isWorkshop = Boolean(item && item.workshopId);
+        if (!state.patients.length && !isWorkshop) {
             showToast('Registra primero un paciente para programar sesiones.', true);
             openPatientDialog();
             return;
         }
         $('#appointmentForm').reset();
         $('#appointmentId').value = item ? item.id : '';
-        $('#appointmentDialogTitle').textContent = item ? 'Ficha de sesión' : 'Programar sesión';
+        $('#appointmentDialogTitle').textContent = isWorkshop
+            ? `${item.workshopTitle || 'Taller'} · sesión ${item.workshopSession} de ${item.workshopTotal}`
+            : item ? 'Ficha de sesión' : 'Programar sesión';
         $('#appointmentPatient').innerHTML = state.patients.slice().sort((a, b) => a.name.localeCompare(b.name, 'es')).map(patient => `<option value="${escapeHtml(patient.id)}">${escapeHtml(patient.name)}</option>`).join('');
-        $('#appointmentPatient').value = item ? item.patientId : patientId || state.patients[0].id;
+        $('#appointmentPatient').value = item && !isWorkshop ? item.patientId : patientId || state.patients[0]?.id || '';
+        $('#appointmentPatient').required = !isWorkshop;
+        $('#appointmentPatientField').hidden = isWorkshop;
+        $('#appointmentWorkshopInfo').hidden = !isWorkshop;
+        $('#appointmentWorkshopInfo').textContent = isWorkshop
+            ? `Taller de Tienda.html · Sesión ${item.workshopSession} de ${item.workshopTotal}. Esta ficha y su desarrollo son independientes de las demás fechas de la serie.`
+            : '';
+        $('#appointmentTools').hidden = isWorkshop;
+        $('#appointmentPrivacyNote').hidden = isWorkshop;
+        $('#appointmentNextField').hidden = isWorkshop;
+        $('#appointmentSummaryField').hidden = isWorkshop;
+        $('#dictationStatus').hidden = isWorkshop;
+        $('#promptField').hidden = true;
         $('#appointmentDate').value = item ? item.date : date;
         $('#appointmentStart').value = item ? item.start : '09:00';
         $('#appointmentEnd').value = item ? item.end : '10:00';
         $('#appointmentStatus').value = item ? item.status : 'scheduled';
         $('#appointmentNotes').value = item ? item.notes || '' : '';
+        $('#appointmentDevelopment').value = item ? item.development || '' : '';
         $('#appointmentNext').value = item ? item.nextTopic || '' : (patientFor(patientId || $('#appointmentPatient').value)?.pendingTopic || '');
         $('#appointmentSummary').value = item ? item.summary || '' : '';
         $('#deleteAppointmentButton').hidden = !item;
+        $('#deleteAppointmentButton').textContent = isWorkshop ? 'Eliminar esta sesión' : 'Eliminar sesión';
         currentPrompt = '';
-        $('#promptField').hidden = true;
         $('#summaryPrompt').value = '';
         $('#summaryHistory').innerHTML = item && item.summaryHistory && item.summaryHistory.length ? `<div class="history-card"><strong>Prompts guardados en esta sesión (${item.summaryHistory.length})</strong>${item.summaryHistory.map((entry, index) => `<details><summary>Prompt ${index + 1} · ${new Date(entry.createdAt).toLocaleString('es')}</summary><pre>${escapeHtml(entry.prompt)}</pre></details>`).join('')}</div>` : '';
         $('#copyPromptButton').disabled = true;
         $('#openGeminiButton').disabled = true;
         $('#openChatGPTButton').disabled = true;
-        updateDictationAvailability();
+        if (!isWorkshop) updateDictationAvailability();
         $('#appointmentDialog').showModal();
     }
 
@@ -819,6 +853,33 @@
         const total = hours * 60 + mins + minutes;
         if (total > 1439) return '';
         return `${String(Math.floor(total / 60)).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`;
+    }
+
+    function selectedPatientDays() {
+        return $$('#patientWeekdays input:checked').map(input => Number(input.value));
+    }
+
+    function renderPatientSeriesPreview() {
+        const date = $('#patientAppointmentDate').value;
+        const weekdays = selectedPatientDays();
+        const count = Number($('#patientAppointmentCount').value);
+        if (!date) {
+            $('#patientSeriesPreview').textContent = 'Selecciona una fecha de inicio para agendar sesiones.';
+            return;
+        }
+        if (!weekdays.length) {
+            $('#patientSeriesPreview').textContent = count > 1
+                ? 'Selecciona uno o más días de repetición para agendar varias sesiones.'
+                : 'Sin días de repetición, se agendará una sesión en la fecha de inicio.';
+            return;
+        }
+        if (!Number.isInteger(count) || count < 1 || count > 104) {
+            $('#patientSeriesPreview').textContent = 'Indica entre 1 y 104 sesiones.';
+            return;
+        }
+        const dates = workshopDates(date, weekdays, count);
+        const preview = dates.slice(0, 4).map(value => formatDate(value, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })).join(' · ');
+        $('#patientSeriesPreview').textContent = `${dates.length} sesiones individuales: ${preview}${dates.length > 4 ? ' · …' : ''}. Podrás reprogramar cada una desde el calendario.`;
     }
 
     function validateAppointment(candidate, additionalAppointments = []) {
@@ -884,22 +945,23 @@
     async function saveAppointment(event) {
         event.preventDefault();
         const id = $('#appointmentId').value || makeId('sesion');
+        const existing = state.appointments.find(item => item.id === id);
         const candidate = {
+            ...(existing || {}),
             id,
-            patientId: $('#appointmentPatient').value,
+            patientId: existing && existing.workshopId ? '' : $('#appointmentPatient').value,
             date: $('#appointmentDate').value,
             start: $('#appointmentStart').value,
             end: $('#appointmentEnd').value,
             status: $('#appointmentStatus').value,
             notes: $('#appointmentNotes').value.trim(),
+            development: $('#appointmentDevelopment').value.trim(),
             nextTopic: $('#appointmentNext').value.trim(),
             summary: $('#appointmentSummary').value.trim(),
-            summaryHistory: []
+            summaryHistory: existing ? existing.summaryHistory || [] : []
         };
         const problem = validateAppointment(candidate);
         if (problem) return showToast(problem, true);
-        const existing = state.appointments.find(item => item.id === id);
-        candidate.summaryHistory = existing ? existing.summaryHistory || [] : [];
         if (currentPrompt && !candidate.summaryHistory.some(entry => entry.prompt === currentPrompt)) {
             candidate.summaryHistory.unshift({ prompt: currentPrompt, createdAt: new Date().toISOString() });
         }
@@ -1157,28 +1219,40 @@
         if (!name) return showToast('El nombre del paciente es obligatorio.', true);
         const appointmentDate = $('#patientAppointmentDate').value;
         const appointmentStart = $('#patientAppointmentStart').value;
-        const appointmentDuration = Number($('#patientAppointmentDuration').value || 60);
-        if ((appointmentDate && !appointmentStart) || (!appointmentDate && appointmentStart !== '09:00')) return showToast('Para agendar desde esta ficha, completa la fecha y la hora.', true);
-        if (!Number.isInteger(appointmentDuration) || appointmentDuration < 5 || appointmentDuration > 480) return showToast('La duración debe estar entre 5 y 480 minutos.', true);
-        let appointment = null;
+        const appointmentEnd = $('#patientAppointmentEnd').value;
+        const sessionCount = Number($('#patientAppointmentCount').value);
+        const weekdays = selectedPatientDays();
+        const appointments = [];
         const patientId = id || makeId('paciente');
+        if (!Number.isInteger(sessionCount) || sessionCount < 1 || sessionCount > 104) return showToast('Indica entre 1 y 104 sesiones para agendar.', true);
+        if (sessionCount > 1 && !weekdays.length) return showToast('Selecciona uno o más días de repetición para agendar varias sesiones.', true);
+        if (!appointmentDate && weekdays.length) return showToast('Elige una fecha de inicio para crear la serie de sesiones.', true);
+        if (appointmentDate && appointmentEnd <= appointmentStart) return showToast('La hora de término debe ser posterior a la hora de inicio.', true);
         if (appointmentDate) {
-            const end = addMinutes(appointmentStart, appointmentDuration);
-            if (!end) return showToast('La duración de esta cita no puede pasar de la medianoche.', true);
-            appointment = {
-                id: makeId('sesion'),
-                patientId,
-                date: appointmentDate,
-                start: appointmentStart,
-                end,
-                status: 'scheduled',
-                notes: '',
-                nextTopic: '',
-                summary: '',
-                summaryHistory: []
-            };
-            const problem = validateAppointment(appointment);
-            if (problem) return showToast(problem, true);
+            const dates = weekdays.length ? workshopDates(appointmentDate, weekdays, sessionCount) : [appointmentDate];
+            if (dates.length !== (weekdays.length ? sessionCount : 1)) return showToast('No se pudo calcular toda la serie dentro de dos años.', true);
+            const seriesId = dates.length > 1 ? makeId('serie-paciente') : '';
+            for (const [index, sessionDate] of dates.entries()) {
+                const appointment = {
+                    id: makeId('sesion'),
+                    patientId,
+                    seriesId,
+                    seriesSession: index + 1,
+                    seriesTotal: dates.length,
+                    date: sessionDate,
+                    start: appointmentStart,
+                    end: appointmentEnd,
+                    status: 'scheduled',
+                    notes: '',
+                    development: '',
+                    nextTopic: '',
+                    summary: '',
+                    summaryHistory: []
+                };
+                const problem = validateAppointment(appointment, appointments);
+                if (problem) return showToast(`${formatDate(sessionDate)}: ${problem} No se agendó ninguna sesión de la serie.`, true);
+                appointments.push(appointment);
+            }
         }
         if (id) {
             const patient = patientFor(id);
@@ -1206,13 +1280,13 @@
             state.patients.push(patient);
             selectedPatientId = patient.id;
         }
-        if (appointment) {
-            state.appointments.push(appointment);
-            selectedDate = appointment.date;
-            visibleMonth = new Date(`${appointment.date}T00:00:00`);
+        if (appointments.length) {
+            state.appointments.push(...appointments);
+            selectedDate = appointments[0].date;
+            visibleMonth = new Date(`${appointments[0].date}T00:00:00`);
         }
         $('#patientDialog').close();
-        persistAndRender(`${id ? 'Ficha actualizada.' : 'Paciente registrado.'}${appointment ? ' Cita agendada en el calendario.' : ''}`);
+        persistAndRender(`${id ? 'Ficha actualizada.' : 'Paciente registrado.'}${appointments.length ? ` ${appointments.length} sesión(es) agendada(s) en el calendario.` : ''}`);
     }
 
     function registerPayment(patientId) {
@@ -1309,6 +1383,9 @@
         $('#newPatientButton').addEventListener('click', () => openPatientDialog());
         $('#patientsNewButton').addEventListener('click', () => openPatientDialog());
         $('#patientSearch').addEventListener('input', renderDirectory);
+        $('#patientAppointmentDate').addEventListener('input', renderPatientSeriesPreview);
+        $('#patientAppointmentCount').addEventListener('input', renderPatientSeriesPreview);
+        $('#patientWeekdays').addEventListener('change', renderPatientSeriesPreview);
         $('#patientForm').addEventListener('submit', savePatient);
         $('#appointmentForm').addEventListener('submit', saveAppointment);
         $('#appointmentDialog').addEventListener('close', () => {
