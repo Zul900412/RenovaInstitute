@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#746f50">
-    <meta name="description" content="Panel local para organizar pacientes, sesiones, pagos, tareas y agenda de Renova Institute.">
+    <meta name="description" content="Panel privado para organizar pacientes, sesiones, pagos, tareas y agenda de Renova Institute.">
     <link rel="manifest" href="./pacientes.webmanifest">
     <link rel="icon" href="./pacientes-icon.svg" type="image/svg+xml">
     <title>Pacientes | Renova Institute</title>
@@ -90,30 +90,34 @@
         input:focus, select:focus, textarea:focus { outline: 2px solid #77734f33; border-color: var(--olive); }
         .field { display: grid; gap: 5px; }
         .field[hidden] { display: none; }
+        .section-label[hidden] { display: none; }
         .field label { color: var(--muted); font: 700 10px Arial, sans-serif; letter-spacing: .04em; }
+        .validation-error { margin: 0; padding: 11px 12px; border: 1px solid #d9aaa5; border-radius: 8px; background: var(--red-soft); color: var(--red); font: 12px/1.5 Arial, sans-serif; }
+        .validation-error[hidden] { display: none; }
         .inline input[type="checkbox"] { width: 16px; min-height: 16px; margin: 0; accent-color: var(--olive); }
         .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
         .field.full { grid-column: 1 / -1; }
         .section-label { grid-column: 1 / -1; margin: 8px 0 -3px; padding-top: 12px; border-top: 1px solid var(--line); color: var(--olive-dark); font: 700 10px Arial, sans-serif; letter-spacing: .1em; text-transform: uppercase; }
-        .weekday-schedules { display: grid; gap: 7px; }
-        .weekday-schedule { display: grid; grid-template-columns: minmax(100px, .8fr) repeat(3, minmax(90px, 1fr)); align-items: end; gap: 8px; padding: 9px; border: 1px solid var(--line); border-radius: 9px; background: #fff; }
-        .weekday-schedule:not(.enabled) .field { opacity: .55; }
-        .weekday-schedule .field label { font-size: 9px; }
-        .weekday-schedule .field input { min-height: 35px; padding: 6px 8px; }
-        .weekday-toggle { display: flex; align-items: center; gap: 7px; min-height: 35px; color: var(--ink) !important; font-size: 12px !important; }
-        .series-total { color: var(--olive-dark); font: 700 12px Arial, sans-serif; }
+        .acquisition-session-row { padding: 12px; border: 1px solid var(--line); border-radius: 9px; background: #fff; }
         dialog { width: min(680px, calc(100% - 24px)); max-height: min(90vh, 900px); overflow: auto; border: 1px solid var(--line); border-radius: 14px; padding: 0; background: var(--paper); color: var(--ink); box-shadow: 0 22px 70px #332c2850; }
+        dialog.auth-dialog { width: min(440px, calc(100% - 24px)); }
         dialog::backdrop { background: #302c286e; backdrop-filter: blur(3px); }
         .dialog-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 15px; padding: 20px 22px 13px; border-bottom: 1px solid var(--line); }
         .dialog-body { display: grid; gap: 14px; padding: 18px 22px; }
         .dialog-foot { display: flex; justify-content: space-between; gap: 10px; padding: 14px 22px 20px; border-top: 1px solid var(--line); }
         .icon-button { width: 34px; height: 34px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--muted); font-size: 18px; }
         .calendar-layout { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(310px, .85fr); gap: 17px; }
-        .calendar-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+        .calendar-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
         .calendar-head h2 { margin: 0; }
+        .calendar-views { display: flex; gap: 3px; padding: 3px; border: 1px solid var(--line); border-radius: 9px; background: #f8f6f2; }
+        .calendar-views button { min-height: 30px; padding: 5px 9px; border: 0; border-radius: 6px; background: transparent; color: var(--muted); font: 700 11px Arial, sans-serif; }
+        .calendar-views button[aria-pressed="true"] { background: #fff; color: var(--olive-dark); box-shadow: 0 1px 4px #3e33210f; }
         .calendar-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px; }
+        .calendar-grid.single-day { grid-template-columns: minmax(0, 1fr); }
         .weekday { padding: 7px 2px; color: var(--muted); text-align: center; font: 700 10px Arial, sans-serif; text-transform: uppercase; }
         .day { position: relative; display: flex; min-height: 79px; flex-direction: column; align-items: flex-start; gap: 4px; padding: 8px; border: 1px solid transparent; border-radius: 9px; background: #faf8f5; color: var(--ink); text-align: left; }
+        .calendar-grid:not(.single-day) .day { min-width: 0; }
+        .calendar-grid.single-day .day { min-height: 140px; }
         .day:hover { border-color: #c8c1ab; }
         .day.outside { color: #b4ada6; background: #f7f5f2; }
         .day.today .day-number { display: grid; width: 23px; height: 23px; place-items: center; border-radius: 50%; background: var(--olive); color: #fff; }
@@ -123,6 +127,7 @@
         .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--olive); }
         .dot.open { background: var(--green); }
         .dot.blocked { background: var(--red); }
+        .dot.task { background: var(--amber); }
         .day-count { color: var(--muted); font: 10px Arial, sans-serif; }
         .agenda-item { display: grid; grid-template-columns: 58px minmax(0, 1fr); gap: 11px; padding: 12px 0; border-bottom: 1px solid var(--line); }
         .agenda-item:last-child { border-bottom: 0; }
@@ -136,6 +141,7 @@
         .task-content { flex: 1; min-width: 0; }
         .task-content strong { display: block; }
         .task-content small { display: block; margin-top: 3px; color: var(--muted); font: 11px/1.4 Arial, sans-serif; }
+        #agendaTasks { max-height: 320px; overflow-y: auto; }
         .patient-detail { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, .8fr); gap: 17px; }
         .detail-hero { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
         .detail-hero .avatar { width: 52px; height: 52px; font-size: 17px; }
@@ -150,6 +156,7 @@
         .purchase-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
         .purchase-head strong { display: block; }
         .purchase-head small { display: block; margin-top: 3px; color: var(--muted); font: 11px Arial, sans-serif; }
+        .purchase-actions { display: flex; justify-content: flex-end; gap: 6px; flex-wrap: wrap; }
         .purchase-totals { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
         .purchase-total { padding: 8px; border-radius: 7px; background: #f8f6f2; }
         .purchase-total small { display: block; color: var(--muted); font: 700 9px Arial, sans-serif; text-transform: uppercase; }
@@ -159,6 +166,12 @@
         .history-card { margin-top: 9px; padding: 12px; border: 1px solid var(--line); border-radius: 9px; background: #fff; }
         .history-card summary { color: var(--olive-dark); cursor: pointer; font: 700 12px Arial, sans-serif; }
         .history-card pre { overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; color: var(--muted); font: 11px/1.5 Arial, sans-serif; }
+        .session-history-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+        .session-history-head details { min-width: 0; flex: 1; }
+        .session-history-actions { display: flex; flex: 0 0 auto; align-items: center; gap: 6px; }
+        .session-status-select { width: auto; min-width: 130px; min-height: 34px; padding: 6px 8px; font-size: 12px; }
+        .session-delete-button { display: inline-grid; width: 34px; min-width: 34px; height: 34px; min-height: 34px; place-items: center; padding: 7px; }
+        .session-delete-button svg { width: 16px; height: 16px; }
         .banner-note { padding: 11px 12px; border-radius: 8px; background: var(--amber-soft); color: #75511e; font: 11px/1.5 Arial, sans-serif; }
         .inline-note { display: flex; gap: 8px; align-items: flex-start; color: var(--muted); font: 11px/1.4 Arial, sans-serif; }
         .footer { margin: 22px 0 0; color: var(--muted); text-align: center; font: 11px Arial, sans-serif; }
@@ -181,8 +194,6 @@
             .day-count { display: none; }
             .form-grid { grid-template-columns: 1fr; }
             .field.full, .section-label { grid-column: auto; }
-            .weekday-schedule { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-            .weekday-toggle { grid-column: 1 / -1; }
             .purchase-totals { grid-template-columns: 1fr; }
             .dialog-head { padding: 17px 17px 12px; }
             .dialog-body { padding: 15px 17px; }
@@ -191,7 +202,7 @@
     </style>
 </head>
 <body>
-<div class="app">
+<div class="app" id="patientApp" hidden>
     <header class="topbar">
         <div class="brand">
             <div class="brand-mark" aria-hidden="true">R</div>
@@ -203,6 +214,8 @@
         <div class="top-actions">
             <button class="button secondary" type="button" id="importButton">Importar copia</button>
             <button class="button secondary" type="button" id="exportButton">Exportar copia</button>
+            <span class="hint" id="cloudSyncStatus">Sin conectar</span>
+            <button class="button secondary" type="button" id="signOutButton" hidden>Cerrar sesión</button>
             <button class="button" type="button" id="newPatientButton">+ Nuevo paciente</button>
             <input id="importFile" type="file" accept="application/json,.json" hidden>
         </div>
@@ -210,7 +223,7 @@
 
     <aside class="privacy">
         <span aria-hidden="true">●</span>
-        <div><strong>Almacenamiento local en este dispositivo</strong>La información se guarda en este navegador y no se envía a Renova ni a un servidor. Exporta copias de seguridad periódicamente; otras personas con acceso a este dispositivo o perfil de navegador podrían ver los datos.</div>
+        <div><strong>Espacio privado sincronizado</strong>Los datos se guardan en este dispositivo y en tu espacio privado de Supabase. Inicia sesión solo en dispositivos de confianza y conserva copias de seguridad; el acceso depende de las políticas de seguridad configuradas en Supabase.</div>
     </aside>
 
     <section class="stats" aria-label="Resumen de actividad">
@@ -268,15 +281,20 @@
                 <article class="panel">
                     <div class="calendar-head">
                         <div class="row">
-                            <button class="button secondary small" type="button" id="previousMonth" aria-label="Mes anterior">‹</button>
+                            <button class="button secondary small" type="button" id="previousMonth" aria-label="Periodo anterior">‹</button>
                             <button class="button secondary small" type="button" id="todayButton">Hoy</button>
-                            <button class="button secondary small" type="button" id="nextMonth" aria-label="Mes siguiente">›</button>
+                            <button class="button secondary small" type="button" id="nextMonth" aria-label="Periodo siguiente">›</button>
                         </div>
                         <h2 id="calendarTitle"></h2>
+                        <div class="calendar-views" role="group" aria-label="Vista del calendario">
+                            <button type="button" data-calendar-view="day" aria-pressed="false">Día</button>
+                            <button type="button" data-calendar-view="week" aria-pressed="false">Semana</button>
+                            <button type="button" data-calendar-view="month" aria-pressed="true">Mes</button>
+                        </div>
                         <div class="button-row"><button class="button secondary small" type="button" id="calendarNewWorkshop">+ Taller</button><button class="button small" type="button" id="calendarNewSession">+ Sesión</button></div>
                     </div>
                     <div class="calendar-grid" id="calendarGrid"></div>
-                    <div class="inline-note" style="margin-top:13px"><span class="dot"></span> Sesión <span class="dot open"></span> Horario disponible <span class="dot blocked"></span> Horario bloqueado</div>
+                    <div class="inline-note" style="margin-top:13px"><span class="dot"></span> Sesión <span class="dot open"></span> Horario disponible <span class="dot blocked"></span> Horario bloqueado <span class="dot task"></span> Tarea pendiente</div>
                 </article>
                 <div class="stack">
                     <article class="panel">
@@ -285,6 +303,13 @@
                             <button class="button secondary small" type="button" id="agendaNewSlot">+ Horario</button>
                         </div>
                         <div id="dayAgenda"></div>
+                    </article>
+                    <article class="panel">
+                        <div class="panel-heading">
+                            <div class="row"><h2 style="margin:0">Tareas por revisar</h2><span class="pill amber" id="agendaTaskCount">0 pendientes</span></div>
+                            <button class="button secondary small" type="button" data-go="tareas">Ver tareas</button>
+                        </div>
+                        <div id="agendaTasks"></div>
                     </article>
                     <article class="panel">
                         <h2>Reglas de agenda</h2>
@@ -319,6 +344,19 @@
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
+<dialog id="cloudLoginDialog" class="auth-dialog">
+    <form id="cloudLoginForm">
+        <div class="dialog-head"><div><p class="eyebrow">Renova Institute · Acceso privado</p><h2 style="margin:0">Inicia sesión para continuar</h2></div></div>
+        <div class="dialog-body">
+            <p class="hint">Usa la cuenta creada en Supabase. No se permite el registro público desde esta pantalla.</p>
+            <label class="field"><span>Correo electrónico</span><input id="cloudEmail" type="email" autocomplete="username" required></label>
+            <label class="field"><span>Contraseña</span><input id="cloudPassword" type="password" autocomplete="current-password" required></label>
+            <p id="cloudLoginError" class="validation-error" hidden></p>
+            <button class="button" type="submit">Iniciar sesión</button>
+        </div>
+    </form>
+</dialog>
+
 <dialog id="patientDialog">
     <form id="patientForm">
         <div class="dialog-head"><div><p class="eyebrow">Ficha del paciente</p><h2 id="patientDialogTitle" style="margin:0">Nuevo paciente</h2></div><button class="icon-button" type="button" data-close="patientDialog" aria-label="Cerrar">×</button></div>
@@ -328,62 +366,9 @@
                 <div class="field full"><label for="patientName">Nombre completo *</label><input id="patientName" name="name" required autocomplete="name"></div>
                 <div class="field"><label for="patientEmail">Correo electrónico</label><input id="patientEmail" type="email" autocomplete="email"></div>
                 <div class="field"><label for="patientPhone">Teléfono</label><input id="patientPhone" type="tel" autocomplete="tel"></div>
-                <div class="field"><label for="packageTotal">Sesiones adquiridas</label><input id="packageTotal" type="number" min="0" step="1" value="0"></div>
-                <div class="field"><label for="initialPayment">Pago recibido al registrar (sin asignar)</label><input id="initialPayment" type="number" min="0" step="1" value="0"></div>
-                <div class="section-label">Plan de sesiones · opcional</div>
-                <div class="field"><label for="patientAppointmentDate">Fecha de inicio</label><input id="patientAppointmentDate" type="date"></div>
-                <div class="field" id="patientSingleSchedule"><label for="patientAppointmentStart">Hora de inicio (sesión única)</label><input id="patientAppointmentStart" type="time" value="09:00"></div>
-                <div class="field" id="patientSingleScheduleEnd"><label for="patientAppointmentEnd">Hora de término (sesión única)</label><input id="patientAppointmentEnd" type="time" value="10:00"></div>
-                <div class="field full"><label>Días de repetición (define horario y cantidad para cada día)</label>
-                    <div class="weekday-schedules" id="patientWeekdays">
-                        <div class="weekday-schedule" data-weekday-row>
-                            <label class="weekday-toggle"><input type="checkbox" data-day-enabled value="1"> Lunes</label>
-                            <div class="field"><label>Sesiones</label><input type="number" data-day-count min="1" max="104" step="1" value="1" disabled></div>
-                            <div class="field"><label>Inicio</label><input type="time" data-day-start value="09:00" disabled></div>
-                            <div class="field"><label>Término</label><input type="time" data-day-end value="10:00" disabled></div>
-                        </div>
-                        <div class="weekday-schedule" data-weekday-row>
-                            <label class="weekday-toggle"><input type="checkbox" data-day-enabled value="2"> Martes</label>
-                            <div class="field"><label>Sesiones</label><input type="number" data-day-count min="1" max="104" step="1" value="1" disabled></div>
-                            <div class="field"><label>Inicio</label><input type="time" data-day-start value="09:00" disabled></div>
-                            <div class="field"><label>Término</label><input type="time" data-day-end value="10:00" disabled></div>
-                        </div>
-                        <div class="weekday-schedule" data-weekday-row>
-                            <label class="weekday-toggle"><input type="checkbox" data-day-enabled value="3"> Miércoles</label>
-                            <div class="field"><label>Sesiones</label><input type="number" data-day-count min="1" max="104" step="1" value="1" disabled></div>
-                            <div class="field"><label>Inicio</label><input type="time" data-day-start value="09:00" disabled></div>
-                            <div class="field"><label>Término</label><input type="time" data-day-end value="10:00" disabled></div>
-                        </div>
-                        <div class="weekday-schedule" data-weekday-row>
-                            <label class="weekday-toggle"><input type="checkbox" data-day-enabled value="4"> Jueves</label>
-                            <div class="field"><label>Sesiones</label><input type="number" data-day-count min="1" max="104" step="1" value="1" disabled></div>
-                            <div class="field"><label>Inicio</label><input type="time" data-day-start value="09:00" disabled></div>
-                            <div class="field"><label>Término</label><input type="time" data-day-end value="10:00" disabled></div>
-                        </div>
-                        <div class="weekday-schedule" data-weekday-row>
-                            <label class="weekday-toggle"><input type="checkbox" data-day-enabled value="5"> Viernes</label>
-                            <div class="field"><label>Sesiones</label><input type="number" data-day-count min="1" max="104" step="1" value="1" disabled></div>
-                            <div class="field"><label>Inicio</label><input type="time" data-day-start value="09:00" disabled></div>
-                            <div class="field"><label>Término</label><input type="time" data-day-end value="10:00" disabled></div>
-                        </div>
-                        <div class="weekday-schedule" data-weekday-row>
-                            <label class="weekday-toggle"><input type="checkbox" data-day-enabled value="6"> Sábado</label>
-                            <div class="field"><label>Sesiones</label><input type="number" data-day-count min="1" max="104" step="1" value="1" disabled></div>
-                            <div class="field"><label>Inicio</label><input type="time" data-day-start value="09:00" disabled></div>
-                            <div class="field"><label>Término</label><input type="time" data-day-end value="10:00" disabled></div>
-                        </div>
-                        <div class="weekday-schedule" data-weekday-row>
-                            <label class="weekday-toggle"><input type="checkbox" data-day-enabled value="0"> Domingo</label>
-                            <div class="field"><label>Sesiones</label><input type="number" data-day-count min="1" max="104" step="1" value="1" disabled></div>
-                            <div class="field"><label>Inicio</label><input type="time" data-day-start value="09:00" disabled></div>
-                            <div class="field"><label>Término</label><input type="time" data-day-end value="10:00" disabled></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="field full hint" id="patientSeriesPreview" aria-live="polite"></div>
                 <div class="field full"><label for="patientNotes">Notas administrativas</label><textarea id="patientNotes" placeholder="Información de contacto o seguimiento administrativo. Evita datos que no necesites conservar."></textarea></div>
             </div>
-            <p class="inline-note">Cada día seleccionado tendrá su propio horario y cantidad de sesiones. Todas las fechas se combinarán en una sola serie numerada cronológicamente; podrás reprogramar y completar cada sesión por separado desde el calendario.</p>
+            <p class="inline-note">Primero registra la ficha. Después podrás añadir packs, servicios, talleres programados y sus sesiones desde el perfil del paciente o el calendario.</p>
         </div>
         <div class="dialog-foot"><button class="button secondary" type="button" data-close="patientDialog">Cancelar</button><button class="button" type="submit">Guardar paciente</button></div>
     </form>
@@ -394,20 +379,28 @@
         <div class="dialog-head"><div><p class="eyebrow">Compra del paciente</p><h2 style="margin:0">Registrar adquisición</h2></div><button class="icon-button" type="button" data-close="acquisitionDialog" aria-label="Cerrar">×</button></div>
         <div class="dialog-body">
             <input id="acquisitionPatientId" type="hidden">
+            <input id="acquisitionId" type="hidden">
             <input id="acquisitionRequireSessions" type="hidden">
             <div class="form-grid">
                 <div class="field full"><label for="acquisitionProduct">Taller, pack o producto</label><select id="acquisitionProduct"><option value="">Otro / personalizado</option></select></div>
                 <div class="field full" id="acquisitionCustomNameField"><label for="acquisitionCustomName">Nombre de la adquisición *</label><input id="acquisitionCustomName" required maxlength="160" placeholder="Ej. Pack de 8 sesiones"></div>
                 <div class="field"><label for="acquisitionSessions">Sesiones incluidas (opcional)</label><input id="acquisitionSessions" type="number" min="0" step="1" value="0"></div>
                 <div class="field"><label for="acquisitionTotal">Costo total (CLP) *</label><input id="acquisitionTotal" type="number" min="0" step="1" required value="0"></div>
-                <div class="section-label">Abono inicial · opcional</div>
-                <div class="field"><label for="acquisitionInitialPayment">Monto recibido (CLP)</label><input id="acquisitionInitialPayment" type="number" min="0" step="1" value="0"></div>
-                <div class="field"><label for="acquisitionInitialDate">Fecha del abono</label><input id="acquisitionInitialDate" type="date"></div>
-                <div class="field full"><label for="acquisitionInitialMethod">Método de pago</label><input id="acquisitionInitialMethod" maxlength="80" placeholder="Transferencia, efectivo, etc."></div>
+                <div class="field"><label for="acquisitionDate">Fecha de adquisición</label><input id="acquisitionDate" type="date" required></div>
+                <div class="section-label" id="acquisitionInitialSection">Abono inicial · opcional</div>
+                <div class="field" id="acquisitionInitialPaymentField"><label for="acquisitionInitialPayment">Monto recibido (CLP)</label><input id="acquisitionInitialPayment" type="number" min="0" step="1" value="0"></div>
+                <div class="field" id="acquisitionInitialDateField"><label for="acquisitionInitialDate">Fecha del abono</label><input id="acquisitionInitialDate" type="date"></div>
+                <div class="field full" id="acquisitionInitialMethodField"><label for="acquisitionInitialMethod">Método de pago</label><input id="acquisitionInitialMethod" maxlength="80" placeholder="Transferencia, efectivo, etc."></div>
+                <div class="field full" id="acquisitionScheduleOption"><label class="inline"><input id="acquisitionScheduleSessions" type="checkbox"><span>Agendar ahora las sesiones de este pack</span></label></div>
+                <div class="field full" id="acquisitionScheduleFields" hidden>
+                    <p class="hint">Crea un patrón por cada día y horario. Por ejemplo: 5 lunes a las 19:30 y 5 sábados a las 07:00.</p>
+                    <div id="acquisitionSessionScheduleRows" class="stack"></div>
+                    <div class="button-row"><button class="button secondary small" type="button" data-add-recurrence="acquisitionSessionScheduleRows">+ Agregar otro horario semanal</button><p class="hint" data-recurrence-summary></p></div>
+                </div>
             </div>
             <p class="hint">El precio sugerido del catálogo se puede ajustar al valor realmente acordado. Las sesiones incluidas se suman al paquete del paciente.</p>
         </div>
-        <div class="dialog-foot"><button class="button secondary" type="button" data-close="acquisitionDialog">Cancelar</button><button class="button" type="submit">Guardar adquisición</button></div>
+        <div class="dialog-foot"><button class="button danger" type="button" id="deleteAcquisitionButton" hidden>Eliminar adquisición</button><div class="button-row"><button class="button secondary" type="button" data-close="acquisitionDialog">Cancelar</button><button class="button" type="submit" id="saveAcquisitionButton">Guardar adquisición</button></div></div>
     </form>
 </dialog>
 
@@ -415,6 +408,8 @@
     <form id="paymentForm">
         <div class="dialog-head"><div><p class="eyebrow">Abono de adquisición</p><h2 style="margin:0">Registrar abono</h2></div><button class="icon-button" type="button" data-close="paymentDialog" aria-label="Cerrar">×</button></div>
         <div class="dialog-body">
+            <input id="paymentId" type="hidden">
+            <input id="paymentSource" type="hidden">
             <div class="form-grid">
                 <div class="field full"><label for="paymentAcquisition">Adquisición</label><select id="paymentAcquisition" required></select></div>
                 <div class="field"><label for="paymentBalance">Pendiente actual</label><input id="paymentBalance" readonly></div>
@@ -424,7 +419,22 @@
                 <div class="field full"><label for="paymentNote">Nota (opcional)</label><input id="paymentNote" maxlength="240"></div>
             </div>
         </div>
-        <div class="dialog-foot"><button class="button secondary" type="button" data-close="paymentDialog">Cancelar</button><button class="button" type="submit">Guardar abono</button></div>
+        <div class="dialog-foot"><button class="button danger" type="button" id="deletePaymentButton" hidden>Eliminar abono</button><div class="button-row"><button class="button secondary" type="button" data-close="paymentDialog">Cancelar</button><button class="button" type="submit" id="savePaymentButton">Guardar abono</button></div></div>
+    </form>
+</dialog>
+
+<dialog id="packScheduleDialog">
+    <form id="packScheduleForm">
+        <div class="dialog-head"><div><p class="eyebrow">Agenda del pack</p><h2 style="margin:0">Programar sesiones pendientes</h2></div><button class="icon-button" type="button" data-close="packScheduleDialog" aria-label="Cerrar">×</button></div>
+        <div class="dialog-body">
+            <input id="packSchedulePatientId" type="hidden">
+            <input id="packScheduleAcquisitionId" type="hidden">
+            <p class="hint" id="packScheduleDescription"></p>
+            <p class="hint">Crea un patrón por cada día y horario. Por ejemplo: 5 lunes a las 19:30 y 5 sábados a las 07:00.</p>
+            <div id="packScheduleRows" class="stack"></div>
+            <div class="button-row"><button class="button secondary small" type="button" data-add-recurrence="packScheduleRows">+ Agregar otro horario semanal</button><p class="hint" data-recurrence-summary></p></div>
+        </div>
+        <div class="dialog-foot"><button class="button secondary" type="button" data-close="packScheduleDialog">Cancelar</button><button class="button" type="submit">Guardar sesiones</button></div>
     </form>
 </dialog>
 
@@ -433,8 +443,10 @@
         <div class="dialog-head"><div><p class="eyebrow">Calendario y seguimiento</p><h2 id="appointmentDialogTitle" style="margin:0">Programar sesión</h2></div><button class="icon-button" type="button" data-close="appointmentDialog" aria-label="Cerrar">×</button></div>
         <div class="dialog-body">
             <input id="appointmentId" type="hidden">
+            <p id="appointmentError" class="validation-error" role="alert" aria-live="assertive" hidden></p>
             <div class="form-grid">
                 <div class="field full" id="appointmentPatientField"><label for="appointmentPatient">Paciente *</label><select id="appointmentPatient" required></select></div>
+                <div class="field full" id="appointmentAcquisitionField"><label for="appointmentAcquisition">Pack o servicio adquirido *</label><select id="appointmentAcquisition" required></select></div>
                 <div class="field full hint" id="appointmentWorkshopInfo" hidden></div>
                 <div class="field"><label for="appointmentDate">Fecha *</label><input id="appointmentDate" type="date" required></div>
                 <div class="field"><label for="appointmentStart">Hora de inicio *</label><input id="appointmentStart" type="time" required></div>
@@ -469,6 +481,7 @@
         <div class="dialog-head"><div><p class="eyebrow">Programación recurrente</p><h2 style="margin:0">Agendar taller o programa</h2></div><button class="icon-button" type="button" data-close="workshopDialog" aria-label="Cerrar">×</button></div>
         <div class="dialog-body">
             <p class="hint" id="workshopCatalogStatus" role="status">Cargando talleres activos de Tienda.html…</p>
+            <p class="hint">Programa las fechas aunque todavía no haya pacientes inscritos. Luego, desde la agenda de una fecha del taller, podrás inscribir pacientes en la serie.</p>
             <div class="form-grid">
                 <div class="field full"><label for="workshopProduct">Taller o programa activo *</label><select id="workshopProduct" required disabled><option value="">Cargando catálogo…</option></select></div>
                 <div class="field"><label for="workshopStartDate">Primera fecha posible *</label><input id="workshopStartDate" type="date" required></div>
@@ -491,6 +504,24 @@
             <div id="workshopPreview" class="hint" aria-live="polite"></div>
         </div>
         <div class="dialog-foot"><button class="button secondary" type="button" data-close="workshopDialog">Cancelar</button><button class="button" type="submit">Agendar sesiones</button></div>
+    </form>
+</dialog>
+
+<dialog id="workshopEnrollmentDialog">
+    <form id="workshopEnrollmentForm">
+        <div class="dialog-head"><div><p class="eyebrow">Taller programado</p><h2 style="margin:0">Inscribir paciente</h2></div><button class="icon-button" type="button" data-close="workshopEnrollmentDialog" aria-label="Cerrar">×</button></div>
+        <div class="dialog-body">
+            <input id="enrollmentSeriesId" type="hidden">
+            <div class="form-grid">
+                <div class="field full"><label for="enrollmentPatient">Paciente *</label><select id="enrollmentPatient" required></select></div>
+                <div class="field"><label for="enrollmentCost">Costo del taller (CLP) *</label><input id="enrollmentCost" type="number" min="0" step="1" required></div>
+                <div class="field"><label for="enrollmentInitialPayment">Abono inicial (CLP)</label><input id="enrollmentInitialPayment" type="number" min="0" step="1" value="0"></div>
+                <div class="field"><label for="enrollmentPaymentDate">Fecha del abono</label><input id="enrollmentPaymentDate" type="date"></div>
+                <div class="field"><label for="enrollmentPaymentMethod">Método de pago</label><input id="enrollmentPaymentMethod" maxlength="80" value="Transferencia"></div>
+            </div>
+            <p class="hint" id="enrollmentWorkshopInfo"></p>
+        </div>
+        <div class="dialog-foot"><button class="button secondary" type="button" data-close="workshopEnrollmentDialog">Cancelar</button><button class="button" type="submit">Inscribir y registrar adquisición</button></div>
     </form>
 </dialog>
 
@@ -527,6 +558,8 @@
     </form>
 </dialog>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./supabase-config.js"></script>
 <script>
 (() => {
     'use strict';
@@ -535,18 +568,26 @@
     const DB_VERSION = 1;
     const STORE_NAME = 'workspace';
     const STATE_KEY = 'data';
+    const DIRTY_KEY = 'renova-pacientes-cloud-dirty';
     const $ = selector => document.querySelector(selector);
     const $$ = selector => Array.from(document.querySelectorAll(selector));
     const today = dateKey(new Date());
     let db;
-    let state = { patients: [], appointments: [], slots: [] };
+    let supabaseClient;
+    let cloudUser = null;
+    let hasLocalState = false;
+    let state = { patients: [], appointments: [], slots: [], workshopEnrollments: [] };
     let selectedPatientId = '';
+    let collapsedPatientDetailId = '';
+    let isSavingPatient = false;
     let selectedDate = today;
     let visibleMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+    let calendarView = 'month';
     let currentPrompt = '';
     let activeRecognition = null;
     let workshopCatalog = [];
     let purchaseCatalog = [];
+    let recurrenceRuleId = 0;
     let toastTimer;
 
     function dateKey(date) {
@@ -575,7 +616,10 @@
             const request = db.transaction(STORE_NAME, 'readonly').objectStore(STORE_NAME).get(STATE_KEY);
             request.onsuccess = () => {
                 const saved = request.result && request.result.value;
-                if (saved && Array.isArray(saved.patients) && Array.isArray(saved.appointments) && Array.isArray(saved.slots)) state = saved;
+                if (saved && Array.isArray(saved.patients) && Array.isArray(saved.appointments) && Array.isArray(saved.slots)) {
+                    state = { ...saved, workshopEnrollments: Array.isArray(saved.workshopEnrollments) ? saved.workshopEnrollments : [] };
+                    hasLocalState = true;
+                }
                 resolve();
             };
             request.onerror = () => reject(request.error || new Error('No fue posible leer tus datos locales.'));
@@ -614,6 +658,19 @@
         return Math.max(0, Number(patient.sessionsPurchased || 0) - completedCount(patient.id));
     }
 
+    function individualAcquisitions(patient, appointmentId = '') {
+        return (patient.acquisitions || []).filter(acquisition => {
+            if (acquisition.workshopSeriesId || Number(acquisition.sessions || 0) <= 0) return false;
+            const used = state.appointments.filter(item =>
+                item.id !== appointmentId &&
+                item.patientId === patient.id &&
+                item.acquisitionId === acquisition.id &&
+                item.status !== 'cancelled'
+            ).length;
+            return used < Number(acquisition.sessions || 0);
+        });
+    }
+
     function workshopSessions(product) {
         const configured = Number(product.cantidadSesiones);
         if (Number.isInteger(configured) && configured > 0) return configured;
@@ -624,19 +681,39 @@
     async function loadWorkshopCatalog() {
         const status = $('#workshopCatalogStatus');
         try {
-            const response = await fetch('../Tienda.html', { cache: 'no-store' });
-            if (!response.ok) throw new Error(`Tienda.html respondió con estado ${response.status}.`);
-            const html = await response.text();
-            const match = html.match(/const\s+catalogo\s*=\s*(\[[\s\S]*?\])\s*;/);
-            if (!match) throw new Error('No se encontró el catálogo de productos en Tienda.html.');
-            const products = JSON.parse(match[1]);
+            let products;
+            let source = 'Tienda.html';
+            if (supabaseClient) {
+                const { data, error } = await supabaseClient
+                    .from('renova_store_catalog')
+                    .select('products')
+                    .eq('id', 1)
+                    .maybeSingle();
+                if (error) {
+                    console.warn(`No se pudo leer el catálogo de Supabase; se intentará con Tienda.html: ${error.message}`);
+                    showToast(`No se pudo leer el catálogo de Supabase; se usará Tienda.html: ${error.message}`, true);
+                }
+                else if (data) {
+                    products = data.products;
+                    source = 'Supabase';
+                }
+            }
+            if (!products) {
+                const response = await fetch('../Tienda.html', { cache: 'no-store' });
+                if (!response.ok) throw new Error(`Tienda.html respondió con estado ${response.status}.`);
+                const html = await response.text();
+                const match = html.match(/const\s+catalogo\s*=\s*(\[[\s\S]*?\])\s*;/);
+                if (!match) throw new Error('No se encontró el catálogo de productos en Tienda.html.');
+                products = JSON.parse(match[1]);
+            }
             if (!Array.isArray(products)) throw new Error('El catálogo de Tienda.html no contiene una lista válida.');
             purchaseCatalog = products.filter(product =>
                 product.id && product.nombre &&
                 product.visible !== false &&
                 product.estado !== 'espera'
             );
-            $('#acquisitionProduct').innerHTML = `<option value="">Otro / personalizado</option>${purchaseCatalog.map(product => `<option value="${escapeHtml(product.id)}">${escapeHtml(product.nombre)} · ${escapeHtml(product.cat || 'Producto')}</option>`).join('')}`;
+            const individualCatalog = purchaseCatalog.filter(product => product.cat !== 'Grupales');
+            $('#acquisitionProduct').innerHTML = `<option value="">Otro / personalizado</option>${individualCatalog.map(product => `<option value="${escapeHtml(product.id)}">${escapeHtml(product.nombre)} · ${escapeHtml(product.cat || 'Producto')}</option>`).join('')}`;
             workshopCatalog = products.filter(product =>
                 ['Grupales', 'Personalizados'].includes(product.cat) &&
                 product.visible !== false &&
@@ -649,7 +726,7 @@
                 : '<option value="">No hay programas activos con varias sesiones</option>';
             select.disabled = !workshopCatalog.length;
             status.textContent = workshopCatalog.length
-                ? `${workshopCatalog.length} programas activos cargados desde Tienda.html.`
+                ? `${workshopCatalog.length} programas activos cargados desde ${source}.`
                 : 'No hay programas activos con varias sesiones en Tienda.html. Puedes activarlos en el administrador de tienda.';
         } catch (error) {
             status.textContent = `No se pudo cargar el catálogo de Tienda.html: ${error.message} Inicia el servidor del sitio y vuelve a abrir esta ventana.`;
@@ -682,13 +759,154 @@
         toastTimer = setTimeout(() => { toast.hidden = true; }, 4200);
     }
 
+    function showAppointmentError(message) {
+        const error = $('#appointmentError');
+        error.textContent = message;
+        error.hidden = false;
+        error.scrollIntoView({ block: 'nearest' });
+    }
+
+    function clearAppointmentError() {
+        const error = $('#appointmentError');
+        error.textContent = '';
+        error.hidden = true;
+    }
+
     async function persistAndRender(message) {
         try {
             await saveState();
+            hasLocalState = true;
+            localStorage.setItem(DIRTY_KEY, 'true');
             renderAll();
-            if (message) showToast(message);
+            if (cloudUser) {
+                try {
+                    await syncStateToCloud();
+                    if (message) showToast(message);
+                } catch (error) {
+                    showToast(`Guardado localmente, pero no se pudo sincronizar con Supabase: ${error.message}`, true);
+                }
+            } else if (message) {
+                showToast(`${message} Pendiente de sincronizar al iniciar sesión.`);
+            }
         } catch (error) {
             showToast(`Error de almacenamiento: ${error.message}`, true);
+        }
+    }
+
+    function setCloudStatus(message) {
+        $('#cloudSyncStatus').textContent = message;
+    }
+
+    async function syncStateToCloud() {
+        if (!cloudUser) throw new Error('Inicia sesión para sincronizar.');
+        setCloudStatus('Sincronizando…');
+        const { error } = await supabaseClient
+            .from('renova_patient_state')
+            .upsert({ owner_id: cloudUser.id, state }, { onConflict: 'owner_id' });
+        if (error) throw error;
+        localStorage.removeItem(DIRTY_KEY);
+        setCloudStatus('Sincronizado');
+    }
+
+    function stateHasData(value) {
+        return value.patients.length > 0 || value.appointments.length > 0 ||
+            value.slots.length > 0 || (value.workshopEnrollments || []).length > 0;
+    }
+
+    async function reconcileCloudState() {
+        setCloudStatus('Cargando datos de la nube…');
+        const { data, error } = await supabaseClient
+            .from('renova_patient_state')
+            .select('state')
+            .eq('owner_id', cloudUser.id)
+            .maybeSingle();
+        if (error) throw error;
+
+        const localDirty = localStorage.getItem(DIRTY_KEY) === 'true';
+        const localHasData = hasLocalState && stateHasData(state);
+        if (!data) {
+            if (localHasData && window.confirm('Aún no hay datos en la nube. ¿Quieres subir a Supabase los datos de este dispositivo?')) {
+                await syncStateToCloud();
+            } else {
+                setCloudStatus('Conectado; aún sin copia en la nube');
+            }
+            return;
+        }
+        if (!data.state || !Array.isArray(data.state.patients) ||
+            !Array.isArray(data.state.appointments) || !Array.isArray(data.state.slots)) {
+            throw new Error('Los datos recibidos de Supabase no tienen el formato esperado. No se modificó la copia local.');
+        }
+
+        if (localDirty && localHasData &&
+            window.confirm('Hay cambios locales pendientes y ya existe una copia en la nube. Aceptar sube los datos de este dispositivo; Cancelar descarga la copia de Supabase y reemplaza la local.')) {
+            await syncStateToCloud();
+            return;
+        }
+
+        state = {
+            ...data.state,
+            workshopEnrollments: Array.isArray(data.state.workshopEnrollments) ? data.state.workshopEnrollments : []
+        };
+        await saveState();
+        hasLocalState = true;
+        localStorage.removeItem(DIRTY_KEY);
+        setCloudStatus('Sincronizado');
+        renderAll();
+    }
+
+    async function completeCloudSignIn(session) {
+        cloudUser = session.user;
+        const { data: isOwner, error: ownerError } = await supabaseClient.rpc('is_renova_workspace_owner');
+        if (ownerError && localStorage.getItem('renova-authorized-owner-id') !== cloudUser.id) {
+            cloudUser = null;
+            throw ownerError;
+        }
+        if (!ownerError && isOwner !== true) {
+            cloudUser = null;
+            throw new Error('Esta cuenta no está autorizada para este espacio.');
+        }
+        if (!ownerError) localStorage.setItem('renova-authorized-owner-id', cloudUser.id);
+        $('#patientApp').hidden = false;
+        $('#cloudLoginDialog').close();
+        $('#signOutButton').hidden = false;
+        if (ownerError) {
+            setCloudStatus('Sin conexión; los datos quedan locales');
+            showToast('No se pudo validar en Supabase. Se usa la copia local de este dispositivo; los cambios no se sincronizarán hasta recuperar la conexión.', true);
+            return;
+        }
+        setCloudStatus(`Conectado: ${cloudUser.email}`);
+        try {
+            await reconcileCloudState();
+        } catch (error) {
+            setCloudStatus('Error de sincronización');
+            showToast(`No se pudo sincronizar con Supabase; se conserva la copia local: ${error.message}`, true);
+        }
+    }
+
+    async function handleCloudLogin(event) {
+        event.preventDefault();
+        const errorElement = $('#cloudLoginError');
+        errorElement.hidden = true;
+        if (!supabaseClient) {
+            errorElement.textContent = 'No se pudo cargar el cliente de Supabase. Revisa tu conexión a internet y vuelve a cargar la página.';
+            errorElement.hidden = false;
+            return;
+        }
+        const submit = $('#cloudLoginForm button[type="submit"]');
+        submit.disabled = true;
+        try {
+            const { data, error } = await supabaseClient.auth.signInWithPassword({
+                email: $('#cloudEmail').value.trim(),
+                password: $('#cloudPassword').value
+            });
+            if (error) throw error;
+            await completeCloudSignIn(data.session);
+        } catch (error) {
+            await supabaseClient.auth.signOut();
+            errorElement.textContent = `No se pudo iniciar sesión: ${error.message}`;
+            errorElement.hidden = false;
+        } finally {
+            submit.disabled = false;
         }
     }
 
@@ -714,8 +932,9 @@
 
     function appointmentCard(item) {
         if (item.workshopId) {
+            const registrations = (state.workshopEnrollments || []).filter(enrollment => enrollment.workshopSeriesId === item.workshopSeriesId);
             return `<div class="list-card">
-                <span class="avatar">T</span><span class="list-main"><strong>${escapeHtml(item.workshopTitle || 'Taller')}</strong><small>${escapeHtml(fullDateTime(item.date, item.start))} · Sesión ${item.workshopSession} de ${item.workshopTotal}</small></span><span class="pill">${escapeHtml(item.end)}</span>
+                <span class="avatar">T</span><span class="list-main"><strong>${escapeHtml(item.workshopTitle || 'Taller')}</strong><small>${escapeHtml(fullDateTime(item.date, item.start))} · Sesión ${item.workshopSession} de ${item.workshopTotal} · ${registrations.length} inscrito(s)</small></span><span class="pill">${escapeHtml(item.end)}</span>
             </div>`;
         }
         const patient = patientFor(item.patientId);
@@ -764,11 +983,12 @@
     function renderDirectory() {
         const query = $('#patientSearch').value.toLowerCase().trim();
         const matches = state.patients.filter(patient => `${patient.name} ${patient.email || ''} ${patient.phone || ''}`.toLowerCase().includes(query)).sort((a, b) => a.name.localeCompare(b.name, 'es'));
-        $('#patientDirectory').innerHTML = matches.length ? matches.map(patient => `<button type="button" class="list-card" data-select-patient="${escapeHtml(patient.id)}">
-            <span class="avatar">${escapeHtml(initials(patient.name))}</span><span class="list-main"><strong>${escapeHtml(patient.name)}</strong><small>${escapeHtml(patient.email || patient.phone || 'Sin datos de contacto')}</small></span><span class="pill ${remainingSessions(patient) ? 'green' : 'amber'}">${remainingSessions(patient)} rest.</span>
-        </button>`).join('') : '<div class="empty">No hay pacientes que coincidan con la búsqueda.</div>';
         if (selectedPatientId && !patientFor(selectedPatientId)) selectedPatientId = '';
         if (!selectedPatientId && matches[0]) selectedPatientId = matches[0].id;
+        const otherPatients = matches.filter(patient => patient.id !== selectedPatientId);
+        $('#patientDirectory').innerHTML = otherPatients.length ? otherPatients.map(patient => `<button type="button" class="list-card" data-select-patient="${escapeHtml(patient.id)}">
+            <span class="avatar">${escapeHtml(initials(patient.name))}</span><span class="list-main"><strong>${escapeHtml(patient.name)}</strong><small>${escapeHtml(patient.email || patient.phone || 'Sin datos de contacto')}</small></span><span class="pill ${remainingSessions(patient) ? 'green' : 'amber'}">${remainingSessions(patient)} rest.</span>
+        </button>`).join('') : matches.length && selectedPatientId ? '<div class="empty">La ficha seleccionada se muestra a la derecha.</div>' : '<div class="empty">No hay pacientes que coincidan con la búsqueda.</div>';
         renderPatientDetail();
     }
 
@@ -786,9 +1006,11 @@
         const acquisitionTotal = acquisitions.reduce((sum, acquisition) => sum + Number(acquisition.total || 0), 0);
         const acquisitionPaid = acquisitions.reduce((sum, acquisition) => sum + acquisitionPayments(acquisition).reduce((paid, payment) => paid + Number(payment.amount || 0), 0), 0);
         const acquisitionBalance = acquisitions.reduce((sum, acquisition) => sum + purchaseBalance(acquisition), 0);
+        const detailsCollapsed = collapsedPatientDetailId === patient.id;
         $('#patientDetail').innerHTML = `<div class="panel">
             <div class="panel-heading"><div class="detail-hero"><span class="avatar">${escapeHtml(initials(patient.name))}</span><div><h2>${escapeHtml(patient.name)}</h2><p class="hint">${escapeHtml(patient.email || 'Sin correo')} ${patient.phone ? `· ${escapeHtml(patient.phone)}` : ''}</p></div></div>
-                <button class="button secondary small" type="button" data-edit-patient="${escapeHtml(patient.id)}">Editar ficha</button></div>
+                <div class="button-row"><button class="button ghost small" type="button" data-toggle-patient-detail="${escapeHtml(patient.id)}" aria-expanded="${!detailsCollapsed}">${detailsCollapsed ? 'Mostrar información' : 'Contraer información'}</button><button class="button secondary small" type="button" data-edit-patient="${escapeHtml(patient.id)}">Editar ficha</button></div></div>
+            <div id="patientDetailContent" ${detailsCollapsed ? 'hidden' : ''}>
             <div class="detail-meta">
                 <div class="meta-box"><small>Sesiones adquiridas</small><strong>${Number(patient.sessionsPurchased || 0)}</strong></div>
                 <div class="meta-box"><small>Sesiones restantes</small><strong>${remainingSessions(patient)}</strong></div>
@@ -799,7 +1021,7 @@
             </div>
             ${patient.notes ? `<p class="hint">${escapeHtml(patient.notes)}</p>` : ''}
             <div class="button-row">
-                <button class="button small" type="button" data-add-session="${escapeHtml(patient.id)}">+ Sesión</button>
+                <button class="button small" type="button" data-add-session="${escapeHtml(patient.id)}">Programar sesión</button>
                 <button class="button secondary small" type="button" data-add-acquisition="${escapeHtml(patient.id)}">+ Adquisición</button>
                 <button class="button secondary small" type="button" data-add-payment="${escapeHtml(patient.id)}" ${acquisitions.every(acquisition => purchaseBalance(acquisition) <= 0) ? 'disabled' : ''}>Registrar abono</button>
                 <button class="button secondary small" type="button" data-add-package="${escapeHtml(patient.id)}">+ Pack de sesiones</button>
@@ -808,29 +1030,33 @@
             <section class="subsection"><div class="panel-heading"><div><h3>Próxima sesión</h3></div>${nextAppointment ? `<button class="button secondary small" type="button" data-open-appointment="${escapeHtml(nextAppointment.id)}">Ver ficha</button>` : ''}</div>
                 ${nextAppointment ? `<p class="hint">${escapeHtml(fullDateTime(nextAppointment.date, nextAppointment.start))} · pendiente: ${escapeHtml(nextAppointment.nextTopic || patient.pendingTopic || 'Sin temas pendientes anotados')}</p>` : `<p class="hint">${patient.pendingTopic ? `Pendiente para retomar: ${escapeHtml(patient.pendingTopic)}. ` : ''}No hay una próxima sesión agendada.</p>`}
             </section>
-            <section class="subsection"><div class="panel-heading"><div><h3>Adquisiciones y pagos</h3><p class="hint">Cada abono queda asociado a un taller, pack o producto.</p></div><button class="button secondary small" type="button" data-add-acquisition="${escapeHtml(patient.id)}">+ Añadir</button></div>
+            <section class="subsection"><div class="panel-heading"><div><h3>Adquisiciones y pagos</h3><p class="hint">Cada abono queda asociado a un taller, pack o producto. Usa «Programar sesiones» para agendar las que falten de un pack.</p></div><button class="button secondary small" type="button" data-add-acquisition="${escapeHtml(patient.id)}">+ Añadir</button></div>
                 ${acquisitions.length ? acquisitions.map(acquisition => {
                     const payments = [...acquisitionPayments(acquisition)].sort((a, b) => `${b.date}`.localeCompare(`${a.date}`));
                     const paid = payments.reduce((sum, payment) => sum + Number(payment.amount || 0), 0);
+                    const usedSessions = state.appointments.filter(item => item.patientId === patient.id && item.acquisitionId === acquisition.id && item.status !== 'cancelled').length;
+                    const sessionsToSchedule = acquisition.workshopSeriesId ? 0 : Math.max(0, Number(acquisition.sessions || 0) - usedSessions);
                     return `<article class="purchase-card">
-                        <div class="purchase-head"><div><strong>${escapeHtml(acquisition.title || 'Adquisición')}</strong><small>${acquisition.sessions ? `${Number(acquisition.sessions)} sesiones · ` : ''}Adquirido: ${escapeHtml(formatDate(acquisition.date))}</small></div><button class="button secondary small" type="button" data-add-payment="${escapeHtml(patient.id)}" data-acquisition-id="${escapeHtml(acquisition.id)}" ${purchaseBalance(acquisition) <= 0 ? 'disabled' : ''}>Abonar</button></div>
+                        <div class="purchase-head"><div><strong>${escapeHtml(acquisition.title || 'Adquisición')}</strong><small>${acquisition.workshopSeriesId ? 'Taller programado · ' : ''}${acquisition.sessions ? `${Number(acquisition.sessions)} sesiones · ` : ''}Adquirido: ${escapeHtml(formatDate(acquisition.date))}</small></div><div class="purchase-actions">${sessionsToSchedule ? `<button class="button small" type="button" data-schedule-acquisition="${escapeHtml(patient.id)}" data-acquisition-id="${escapeHtml(acquisition.id)}">Programar sesiones (${sessionsToSchedule})</button>` : ''}<button class="button secondary small" type="button" data-edit-acquisition="${escapeHtml(patient.id)}" data-acquisition-id="${escapeHtml(acquisition.id)}">Editar</button><button class="button secondary small" type="button" data-add-payment="${escapeHtml(patient.id)}" data-acquisition-id="${escapeHtml(acquisition.id)}" ${purchaseBalance(acquisition) <= 0 ? 'disabled' : ''}>Abonar</button></div></div>
                         <div class="purchase-totals"><div class="purchase-total"><small>Costo</small><strong>${formatMoney(acquisition.total)}</strong></div><div class="purchase-total"><small>Abonado</small><strong>${formatMoney(paid)}</strong></div><div class="purchase-total"><small>Pendiente</small><strong>${formatMoney(purchaseBalance(acquisition))}</strong></div></div>
-                        <div class="purchase-payments">${payments.length ? payments.map(payment => `<div class="agenda-item"><div class="agenda-time">${escapeHtml(formatDate(payment.date, { day: 'numeric', month: 'short', year: 'numeric' }))}</div><div class="agenda-detail"><strong>${formatMoney(payment.amount)}</strong><small>${escapeHtml(payment.method || 'Sin método')}${payment.note ? ` · ${escapeHtml(payment.note)}` : ''}</small></div></div>`).join('') : '<p class="hint" style="margin:9px 0 0">Aún no hay abonos para esta adquisición.</p>'}</div>
+                        <div class="purchase-payments">${payments.length ? payments.map(payment => `<div class="agenda-item"><div class="agenda-time">${escapeHtml(formatDate(payment.date, { day: 'numeric', month: 'short', year: 'numeric' }))}</div><div class="agenda-detail"><strong>${formatMoney(payment.amount)}</strong><small>${escapeHtml(payment.method || 'Sin método')}${payment.note ? ` · ${escapeHtml(payment.note)}` : ''}</small><div class="button-row" style="margin-top:6px"><button class="button ghost small" type="button" data-edit-payment="${escapeHtml(patient.id)}" data-acquisition-id="${escapeHtml(acquisition.id)}" data-payment-id="${escapeHtml(payment.id)}">Editar abono</button><button class="button danger small" type="button" data-delete-payment="${escapeHtml(patient.id)}" data-acquisition-id="${escapeHtml(acquisition.id)}" data-payment-id="${escapeHtml(payment.id)}">Eliminar</button></div></div></div>`).join('') : '<p class="hint" style="margin:9px 0 0">Aún no hay abonos para esta adquisición.</p>'}</div>
                     </article>`;
                 }).join('') : '<p class="hint">Aún no hay adquisiciones. Añade un taller, pack, producto o servicio para llevar su saldo.</p>'}
             </section>
-            ${unassignedPayments.length ? `<section class="subsection"><h3>Pagos anteriores sin asignar</h3><p class="hint">Estos pagos ya estaban registrados antes de vincular abonos a adquisiciones; no se descuentan de un saldo específico.</p>${unassignedPayments.map(payment => `<div class="agenda-item"><div class="agenda-time">${escapeHtml(formatDate(payment.date, { day: 'numeric', month: 'short', year: 'numeric' }))}</div><div class="agenda-detail"><strong>${formatMoney(payment.amount)}</strong><small>${escapeHtml(payment.method || 'Sin método')}${payment.note ? ` · ${escapeHtml(payment.note)}` : ''}</small></div></div>`).join('')}</section>` : ''}
-            <section class="subsection"><h3>Sesiones e historial de resúmenes</h3>${appointments.length ? appointments.map(item => `<div class="history-card"><details><summary>${escapeHtml(formatDate(item.date))} · ${escapeHtml(item.start)}${item.seriesTotal > 1 ? ` · Sesión ${item.seriesSession} de ${item.seriesTotal}` : ''} · ${escapeHtml(item.status === 'completed' ? 'Completada' : item.status === 'cancelled' ? 'Cancelada' : 'Programada')} · ${(item.summaryHistory || []).length} resumen(es)</summary>${item.development ? `<p><strong>Preparación / desarrollo:</strong> ${escapeHtml(item.development)}</p>` : ''}<p class="hint">${escapeHtml(item.nextTopic ? `Para la siguiente sesión: ${item.nextTopic}` : item.notes || 'Sin notas')}</p>${(item.summaryHistory || []).map(entry => `<pre>${escapeHtml(entry.createdAt ? new Date(entry.createdAt).toLocaleString('es') : 'Resumen')}\n${escapeHtml(entry.prompt)}</pre>`).join('')}${item.summary ? `<p><strong>Resumen guardado:</strong> ${escapeHtml(item.summary)}</p>` : ''}<button class="button secondary small" type="button" data-open-appointment="${escapeHtml(item.id)}">Abrir sesión</button></details></div>`).join('') : '<p class="hint">Aún no hay sesiones registradas.</p>'}</section>
+            ${unassignedPayments.length ? `<section class="subsection"><h3>Pagos anteriores sin asignar</h3><p class="hint">Estos pagos ya estaban registrados antes de vincular abonos a adquisiciones; no se descuentan de un saldo específico.</p>${unassignedPayments.map(payment => `<div class="agenda-item"><div class="agenda-time">${escapeHtml(formatDate(payment.date, { day: 'numeric', month: 'short', year: 'numeric' }))}</div><div class="agenda-detail"><strong>${formatMoney(payment.amount)}</strong><small>${escapeHtml(payment.method || 'Sin método')}${payment.note ? ` · ${escapeHtml(payment.note)}` : ''}</small><div class="button-row" style="margin-top:6px"><button class="button ghost small" type="button" data-edit-payment="${escapeHtml(patient.id)}" data-payment-source="legacy" data-payment-id="${escapeHtml(payment.id)}">Editar abono</button><button class="button danger small" type="button" data-delete-payment="${escapeHtml(patient.id)}" data-payment-source="legacy" data-payment-id="${escapeHtml(payment.id)}">Eliminar</button></div></div></div>`).join('')}</section>` : ''}
+            <section class="subsection"><h3>Sesiones e historial de resúmenes</h3>${appointments.length ? appointments.map(item => `<div class="history-card"><div class="session-history-head"><details><summary>${escapeHtml(formatDate(item.date))} · ${escapeHtml(item.start)}${item.seriesTotal > 1 ? ` · Sesión ${item.seriesSession} de ${item.seriesTotal}` : ''} · ${escapeHtml(item.status === 'completed' ? 'Completada' : item.status === 'cancelled' ? 'Cancelada' : 'Programada')} · ${(item.summaryHistory || []).length} resumen(es)</summary>${item.development ? `<p><strong>Preparación / desarrollo:</strong> ${escapeHtml(item.development)}</p>` : ''}<p class="hint">${escapeHtml(item.nextTopic ? `Para la siguiente sesión: ${item.nextTopic}` : item.notes || 'Sin notas')}</p>${(item.summaryHistory || []).map(entry => `<pre>${escapeHtml(entry.createdAt ? new Date(entry.createdAt).toLocaleString('es') : 'Resumen')}\n${escapeHtml(entry.prompt)}</pre>`).join('')}${item.summary ? `<p><strong>Resumen guardado:</strong> ${escapeHtml(item.summary)}</p>` : ''}<button class="button secondary small" type="button" data-open-appointment="${escapeHtml(item.id)}">Editar sesión</button></details><div class="session-history-actions"><select class="session-status-select" data-appointment-status="${escapeHtml(item.id)}" aria-label="Estado de la sesión ${escapeHtml(formatDate(item.date))}"><option value="scheduled" ${item.status === 'scheduled' ? 'selected' : ''}>Programada</option><option value="completed" ${item.status === 'completed' ? 'selected' : ''}>Completada</option><option value="cancelled" ${item.status === 'cancelled' ? 'selected' : ''}>Cancelada</option></select><button class="button danger small session-delete-button" type="button" data-delete-appointment="${escapeHtml(item.id)}" aria-label="Eliminar sesión" title="Eliminar sesión"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2m3 0-.8 14H5.8L5 6m4 4v7m6-7v7"/></svg></button></div></div></div>`).join('') : '<p class="hint">Aún no hay sesiones registradas.</p>'}</section>
             <section class="subsection"><h3>Tareas asignadas</h3>${tasks.length ? tasks.map((task, index) => taskCard(patient, task, index)).join('') : '<p class="hint">No hay tareas asignadas.</p>'}</section>
             <section class="subsection"><button class="button danger small" type="button" data-delete-patient="${escapeHtml(patient.id)}">Eliminar paciente y sus datos</button></section>
+            </div>
         </div>`;
     }
 
     function acquisitionPayments(acquisition) {
-        return Array.isArray(acquisition.payments) ? acquisition.payments : [];
+        return acquisition && Array.isArray(acquisition.payments) ? acquisition.payments : [];
     }
 
     function purchaseBalance(acquisition) {
+        if (!acquisition) return 0;
         const paid = acquisitionPayments(acquisition).reduce((sum, payment) => sum + Number(payment.amount || 0), 0);
         return Math.max(0, Number(acquisition.total || 0) - paid);
     }
@@ -840,36 +1066,99 @@
     }
 
     function renderCalendar() {
-        $('#calendarTitle').textContent = new Intl.DateTimeFormat('es', { month: 'long', year: 'numeric' }).format(visibleMonth);
-        const first = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth(), 1);
-        const startOffset = (first.getDay() + 6) % 7;
-        const gridStart = new Date(first.getFullYear(), first.getMonth(), 1 - startOffset);
-        const days = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
-        const cells = days.map(day => `<div class="weekday">${day}</div>`);
-        for (let index = 0; index < 42; index += 1) {
-            const date = new Date(gridStart.getFullYear(), gridStart.getMonth(), gridStart.getDate() + index);
+        const selected = new Date(`${selectedDate}T00:00:00`);
+        const startOfWeek = new Date(selected);
+        startOfWeek.setDate(selected.getDate() - ((selected.getDay() + 6) % 7));
+        let dates;
+        if (calendarView === 'day') {
+            dates = [selected];
+            $('#calendarTitle').textContent = new Intl.DateTimeFormat('es', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(selected);
+        } else if (calendarView === 'week') {
+            dates = Array.from({ length: 7 }, (_, index) => new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate() + index));
+            const dateLabel = new Intl.DateTimeFormat('es', { day: 'numeric', month: 'short' });
+            $('#calendarTitle').textContent = `${dateLabel.format(dates[0])} – ${dateLabel.format(dates[6])} ${dates[6].getFullYear()}`;
+        } else {
+            const first = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth(), 1);
+            const startOffset = (first.getDay() + 6) % 7;
+            const gridStart = new Date(first.getFullYear(), first.getMonth(), 1 - startOffset);
+            dates = Array.from({ length: 42 }, (_, index) => new Date(gridStart.getFullYear(), gridStart.getMonth(), gridStart.getDate() + index));
+            $('#calendarTitle').textContent = new Intl.DateTimeFormat('es', { month: 'long', year: 'numeric' }).format(visibleMonth);
+        }
+        $$('[data-calendar-view]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.calendarView === calendarView)));
+        const grid = $('#calendarGrid');
+        grid.classList.toggle('single-day', calendarView === 'day');
+        let cells;
+        if (calendarView === 'month') {
+            cells = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'].map(day => `<div class="weekday">${day}</div>`);
+        } else if (calendarView === 'week') {
+            cells = dates.map(date => `<div class="weekday">${escapeHtml(new Intl.DateTimeFormat('es', { weekday: 'short' }).format(date))}</div>`);
+        } else {
+            cells = [`<div class="weekday">${escapeHtml(new Intl.DateTimeFormat('es', { weekday: 'long' }).format(selected))}</div>`];
+        }
+        for (const date of dates) {
             const key = dateKey(date);
-            const appointments = state.appointments.filter(item => item.date === key && item.status !== 'cancelled');
+            const appointments = state.appointments.filter(item => item.date === key && item.status === 'scheduled');
             const slots = state.slots.filter(item => item.date === key);
+            const blockedSlots = slots.filter(item => item.type === 'blocked');
+            const openSlots = slots.filter(item => item.type === 'open');
+            const pendingTasks = tasksDueOn(key);
             const marks = [
-                ...appointments.map(() => '<span class="dot" title="Sesión"></span>'),
-                ...slots.filter(item => item.type === 'open').slice(0, 2).map(() => '<span class="dot open" title="Disponible"></span>'),
-                ...slots.filter(item => item.type === 'blocked').slice(0, 2).map(() => '<span class="dot blocked" title="Bloqueado"></span>')
+                ...appointments.slice(0, 3).map(() => '<span class="dot" title="Sesión pendiente"></span>'),
+                ...openSlots.slice(0, 2).map(() => '<span class="dot open" title="Horario disponible"></span>'),
+                ...blockedSlots.slice(0, 2).map(() => '<span class="dot blocked" title="Horario bloqueado"></span>'),
+                ...pendingTasks.slice(0, 3).map(() => '<span class="dot task" title="Tarea pendiente"></span>')
             ].join('');
-            cells.push(`<button type="button" class="day ${date.getMonth() !== visibleMonth.getMonth() ? 'outside' : ''} ${key === today ? 'today' : ''} ${key === selectedDate ? 'selected' : ''}" data-select-date="${key}" aria-label="${escapeHtml(formatDate(key))}, ${appointments.length} sesiones, ${slots.length} horarios">
-                <span class="day-number">${date.getDate()}</span><span class="day-info">${marks}</span>${appointments.length || slots.length ? `<span class="day-count">${appointments.length} ses. · ${slots.length} hor.</span>` : ''}
+            const scheduleLabel = `${openSlots.length} horarios disponibles, ${blockedSlots.length} horarios bloqueados`;
+            const taskLabel = `${pendingTasks.length} ${pendingTasks.length === 1 ? 'tarea pendiente' : 'tareas pendientes'}`;
+            const sessionLabel = `${appointments.length} ${appointments.length === 1 ? 'sesión pendiente' : 'sesiones pendientes'}`;
+            const countLabels = [
+                appointments.length ? `${appointments.length} ses.` : '',
+                blockedSlots.length ? `${blockedSlots.length} bloq.` : '',
+                openSlots.length ? `${openSlots.length} disp.` : '',
+                pendingTasks.length ? `${pendingTasks.length} ${pendingTasks.length === 1 ? 'tarea' : 'tareas'}` : ''
+            ].filter(Boolean);
+            cells.push(`<button type="button" class="day ${calendarView === 'month' && date.getMonth() !== visibleMonth.getMonth() ? 'outside' : ''} ${key === today ? 'today' : ''} ${key === selectedDate ? 'selected' : ''}" data-select-date="${key}" aria-label="${escapeHtml(formatDate(key))}, ${sessionLabel}, ${scheduleLabel}, ${taskLabel}">
+                <span class="day-number">${date.getDate()}</span><span class="day-info">${marks}</span>${countLabels.length ? `<span class="day-count">${countLabels.map(escapeHtml).join(' · ')}</span>` : ''}
             </button>`);
         }
-        $('#calendarGrid').innerHTML = cells.join('');
+        grid.innerHTML = cells.join('');
         renderDayAgenda();
+        renderAgendaTasks();
     }
 
-    function changeCalendarMonth(offset) {
-        const [year, month, day] = selectedDate.split('-').map(Number);
-        const targetMonth = new Date(year, month - 1 + offset, 1);
-        const lastDay = new Date(targetMonth.getFullYear(), targetMonth.getMonth() + 1, 0).getDate();
-        selectedDate = dateKey(new Date(targetMonth.getFullYear(), targetMonth.getMonth(), Math.min(day, lastDay)));
-        visibleMonth = new Date(targetMonth.getFullYear(), targetMonth.getMonth(), 1);
+    function tasksDueOn(date) {
+        const tasks = [];
+        state.patients.forEach(patient => (patient.tasks || []).forEach((task, index) => {
+            if (task.dueDate === date && !taskCompletedThisPeriod(task)) tasks.push({ patient, task, index });
+        }));
+        return tasks;
+    }
+
+    function renderAgendaTasks() {
+        const pending = [];
+        state.patients.forEach(patient => (patient.tasks || []).forEach((task, index) => {
+            if (!taskCompletedThisPeriod(task)) pending.push({ patient, task, index });
+        }));
+        pending.sort((a, b) => (a.task.dueDate || '9999-12-31').localeCompare(b.task.dueDate || '9999-12-31') || a.patient.name.localeCompare(b.patient.name, 'es'));
+        const count = pending.length;
+        $('#agendaTaskCount').textContent = `${count} ${count === 1 ? 'pendiente' : 'pendientes'}`;
+        $('#agendaTasks').innerHTML = count
+            ? pending.map(({ patient, task, index }) => taskCard(patient, task, index, true)).join('')
+            : '<div class="empty">No hay tareas pendientes por revisar.</div>';
+    }
+
+    function changeCalendarPeriod(offset) {
+        const date = new Date(`${selectedDate}T00:00:00`);
+        if (calendarView === 'month') {
+            const targetMonth = new Date(date.getFullYear(), date.getMonth() + offset, 1);
+            const lastDay = new Date(targetMonth.getFullYear(), targetMonth.getMonth() + 1, 0).getDate();
+            selectedDate = dateKey(new Date(targetMonth.getFullYear(), targetMonth.getMonth(), Math.min(date.getDate(), lastDay)));
+        } else {
+            date.setDate(date.getDate() + offset * (calendarView === 'week' ? 7 : 1));
+            selectedDate = dateKey(date);
+        }
+        const updatedDate = new Date(`${selectedDate}T00:00:00`);
+        visibleMonth = new Date(updatedDate.getFullYear(), updatedDate.getMonth(), 1);
         renderCalendar();
     }
 
@@ -882,7 +1171,10 @@
         $('#dayAgenda').innerHTML = items.length ? items.map(item => {
             if (item.kind === 'appointment') {
                 if (item.workshopId) {
-                    return `<div class="agenda-item"><div class="agenda-time">${escapeHtml(item.start)}<br>${escapeHtml(item.end)}</div><div class="agenda-detail"><strong>${escapeHtml(item.workshopTitle || 'Taller')}</strong><small>Taller · Sesión ${item.workshopSession} de ${item.workshopTotal}${item.development ? ` · Preparación: ${escapeHtml(item.development.slice(0, 110))}${item.development.length > 110 ? '…' : ''}` : ''}</small><div class="button-row" style="margin-top:7px"><button type="button" class="button secondary small" data-open-appointment="${escapeHtml(item.id)}">Preparar / editar sesión</button><button type="button" class="button danger small" data-delete-workshop-series="${escapeHtml(item.workshopSeriesId)}">Eliminar serie</button></div></div></div>`;
+                    const enrollments = (state.workshopEnrollments || []).filter(enrollment => enrollment.workshopSeriesId === item.workshopSeriesId);
+                    const patients = enrollments.map(enrollment => patientFor(enrollment.patientId)).filter(Boolean);
+                    const participantLabel = patients.length ? patients.map(patient => escapeHtml(patient.name)).join(', ') : 'Sin pacientes inscritos';
+                    return `<div class="agenda-item"><div class="agenda-time">${escapeHtml(item.start)}<br>${escapeHtml(item.end)}</div><div class="agenda-detail"><strong>${escapeHtml(item.workshopTitle || 'Taller')}</strong><small>Taller · Sesión ${item.workshopSession} de ${item.workshopTotal} · ${participantLabel}${item.development ? ` · Preparación: ${escapeHtml(item.development.slice(0, 110))}${item.development.length > 110 ? '…' : ''}` : ''}</small><div class="button-row" style="margin-top:7px"><button type="button" class="button secondary small" data-enroll-workshop="${escapeHtml(item.workshopSeriesId)}">Inscribir paciente</button><button type="button" class="button secondary small" data-open-appointment="${escapeHtml(item.id)}">Preparar / editar sesión</button><button type="button" class="button danger small" data-delete-workshop-series="${escapeHtml(item.workshopSeriesId)}">Eliminar serie</button></div></div></div>`;
                 }
                 const patient = patientFor(item.patientId);
                 return `<div class="agenda-item"><div class="agenda-time">${escapeHtml(item.start)}<br>${escapeHtml(item.end)}</div><div class="agenda-detail"><strong>${escapeHtml(patient ? patient.name : 'Paciente eliminado')}</strong><small>${escapeHtml(item.status === 'completed' ? 'Sesión completada' : 'Sesión programada')}${item.seriesTotal > 1 ? ` · Sesión ${item.seriesSession} de ${item.seriesTotal}` : ''}${item.nextTopic ? ` · Próxima: ${escapeHtml(item.nextTopic)}` : ''}</small><button type="button" class="button secondary small" style="margin-top:7px" data-open-appointment="${escapeHtml(item.id)}">Abrir y editar sesión</button></div></div>`;
@@ -922,22 +1214,7 @@
         $('#patientName').value = patient ? patient.name : '';
         $('#patientEmail').value = patient ? patient.email || '' : '';
         $('#patientPhone').value = patient ? patient.phone || '' : '';
-        $('#packageTotal').value = patient ? Number(patient.sessionsPurchased || 0) : 0;
-        $('#initialPayment').value = 0;
-        $('#initialPayment').disabled = Boolean(patient);
         $('#patientNotes').value = patient ? patient.notes || '' : '';
-        $('#patientAppointmentDate').value = '';
-        $('#patientAppointmentStart').value = '09:00';
-        $('#patientAppointmentEnd').value = '10:00';
-        $$('#patientWeekdays [data-weekday-row]').forEach(row => {
-            row.querySelector('[data-day-enabled]').checked = false;
-            row.querySelector('[data-day-count]').value = 1;
-            row.querySelector('[data-day-start]').value = '09:00';
-            row.querySelector('[data-day-end]').value = '10:00';
-            updatePatientScheduleRow(row);
-        });
-        updatePatientSingleScheduleVisibility();
-        renderPatientSeriesPreview();
         $('#patientDialog').showModal();
     }
 
@@ -948,15 +1225,38 @@
             openPatientDialog();
             return;
         }
+        if (!isWorkshop && !item && patientId) {
+            const patient = patientFor(patientId);
+            if (patient && !individualAcquisitions(patient).length) {
+                showToast('Registra primero un pack individual o servicio para este paciente.', true);
+                openAcquisitionDialog(patientId);
+                return;
+            }
+        }
+        const eligiblePatients = state.patients.filter(patient => individualAcquisitions(patient).length || item && patient.id === item.patientId);
+        if (!isWorkshop && !item && !eligiblePatients.length) {
+            showToast('Registra un pack individual o servicio para un paciente antes de programar una sesión.', true);
+            setView('pacientes');
+            return;
+        }
         $('#appointmentForm').reset();
+        clearAppointmentError();
         $('#appointmentId').value = item ? item.id : '';
         $('#appointmentDialogTitle').textContent = isWorkshop
             ? `${item.workshopTitle || 'Taller'} · sesión ${item.workshopSession} de ${item.workshopTotal}`
             : item ? 'Ficha de sesión' : 'Programar sesión';
-        $('#appointmentPatient').innerHTML = state.patients.slice().sort((a, b) => a.name.localeCompare(b.name, 'es')).map(patient => `<option value="${escapeHtml(patient.id)}">${escapeHtml(patient.name)}</option>`).join('');
-        $('#appointmentPatient').value = item && !isWorkshop ? item.patientId : patientId || state.patients[0]?.id || '';
+        $('#appointmentPatient').innerHTML = eligiblePatients.slice().sort((a, b) => a.name.localeCompare(b.name, 'es')).map(patient => `<option value="${escapeHtml(patient.id)}">${escapeHtml(patient.name)}</option>`).join('');
+        $('#appointmentPatient').value = item && !isWorkshop ? item.patientId : patientId || eligiblePatients[0]?.id || '';
         $('#appointmentPatient').required = !isWorkshop;
         $('#appointmentPatientField').hidden = isWorkshop;
+        $('#appointmentAcquisitionField').hidden = isWorkshop;
+        const selectedPatient = !isWorkshop && patientFor($('#appointmentPatient').value);
+        if (selectedPatient) refreshAppointmentAcquisitions(item ? item.acquisitionId || '' : '');
+        else {
+            $('#appointmentAcquisition').innerHTML = '<option value="">Selecciona un pack o servicio adquirido…</option>';
+            $('#appointmentAcquisition').value = '';
+            $('#appointmentAcquisition').disabled = true;
+        }
         $('#appointmentWorkshopInfo').hidden = !isWorkshop;
         $('#appointmentWorkshopInfo').textContent = isWorkshop
             ? `Taller de Tienda.html · Sesión ${item.workshopSession} de ${item.workshopTotal}. Esta ficha y su desarrollo son independientes de las demás fechas de la serie.`
@@ -987,6 +1287,21 @@
         $('#appointmentDialog').showModal();
     }
 
+    function refreshAppointmentAcquisitions(selectedAcquisitionId = '') {
+        const patient = patientFor($('#appointmentPatient').value);
+        const appointmentId = $('#appointmentId').value;
+        if (!patient) return;
+        const options = individualAcquisitions(patient, appointmentId);
+        const currentAppointment = state.appointments.find(item => item.id === appointmentId);
+        const currentAcquisition = currentAppointment && currentAppointment.acquisitionId && (patient.acquisitions || []).find(acquisition => acquisition.id === currentAppointment.acquisitionId);
+        if (currentAcquisition && !options.some(acquisition => acquisition.id === currentAcquisition.id)) options.unshift(currentAcquisition);
+        $('#appointmentAcquisition').innerHTML = `<option value="">${currentAppointment && !currentAppointment.acquisitionId ? 'Registro anterior sin pack vinculado' : 'Selecciona un pack o servicio adquirido…'}</option>${options.map(acquisition => `<option value="${escapeHtml(acquisition.id)}">${escapeHtml(acquisition.title)} · ${Number(acquisition.sessions)} sesión(es)</option>`).join('')}`;
+        const defaultSelection = selectedAcquisitionId || (!currentAppointment && options.length === 1 ? options[0].id : '');
+        $('#appointmentAcquisition').value = options.some(acquisition => acquisition.id === defaultSelection) ? defaultSelection : currentAppointment ? currentAppointment.acquisitionId || '' : '';
+        $('#appointmentAcquisition').required = !currentAppointment || currentAppointment.patientId !== patient.id || Boolean(currentAppointment.acquisitionId);
+        $('#appointmentAcquisition').disabled = !options.length && Boolean(currentAppointment && !currentAppointment.acquisitionId);
+    }
+
     function overlap(startA, endA, startB, endB) {
         return startA < endB && startB < endA;
     }
@@ -996,89 +1311,6 @@
         const total = hours * 60 + mins + minutes;
         if (total > 1439) return '';
         return `${String(Math.floor(total / 60)).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`;
-    }
-
-    function updatePatientScheduleRow(row) {
-        const enabled = row.querySelector('[data-day-enabled]').checked;
-        row.classList.toggle('enabled', enabled);
-        row.querySelectorAll('[data-day-count], [data-day-start], [data-day-end]').forEach(input => { input.disabled = !enabled; });
-    }
-
-    function selectedPatientSchedules() {
-        return $$('#patientWeekdays [data-weekday-row]').flatMap(row => {
-            const toggle = row.querySelector('[data-day-enabled]');
-            if (!toggle.checked) return [];
-            return [{
-                weekday: Number(toggle.value),
-                count: Number(row.querySelector('[data-day-count]').value),
-                start: row.querySelector('[data-day-start]').value,
-                end: row.querySelector('[data-day-end]').value
-            }];
-        });
-    }
-
-    function updatePatientSingleScheduleVisibility() {
-        const hasWeeklySchedule = selectedPatientSchedules().length > 0;
-        $('#patientSingleSchedule').hidden = hasWeeklySchedule;
-        $('#patientSingleScheduleEnd').hidden = hasWeeklySchedule;
-    }
-
-    function patientScheduleDates(startDate, schedules) {
-        const remaining = new Map(schedules.map(schedule => [schedule.weekday, schedule.count]));
-        const dates = [];
-        for (let offset = 0; offset <= 730 && remaining.size; offset += 1) {
-            const date = new Date(`${startDate}T00:00:00`);
-            date.setDate(date.getDate() + offset);
-            const weekday = date.getDay();
-            const count = remaining.get(weekday) || 0;
-            if (!count) continue;
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            const schedule = schedules.find(item => item.weekday === weekday);
-            dates.push({
-                date: `${year}-${month}-${day}`,
-                start: schedule.start,
-                end: schedule.end
-            });
-            if (count === 1) remaining.delete(weekday);
-            else remaining.set(weekday, count - 1);
-        }
-        return dates.sort((a, b) => a.date.localeCompare(b.date) || a.start.localeCompare(b.start));
-    }
-
-    function renderPatientSeriesPreview() {
-        const date = $('#patientAppointmentDate').value;
-        const schedules = selectedPatientSchedules();
-        if (!date) {
-            $('#patientSeriesPreview').textContent = schedules.length
-                ? 'Selecciona una fecha de inicio para calcular la serie.'
-                : 'Selecciona una fecha de inicio para agendar una sesión.';
-            return;
-        }
-        if (!schedules.length) {
-            $('#patientSeriesPreview').textContent = `Se agendará una sesión el ${formatDate(date)} · ${$('#patientAppointmentStart').value}–${$('#patientAppointmentEnd').value}.`;
-            return;
-        }
-        const invalidSchedule = schedules.find(schedule =>
-            !Number.isInteger(schedule.count) || schedule.count < 1 || schedule.count > 104 ||
-            !schedule.start || !schedule.end || schedule.end <= schedule.start
-        );
-        const total = schedules.reduce((sum, schedule) => sum + schedule.count, 0);
-        if (invalidSchedule) {
-            $('#patientSeriesPreview').textContent = 'Revisa las cantidades y los horarios de cada día seleccionado.';
-            return;
-        }
-        if (total > 104) {
-            $('#patientSeriesPreview').textContent = 'El total combinado no puede superar 104 sesiones.';
-            return;
-        }
-        const dates = patientScheduleDates(date, schedules);
-        const preview = dates.slice(0, 4).map(item =>
-            `${formatDate(item.date, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })} ${item.start}–${item.end}`
-        ).join(' · ');
-        const sessionLabel = dates.length === 1 ? 'sesión' : 'sesiones';
-        $('#patientSeriesPreview').innerHTML = `<span class="series-total">Total: ${dates.length} ${sessionLabel}</span> · ${escapeHtml(preview)}${dates.length > 4 ? ' · …' : ''}. Todas se numerarán juntas y podrás reprogramarlas individualmente.`;
     }
 
     function validateAppointment(candidate, additionalAppointments = []) {
@@ -1149,6 +1381,7 @@
             ...(existing || {}),
             id,
             patientId: existing && existing.workshopId ? '' : $('#appointmentPatient').value,
+            acquisitionId: existing && existing.workshopId ? '' : $('#appointmentAcquisition').value,
             date: $('#appointmentDate').value,
             start: $('#appointmentStart').value,
             end: $('#appointmentEnd').value,
@@ -1159,18 +1392,40 @@
             summary: $('#appointmentSummary').value.trim(),
             summaryHistory: existing ? existing.summaryHistory || [] : []
         };
+        if (!candidate.workshopId && !existing && !candidate.acquisitionId) return showAppointmentError('Asocia la sesión con un pack individual o servicio adquirido.');
+        if (candidate.acquisitionId) {
+            const patient = patientFor(candidate.patientId);
+            const acquisition = patient && (patient.acquisitions || []).find(item => item.id === candidate.acquisitionId && !item.workshopSeriesId);
+            if (!acquisition) return showAppointmentError('Elige un pack individual o servicio válido para este paciente.');
+            const reserved = state.appointments.filter(item =>
+                item.id !== id && item.patientId === candidate.patientId &&
+                item.acquisitionId === candidate.acquisitionId && item.status !== 'cancelled'
+            ).length;
+            if (reserved >= Number(acquisition.sessions || 0)) return showAppointmentError('Este pack o servicio ya tiene todas sus sesiones programadas.');
+        }
         const problem = validateAppointment(candidate);
-        if (problem) return showToast(problem, true);
+        if (problem) return showAppointmentError(problem);
         if (currentPrompt && !candidate.summaryHistory.some(entry => entry.prompt === currentPrompt)) {
             candidate.summaryHistory.unshift({ prompt: currentPrompt, createdAt: new Date().toISOString() });
         }
         const patient = patientFor(candidate.patientId);
-        if (patient && candidate.nextTopic) patient.pendingTopic = candidate.nextTopic;
         const index = state.appointments.findIndex(item => item.id === id);
+        const previousPatientTopic = patient && patient.pendingTopic;
         if (index >= 0) state.appointments[index] = candidate;
         else state.appointments.push(candidate);
+        if (patient && candidate.nextTopic) patient.pendingTopic = candidate.nextTopic;
+        try {
+            await saveState();
+        } catch (error) {
+            if (index >= 0) state.appointments[index] = existing;
+            else state.appointments = state.appointments.filter(item => item.id !== id);
+            if (patient) patient.pendingTopic = previousPatientTopic;
+            showAppointmentError(`No se pudo guardar la sesión: ${error.message}`);
+            return;
+        }
+        renderAll();
         $('#appointmentDialog').close();
-        await persistAndRender('Sesión guardada localmente.');
+        showToast('Sesión guardada localmente.');
     }
 
     function saveSessionSummaryHistory() {
@@ -1386,6 +1641,82 @@
         await persistAndRender(`${series.length} sesiones de «${product.nombre}» agendadas.`);
     }
 
+    function openWorkshopEnrollmentDialog(seriesId) {
+        const series = state.appointments.filter(item =>
+            item.workshopSeriesId === seriesId && item.workshopId &&
+            item.status === 'scheduled' && item.date >= today
+        ).sort((a, b) => `${a.date}T${a.start}`.localeCompare(`${b.date}T${b.start}`));
+        if (!series.length) return showToast('Solo puedes inscribir pacientes en un taller con fechas programadas vigentes.', true);
+        const enrolledPatientIds = new Set((state.workshopEnrollments || [])
+            .filter(item => item.workshopSeriesId === seriesId)
+            .map(item => item.patientId));
+        const availablePatients = state.patients.filter(patient => !enrolledPatientIds.has(patient.id));
+        if (!availablePatients.length) return showToast('No hay pacientes nuevos para inscribir en esta serie.', true);
+        const product = purchaseCatalog.find(item => item.id === series[0].workshopId);
+        const suggestedCost = product ? Number(product.precio || 0) * series.length : 0;
+        $('#workshopEnrollmentForm').reset();
+        $('#enrollmentSeriesId').value = seriesId;
+        $('#enrollmentPatient').innerHTML = availablePatients
+            .sort((a, b) => a.name.localeCompare(b.name, 'es'))
+            .map(patient => `<option value="${escapeHtml(patient.id)}">${escapeHtml(patient.name)}</option>`).join('');
+        $('#enrollmentCost').value = Number.isSafeInteger(suggestedCost) && suggestedCost >= 0 ? suggestedCost : '';
+        $('#enrollmentInitialPayment').value = 0;
+        $('#enrollmentPaymentDate').value = today;
+        $('#enrollmentPaymentMethod').value = 'Transferencia';
+        $('#enrollmentWorkshopInfo').textContent = `«${series[0].workshopTitle}» · ${series.length} fechas programadas, desde ${formatDate(series[0].date)} hasta ${formatDate(series[series.length - 1].date)}.`;
+        $('#workshopEnrollmentDialog').showModal();
+    }
+
+    async function saveWorkshopEnrollment(event) {
+        event.preventDefault();
+        const seriesId = $('#enrollmentSeriesId').value;
+        const series = state.appointments.filter(item =>
+            item.workshopSeriesId === seriesId && item.workshopId &&
+            item.status === 'scheduled' && item.date >= today
+        );
+        if (!series.length) return showToast('La programación de este taller ya no está vigente.', true);
+        const patient = patientFor($('#enrollmentPatient').value);
+        if (!patient) return showToast('Selecciona un paciente válido.', true);
+        if ((state.workshopEnrollments || []).some(item => item.workshopSeriesId === seriesId && item.patientId === patient.id)) return showToast('Este paciente ya está inscrito en la serie.', true);
+        const total = Number($('#enrollmentCost').value);
+        const initialPayment = Number($('#enrollmentInitialPayment').value || 0);
+        const paymentDate = $('#enrollmentPaymentDate').value;
+        if (!Number.isSafeInteger(total) || total < 0) return showToast('Ingresa un costo total válido en pesos chilenos.', true);
+        if (!Number.isSafeInteger(initialPayment) || initialPayment < 0 || initialPayment > total) return showToast('El abono inicial debe ser válido y no superar el costo total.', true);
+        if (initialPayment > 0 && !paymentDate) return showToast('Indica la fecha del abono inicial.', true);
+        const acquisitionId = makeId('adquisicion');
+        const acquisition = {
+            id: acquisitionId,
+            productId: series[0].workshopId,
+            workshopSeriesId: seriesId,
+            title: series[0].workshopTitle || 'Taller',
+            category: 'Taller programado',
+            sessions: series.length,
+            total,
+            date: today,
+            payments: []
+        };
+        if (initialPayment > 0) acquisition.payments.push({
+            id: makeId('pago'),
+            date: paymentDate,
+            amount: initialPayment,
+            method: $('#enrollmentPaymentMethod').value.trim() || 'Sin especificar',
+            note: 'Abono inicial del taller'
+        });
+        if (!Array.isArray(patient.acquisitions)) patient.acquisitions = [];
+        patient.acquisitions.push(acquisition);
+        if (!Array.isArray(state.workshopEnrollments)) state.workshopEnrollments = [];
+        state.workshopEnrollments.push({
+            id: makeId('inscripcion'),
+            patientId: patient.id,
+            workshopSeriesId: seriesId,
+            acquisitionId,
+            date: today
+        });
+        $('#workshopEnrollmentDialog').close();
+        await persistAndRender(`${patient.name} inscrito(a) en «${acquisition.title}».`);
+    }
+
     function saveSlot(event) {
         event.preventDefault();
         const slot = {
@@ -1410,44 +1741,141 @@
         persistAndRender(slot.type === 'open' ? 'Horario disponible guardado.' : 'Horario bloqueado guardado.');
     }
 
-    function savePatient(event) {
+    async function savePatient(event) {
         event.preventDefault();
-        const id = $('#editPatientId').value;
-        const name = $('#patientName').value.trim();
-        const sessionsPurchased = Math.max(0, Math.floor(Number($('#packageTotal').value || 0)));
-        const initialPayment = Number($('#initialPayment').value || 0);
-        if (!name) return showToast('El nombre del paciente es obligatorio.', true);
-        if (!Number.isSafeInteger(initialPayment) || initialPayment < 0) return showToast('El pago inicial debe ser un monto válido en pesos chilenos.', true);
-        const appointmentDate = $('#patientAppointmentDate').value;
-        const appointmentStart = $('#patientAppointmentStart').value;
-        const appointmentEnd = $('#patientAppointmentEnd').value;
-        const schedules = selectedPatientSchedules();
+        if (isSavingPatient) return;
+        isSavingPatient = true;
+        const submitButton = $('#patientForm button[type="submit"]');
+        submitButton.disabled = true;
+        try {
+            const id = $('#editPatientId').value;
+            const name = $('#patientName').value.trim();
+            if (!name) return showToast('El nombre del paciente es obligatorio.', true);
+            if (id) {
+                const patient = patientFor(id);
+                if (!patient) return showToast('No se encontró la ficha del paciente.', true);
+                patient.name = name;
+                patient.email = $('#patientEmail').value.trim();
+                patient.phone = $('#patientPhone').value.trim();
+                patient.notes = $('#patientNotes').value.trim();
+            } else {
+                const patient = {
+                    id: makeId('paciente'),
+                    name,
+                    email: $('#patientEmail').value.trim(),
+                    phone: $('#patientPhone').value.trim(),
+                    sessionsPurchased: 0,
+                    notes: $('#patientNotes').value.trim(),
+                    createdAt: new Date().toISOString(),
+                    payments: [],
+                    tasks: [],
+                    pendingTopic: ''
+                };
+                state.patients.push(patient);
+                selectedPatientId = patient.id;
+            }
+            $('#patientDialog').close();
+            await persistAndRender(id ? 'Ficha actualizada.' : 'Paciente registrado. Ahora puedes añadir una adquisición o programar un taller.');
+        } finally {
+            isSavingPatient = false;
+            submitButton.disabled = false;
+        }
+    }
+
+    function addDaysToDate(value, days) {
+        const [year, month, day] = value.split('-').map(Number);
+        const date = new Date(year, month - 1, day);
+        date.setDate(date.getDate() + days);
+        return dateKey(date);
+    }
+
+    const weekdayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+
+    function nextWeekdayOnOrAfter(value, weekday) {
+        const [year, month, day] = value.split('-').map(Number);
+        const date = new Date(year, month - 1, day);
+        const offset = (weekday - date.getDay() + 7) % 7;
+        date.setDate(date.getDate() + offset);
+        return dateKey(date);
+    }
+
+    function renderRecurrenceRule(containerId, index, rule = {}) {
+        const firstDate = rule.firstDate || today;
+        const firstWeekday = Number.isInteger(rule.weekday) ? rule.weekday : new Date(`${firstDate}T00:00:00`).getDay();
+        const patternNumber = index + 1;
+        const inputId = ++recurrenceRuleId;
+        return `<div class="form-grid acquisition-session-row" data-recurrence-rule>
+            <strong class="field">Horario semanal ${patternNumber}</strong>
+            <button class="button ghost small" type="button" data-remove-recurrence="${containerId}" aria-label="Quitar horario semanal ${patternNumber}">Quitar horario</button>
+            <div class="field"><label for="${containerId}Count${inputId}">Cantidad de sesiones *</label><input id="${containerId}Count${inputId}" type="number" min="1" max="104" step="1" data-recurrence-count required value="${escapeHtml(rule.count || 1)}"></div>
+            <div class="field"><label for="${containerId}Weekday${inputId}">Repetir cada *</label><select id="${containerId}Weekday${inputId}" data-recurrence-weekday required>${weekdayNames.map((name, weekday) => `<option value="${weekday}" ${weekday === firstWeekday ? 'selected' : ''}>${name}</option>`).join('')}</select></div>
+            <div class="field"><label for="${containerId}FirstDate${inputId}">Desde *</label><input id="${containerId}FirstDate${inputId}" type="date" data-recurrence-first-date required value="${escapeHtml(firstDate)}"></div>
+            <div class="field"><label for="${containerId}Start${inputId}">Hora de inicio *</label><input id="${containerId}Start${inputId}" type="time" data-recurrence-start required value="${escapeHtml(rule.start || '09:00')}"></div>
+            <div class="field"><label for="${containerId}End${inputId}">Hora de término *</label><input id="${containerId}End${inputId}" type="time" data-recurrence-end required value="${escapeHtml(rule.end || '10:00')}"></div>
+        </div>`;
+    }
+
+    function renderRecurrenceSummary(containerId) {
+        const container = $(`#${containerId}`);
+        const expected = Number(container.dataset.expectedCount || 0);
+        const scheduled = Array.from(container.querySelectorAll('[data-recurrence-count]')).reduce((sum, input) => sum + Number(input.value || 0), 0);
+        const summary = container.parentElement.querySelector('[data-recurrence-summary]');
+        summary.textContent = `${scheduled} de ${expected} sesiones distribuidas en horarios semanales.`;
+    }
+
+    function initializeRecurrenceRules(containerId, count, firstDate = today) {
+        const container = $(`#${containerId}`);
+        container.dataset.expectedCount = String(count);
+        container.innerHTML = count > 0 ? renderRecurrenceRule(containerId, 0, { count, firstDate }) : '';
+        renderRecurrenceSummary(containerId);
+    }
+
+    function addRecurrenceRule(containerId) {
+        const container = $(`#${containerId}`);
+        const expected = Number(container.dataset.expectedCount || 0);
+        const rules = Array.from(container.querySelectorAll('[data-recurrence-rule]'));
+        if (rules.length >= expected) return showToast('No puedes crear más horarios que sesiones pendientes.', true);
+        const firstDate = rules[0]?.querySelector('[data-recurrence-first-date]')?.value || today;
+        const lastWeekday = Number(rules[rules.length - 1]?.querySelector('[data-recurrence-weekday]')?.value || 0);
+        const nextWeekday = (lastWeekday + 1) % 7;
+        const start = rules[rules.length - 1]?.querySelector('[data-recurrence-start]')?.value || '09:00';
+        const end = rules[rules.length - 1]?.querySelector('[data-recurrence-end]')?.value || '10:00';
+        container.insertAdjacentHTML('beforeend', renderRecurrenceRule(containerId, rules.length, {
+            count: 1,
+            firstDate,
+            weekday: nextWeekday,
+            start,
+            end
+        }));
+        renderRecurrenceSummary(containerId);
+    }
+
+    function buildRecurringAppointments(containerId, expectedCount, patientId, acquisitionId, firstSessionNumber = 1) {
+        const container = $(`#${containerId}`);
+        const rules = Array.from(container.querySelectorAll('[data-recurrence-rule]'));
+        const scheduledCount = rules.reduce((sum, rule) => sum + Number(rule.querySelector('[data-recurrence-count]').value || 0), 0);
+        if (!rules.length || scheduledCount !== expectedCount) {
+            return { error: `Distribuye exactamente las ${expectedCount} sesiones entre los horarios semanales.` };
+        }
         const appointments = [];
-        const patientId = id || makeId('paciente');
-        const totalSessions = schedules.reduce((sum, schedule) => sum + schedule.count, 0);
-        if (schedules.some(schedule =>
-            !Number.isInteger(schedule.count) || schedule.count < 1 || schedule.count > 104 ||
-            !schedule.start || !schedule.end || schedule.end <= schedule.start
-        )) return showToast('Revisa la cantidad y el horario de cada día seleccionado.', true);
-        if (schedules.length && totalSessions > 104) return showToast('El total combinado no puede superar 104 sesiones.', true);
-        if (!appointmentDate && schedules.length) return showToast('Elige una fecha de inicio para crear la serie de sesiones.', true);
-        if (appointmentDate && !schedules.length && appointmentEnd <= appointmentStart) return showToast('La hora de término debe ser posterior a la hora de inicio.', true);
-        if (appointmentDate) {
-            const dates = schedules.length
-                ? patientScheduleDates(appointmentDate, schedules)
-                : [{ date: appointmentDate, start: appointmentStart, end: appointmentEnd }];
-            if (dates.length !== (schedules.length ? totalSessions : 1)) return showToast('No se pudo calcular toda la serie dentro de dos años.', true);
-            const seriesId = dates.length > 1 ? makeId('serie-paciente') : '';
-            for (const [index, session] of dates.entries()) {
-                const appointment = {
+        for (const rule of rules) {
+            const count = Number(rule.querySelector('[data-recurrence-count]').value);
+            const weekday = Number(rule.querySelector('[data-recurrence-weekday]').value);
+            const firstDate = rule.querySelector('[data-recurrence-first-date]').value;
+            const start = rule.querySelector('[data-recurrence-start]').value;
+            const end = rule.querySelector('[data-recurrence-end]').value;
+            if (!Number.isInteger(count) || count < 1 || count > 104 || !Number.isInteger(weekday) || weekday < 0 || weekday > 6 || !firstDate || !start || !end) {
+                return { error: 'Revisa la cantidad, el día de la semana, la fecha y las horas de cada horario.' };
+            }
+            const firstOccurrence = nextWeekdayOnOrAfter(firstDate, weekday);
+            for (let index = 0; index < count; index += 1) {
+                const candidate = {
                     id: makeId('sesion'),
                     patientId,
-                    seriesId,
-                    seriesSession: index + 1,
-                    seriesTotal: dates.length,
-                    date: session.date,
-                    start: session.start,
-                    end: session.end,
+                    acquisitionId,
+                    date: addDaysToDate(firstOccurrence, index * 7),
+                    start,
+                    end,
                     status: 'scheduled',
                     notes: '',
                     development: '',
@@ -1455,69 +1883,130 @@
                     summary: '',
                     summaryHistory: []
                 };
-                const problem = validateAppointment(appointment, appointments);
-                if (problem) return showToast(`${formatDate(session.date)}: ${problem} No se agendó ninguna sesión de la serie.`, true);
-                appointments.push(appointment);
+                const problem = validateAppointment(candidate, appointments);
+                if (problem) return { error: `No se pudo agendar la sesión ${firstSessionNumber + appointments.length}: ${problem}` };
+                appointments.push(candidate);
             }
         }
-        if (id) {
-            const patient = patientFor(id);
-            if (!patient) return showToast('No se encontró la ficha del paciente.', true);
-            patient.name = name;
-            patient.email = $('#patientEmail').value.trim();
-            patient.phone = $('#patientPhone').value.trim();
-            patient.sessionsPurchased = sessionsPurchased;
-            patient.notes = $('#patientNotes').value.trim();
-        } else {
-            const patient = {
-                id: patientId,
-                name,
-                email: $('#patientEmail').value.trim(),
-                phone: $('#patientPhone').value.trim(),
-                sessionsPurchased,
-                notes: $('#patientNotes').value.trim(),
-                createdAt: new Date().toISOString(),
-                payments: [],
-                tasks: [],
-                pendingTopic: ''
-            };
-            if (initialPayment > 0) patient.payments.push({ id: makeId('pago'), date: today, amount: initialPayment, method: 'Sin especificar', note: 'Pago inicial' });
-            state.patients.push(patient);
-            selectedPatientId = patient.id;
-        }
-        if (appointments.length) {
-            state.appointments.push(...appointments);
-            selectedDate = appointments[0].date;
-            visibleMonth = new Date(`${appointments[0].date}T00:00:00`);
-        }
-        $('#patientDialog').close();
-        persistAndRender(`${id ? 'Ficha actualizada.' : 'Paciente registrado.'}${appointments.length ? ` ${appointments.length} sesión(es) agendada(s) en el calendario.` : ''}`);
+        return { appointments };
     }
 
-    function openAcquisitionDialog(patientId, isSessionPackage = false) {
+    function openPackScheduleDialog(patientId, acquisitionId) {
+        const patient = patientFor(patientId);
+        const acquisition = patient && (patient.acquisitions || []).find(item => item.id === acquisitionId);
+        if (!patient || !acquisition || acquisition.workshopSeriesId) return showToast('No se encontró un pack individual válido para agendar.', true);
+        const alreadyScheduled = state.appointments.filter(item => item.patientId === patientId && item.acquisitionId === acquisitionId && item.status !== 'cancelled');
+        const remaining = Math.max(0, Number(acquisition.sessions || 0) - alreadyScheduled.length);
+        if (!remaining) return showToast('Este pack no tiene sesiones pendientes por agendar.', true);
+        const latestDate = alreadyScheduled.reduce((latest, item) => item.date > latest ? item.date : latest, today);
+        const firstDate = latestDate > today ? addDaysToDate(latestDate, 7) : today;
+        $('#packSchedulePatientId').value = patientId;
+        $('#packScheduleAcquisitionId').value = acquisitionId;
+        $('#packScheduleDescription').textContent = `${acquisition.title || 'Pack'} · ${remaining} sesión(es) pendiente(s)`;
+        initializeRecurrenceRules('packScheduleRows', remaining, firstDate);
+        $('#packScheduleDialog').showModal();
+    }
+
+    function savePackSchedule(event) {
+        event.preventDefault();
+        const patientId = $('#packSchedulePatientId').value;
+        const acquisitionId = $('#packScheduleAcquisitionId').value;
+        const patient = patientFor(patientId);
+        const acquisition = patient && (patient.acquisitions || []).find(item => item.id === acquisitionId && !item.workshopSeriesId);
+        if (!patient || !acquisition) return showToast('No se encontró un pack válido para estas sesiones.', true);
+        const alreadyScheduled = state.appointments.filter(item => item.patientId === patientId && item.acquisitionId === acquisitionId && item.status !== 'cancelled');
+        const remaining = Math.max(0, Number(acquisition.sessions || 0) - alreadyScheduled.length);
+        if (!remaining) return showToast('Este pack no tiene sesiones pendientes por agendar.', true);
+        const result = buildRecurringAppointments('packScheduleRows', remaining, patientId, acquisitionId, alreadyScheduled.length + 1);
+        if (result.error) return showToast(result.error, true);
+        const appointments = result.appointments;
+        state.appointments.push(...appointments);
+        $('#packScheduleDialog').close();
+        persistAndRender(`${appointments.length} sesiones agendadas para ${acquisition.title || 'el pack'}.`);
+    }
+
+    function renderAcquisitionScheduleFields(preserveExisting = true) {
+        const enabled = $('#acquisitionScheduleSessions').checked;
+        const sessions = Number($('#acquisitionSessions').value || 0);
+        if (!enabled || sessions <= 0) {
+            $('#acquisitionScheduleFields').hidden = true;
+            $('#acquisitionSessionScheduleRows').innerHTML = '';
+            return;
+        }
+        const firstDate = $('#acquisitionDate').value || today;
+        $('#acquisitionScheduleFields').hidden = false;
+        const container = $('#acquisitionSessionScheduleRows');
+        if (preserveExisting && container.querySelector('[data-recurrence-rule]')) {
+            container.dataset.expectedCount = String(sessions);
+            renderRecurrenceSummary('acquisitionSessionScheduleRows');
+        } else {
+            initializeRecurrenceRules('acquisitionSessionScheduleRows', sessions, firstDate);
+        }
+    }
+
+    function openAcquisitionDialog(patientId, isSessionPackage = false, acquisitionId = '') {
         const patient = patientFor(patientId);
         if (!patient) return;
         $('#acquisitionForm').reset();
         $('#acquisitionPatientId').value = patientId;
-        $('#acquisitionRequireSessions').value = isSessionPackage ? 'true' : '';
+        $('#acquisitionId').value = acquisitionId;
         $('#acquisitionProduct').value = '';
         $('#acquisitionCustomNameField').hidden = false;
         $('#acquisitionCustomName').value = isSessionPackage ? 'Pack de sesiones' : '';
+        $('#acquisitionCustomName').required = true;
         $('#acquisitionSessions').value = isSessionPackage ? 1 : 0;
         $('#acquisitionTotal').value = 0;
+        $('#acquisitionDate').value = today;
         $('#acquisitionInitialPayment').value = 0;
         $('#acquisitionInitialDate').value = today;
         $('#acquisitionInitialMethod').value = 'Transferencia';
+        $('#acquisitionScheduleSessions').checked = false;
+        $('#acquisitionScheduleOption').hidden = Boolean(acquisitionId);
+        $('#acquisitionScheduleFields').hidden = true;
+        $('#acquisitionSessionScheduleRows').innerHTML = '';
+        const acquisition = acquisitionId && (patient.acquisitions || []).find(item => item.id === acquisitionId);
+        const editing = Boolean(acquisition);
+        const catalogProduct = editing && purchaseCatalog.find(item => item.id === acquisition.productId);
+        $('#acquisitionRequireSessions').value = isSessionPackage || Number(acquisition?.sessions || 0) > 0 ? 'true' : '';
+        $('#acquisitionSessions').disabled = Boolean(acquisition?.workshopSeriesId);
+        const hasCatalogOption = Array.from($('#acquisitionProduct').options).some(option => option.value === catalogProduct?.id);
+        if (catalogProduct && catalogProduct.cat === 'Grupales' && !hasCatalogOption) {
+            $('#acquisitionProduct').insertAdjacentHTML('beforeend', `<option value="${escapeHtml(catalogProduct.id)}">${escapeHtml(catalogProduct.nombre)} · Taller programado</option>`);
+        }
+        $('#acquisitionDialog').querySelector('.eyebrow').textContent = editing ? 'Editar compra del paciente' : 'Compra del paciente';
+        $('#acquisitionDialog').querySelector('h2').textContent = editing ? 'Editar adquisición' : 'Registrar adquisición';
+        $('#saveAcquisitionButton').textContent = editing ? 'Guardar cambios' : 'Guardar adquisición';
+        $('#deleteAcquisitionButton').hidden = !editing;
+        ['acquisitionInitialSection', 'acquisitionInitialPaymentField', 'acquisitionInitialDateField', 'acquisitionInitialMethodField'].forEach(id => { $(`#${id}`).hidden = editing; });
+        if (editing) {
+            if (catalogProduct) {
+                $('#acquisitionProduct').value = catalogProduct.id;
+                updateAcquisitionProduct();
+            } else {
+                $('#acquisitionCustomName').value = acquisition.title || '';
+            }
+            $('#acquisitionSessions').value = Number(acquisition.sessions || 0);
+            $('#acquisitionTotal').value = Number(acquisition.total || 0);
+            $('#acquisitionDate').value = acquisition.date || today;
+            $('#acquisitionCustomNameField').hidden = Boolean(catalogProduct);
+            $('#acquisitionCustomName').required = !catalogProduct;
+        }
         $('#acquisitionDialog').showModal();
         if (isSessionPackage) $('#acquisitionSessions').focus();
     }
 
     function updateAcquisitionProduct() {
         const product = purchaseCatalog.find(item => item.id === $('#acquisitionProduct').value);
+        const patient = patientFor($('#acquisitionPatientId').value);
+        const currentAcquisition = patient && (patient.acquisitions || []).find(item => item.id === $('#acquisitionId').value);
+        if (product && product.cat === 'Grupales' && !currentAcquisition?.workshopSeriesId) return showToast('Los talleres grupales solo se pueden adquirir mediante la inscripción a una programación existente.', true);
         const isCustom = !product;
         $('#acquisitionCustomNameField').hidden = !isCustom;
         $('#acquisitionCustomName').required = isCustom;
-        if (!product) return;
+        if (!product) {
+            renderAcquisitionScheduleFields();
+            return;
+        }
         const sessions = workshopSessions(product) || (product.cat === 'Servicios' ? 1 : 0);
         const price = Number(product.precio || 0) * Math.max(1, Number(product.cantidadSesiones) || 1);
         if (!Number.isSafeInteger(price) || price < 0) {
@@ -1527,6 +2016,7 @@
         $('#acquisitionCustomName').value = product.nombre;
         $('#acquisitionSessions').value = sessions;
         $('#acquisitionTotal').value = price;
+        renderAcquisitionScheduleFields();
     }
 
     function saveAcquisition(event) {
@@ -1534,29 +2024,49 @@
         const patient = patientFor($('#acquisitionPatientId').value);
         if (!patient) return showToast('No se encontró la ficha del paciente.', true);
         const product = purchaseCatalog.find(item => item.id === $('#acquisitionProduct').value);
+        if (product && product.cat === 'Grupales') return showToast('Los talleres grupales solo se pueden adquirir mediante la inscripción a una programación existente.', true);
         const title = (product ? product.nombre : $('#acquisitionCustomName').value).trim();
         const sessions = Number($('#acquisitionSessions').value || 0);
         const total = Number($('#acquisitionTotal').value);
         const initialPayment = Number($('#acquisitionInitialPayment').value || 0);
+        const date = $('#acquisitionDate').value;
+        const acquisitionId = $('#acquisitionId').value;
+        const existing = (patient.acquisitions || []).find(item => item.id === acquisitionId);
         const requireSessions = $('#acquisitionRequireSessions').value === 'true';
         if (!title) return showToast('Indica el nombre de la adquisición.', true);
+        if (product && product.cat === 'Grupales' && !existing?.workshopSeriesId) return showToast('Los talleres grupales solo se pueden adquirir mediante la inscripción a una programación existente.', true);
         if (!Number.isInteger(sessions) || sessions < 0) return showToast('Las sesiones incluidas deben ser un número entero igual o mayor que cero.', true);
         if (requireSessions && sessions <= 0) return showToast('Indica cuántas sesiones incluye el pack.', true);
         if (!Number.isSafeInteger(total) || total < 0) return showToast('Ingresa un costo total válido en pesos chilenos.', true);
+        if (!date) return showToast('Indica la fecha de adquisición.', true);
+        if (existing && total < acquisitionPayments(existing).reduce((sum, payment) => sum + Number(payment.amount || 0), 0)) return showToast('El costo no puede ser menor que los abonos ya registrados. Edita primero los abonos si necesitas corregirlos.', true);
         if (!Number.isSafeInteger(initialPayment) || initialPayment < 0 || initialPayment > total) return showToast('El abono inicial debe ser válido y no superar el costo total.', true);
         const initialDate = $('#acquisitionInitialDate').value;
         if (initialPayment > 0 && !initialDate) return showToast('Indica la fecha del abono inicial.', true);
+        const nextSessionsPurchased = Number(patient.sessionsPurchased || 0) -
+            (existing && !existing.workshopSeriesId ? Number(existing.sessions || 0) : 0) +
+            (existing && existing.workshopSeriesId ? 0 : sessions);
+        if (!Number.isSafeInteger(nextSessionsPurchased) || nextSessionsPurchased < 0) return showToast('No se pudo ajustar el paquete porque el total de sesiones del paciente no coincide con esta adquisición.', true);
+        const acquisitionRecordId = existing ? existing.id : makeId('adquisicion');
+        const scheduledAppointments = [];
+        if ($('#acquisitionScheduleSessions').checked) {
+            if (existing || sessions <= 0) return showToast('Agendar sesiones requiere una nueva adquisición con sesiones incluidas.', true);
+            const result = buildRecurringAppointments('acquisitionSessionScheduleRows', sessions, patient.id, acquisitionRecordId);
+            if (result.error) return showToast(result.error, true);
+            scheduledAppointments.push(...result.appointments);
+        }
         const acquisition = {
-            id: makeId('adquisicion'),
+            ...(existing || {}),
+            id: acquisitionRecordId,
             productId: product ? product.id : '',
             title,
             category: product ? product.cat || '' : 'Personalizado',
             sessions,
             total,
-            date: today,
-            payments: []
+            date,
+            payments: existing ? acquisitionPayments(existing) : []
         };
-        if (initialPayment > 0) acquisition.payments.push({
+        if (!existing && initialPayment > 0) acquisition.payments.push({
             id: makeId('pago'),
             date: initialDate,
             amount: initialPayment,
@@ -1564,30 +2074,97 @@
             note: 'Abono inicial'
         });
         if (!Array.isArray(patient.acquisitions)) patient.acquisitions = [];
-        patient.acquisitions.push(acquisition);
-        if (sessions > 0) patient.sessionsPurchased = Number(patient.sessionsPurchased || 0) + sessions;
+        if (existing) patient.acquisitions[patient.acquisitions.indexOf(existing)] = acquisition;
+        else patient.acquisitions.push(acquisition);
+        patient.sessionsPurchased = nextSessionsPurchased;
+        state.appointments.push(...scheduledAppointments);
         $('#acquisitionDialog').close();
-        persistAndRender('Adquisición registrada.');
+        const message = existing
+            ? 'Adquisición actualizada.'
+            : scheduledAppointments.length
+                ? `Adquisición registrada y ${scheduledAppointments.length} sesiones agendadas.`
+                : 'Adquisición registrada.';
+        persistAndRender(message);
     }
 
-    function registerPayment(patientId, acquisitionId = '') {
+    function deleteAcquisition(patientId, acquisitionId) {
+        const patient = patientFor(patientId);
+        const acquisition = patient && (patient.acquisitions || []).find(item => item.id === acquisitionId);
+        if (!patient || !acquisition) return;
+        const paymentCount = acquisitionPayments(acquisition).length;
+        const sessionChange = acquisition.workshopSeriesId
+            ? 'También se quitará la inscripción a su taller programado.'
+            : `También se restarán ${Number(acquisition.sessions || 0)} sesiones del paquete del paciente.`;
+        const prompt = `¿Eliminar "${acquisition.title}" y sus ${paymentCount} abono(s)? ${sessionChange} Las sesiones agendadas se conservarán.`;
+        if (!window.confirm(prompt)) return;
+        patient.acquisitions = patient.acquisitions.filter(item => item.id !== acquisitionId);
+        if (!acquisition.workshopSeriesId) patient.sessionsPurchased = Math.max(0, Number(patient.sessionsPurchased || 0) - Number(acquisition.sessions || 0));
+        else state.workshopEnrollments = (state.workshopEnrollments || []).filter(item => item.acquisitionId !== acquisitionId);
+        $('#acquisitionDialog').close();
+        persistAndRender('Adquisición eliminada.');
+    }
+
+    function registerPayment(patientId, acquisitionId = '', paymentId = '') {
         const patient = patientFor(patientId);
         if (!patient) return;
-        const due = (patient.acquisitions || []).filter(acquisition => purchaseBalance(acquisition) > 0);
+        const legacyPayment = paymentId && (patient.payments || []).find(payment => payment.id === paymentId);
+        if (legacyPayment) {
+            $('#paymentForm').reset();
+            $('#paymentId').value = legacyPayment.id;
+            $('#paymentSource').value = 'legacy';
+            $('#paymentAcquisition').innerHTML = '<option value="">Pago sin asignar</option>';
+            $('#paymentAcquisition').value = '';
+            $('#paymentAcquisition').disabled = true;
+            $('#paymentAcquisition').required = false;
+            $('#paymentDialog').querySelector('#paymentAcquisition').closest('.field').hidden = true;
+            $('#paymentBalance').closest('.field').hidden = true;
+            $('#paymentDate').value = legacyPayment.date || today;
+            $('#paymentAmount').value = legacyPayment.amount;
+            $('#paymentMethod').value = legacyPayment.method || '';
+            $('#paymentNote').value = legacyPayment.note || '';
+            $('#paymentDialog').querySelector('.eyebrow').textContent = 'Editar pago sin asignar';
+            $('#paymentDialog').querySelector('h2').textContent = 'Editar pago anterior';
+            $('#savePaymentButton').textContent = 'Guardar cambios';
+            $('#deletePaymentButton').hidden = false;
+            $('#paymentDialog').dataset.patientId = patientId;
+            $('#paymentDialog').showModal();
+            return;
+        }
+        const editingPayment = paymentId && (patient.acquisitions || []).flatMap(acquisition => acquisitionPayments(acquisition).map(payment => ({ acquisition, payment }))).find(item => item.payment.id === paymentId);
+        const due = (patient.acquisitions || []).filter(acquisition =>
+            acquisition && typeof acquisition.id === 'string' && acquisition.id &&
+            (purchaseBalance(acquisition) > 0 || acquisition.id === acquisitionId || editingPayment?.acquisition.id === acquisition.id)
+        );
         if (!due.length) {
             showToast('Registra primero una adquisición con saldo pendiente.', true);
             openAcquisitionDialog(patientId);
             return;
         }
         $('#paymentForm').reset();
+        $('#paymentId').value = editingPayment ? editingPayment.payment.id : '';
+        $('#paymentSource').value = 'acquisition';
+        $('#paymentAcquisition').disabled = false;
+        $('#paymentAcquisition').required = true;
+        $('#paymentAcquisition').closest('.field').hidden = false;
+        $('#paymentBalance').closest('.field').hidden = false;
         $('#paymentAcquisition').innerHTML = due.map(acquisition => `<option value="${escapeHtml(acquisition.id)}">${escapeHtml(acquisition.title || 'Adquisición')} · ${escapeHtml(formatDate(acquisition.date))} · Pendiente ${formatMoney(purchaseBalance(acquisition))}</option>`).join('');
-        $('#paymentAcquisition').value = due.some(item => item.id === acquisitionId) ? acquisitionId : due[0].id;
+        const selectedAcquisitionId = editingPayment ? editingPayment.acquisition.id : acquisitionId;
+        const selectedAcquisition = due.find(item => item.id === selectedAcquisitionId) || due[0];
+        if (!selectedAcquisition) return showToast('No se encontró una adquisición válida para registrar el abono.', true);
+        $('#paymentAcquisition').value = selectedAcquisition.id;
         $('#paymentDate').value = today;
         $('#paymentMethod').value = 'Transferencia';
-        $('#paymentAmount').value = '';
-        $('#paymentAmount').max = String(purchaseBalance(due.find(item => item.id === $('#paymentAcquisition').value)));
-        $('#paymentBalance').value = formatMoney(purchaseBalance(due.find(item => item.id === $('#paymentAcquisition').value)));
+        $('#paymentAmount').value = editingPayment ? editingPayment.payment.amount : '';
+        $('#paymentDate').value = editingPayment ? editingPayment.payment.date : today;
+        $('#paymentMethod').value = editingPayment ? editingPayment.payment.method || '' : 'Transferencia';
+        $('#paymentNote').value = editingPayment ? editingPayment.payment.note || '' : '';
+        $('#paymentAcquisition').disabled = Boolean(editingPayment);
+        $('#paymentDialog').querySelector('.eyebrow').textContent = editingPayment ? 'Editar abono' : 'Abono de adquisición';
+        $('#paymentDialog').querySelector('h2').textContent = editingPayment ? 'Editar abono' : 'Registrar abono';
+        $('#savePaymentButton').textContent = editingPayment ? 'Guardar cambios' : 'Guardar abono';
+        $('#deletePaymentButton').hidden = !editingPayment;
         $('#paymentDialog').dataset.patientId = patientId;
+        updatePaymentBalance();
         $('#paymentDialog').showModal();
     }
 
@@ -1597,30 +2174,76 @@
         if (!acquisition) return;
         const balance = purchaseBalance(acquisition);
         $('#paymentBalance').value = formatMoney(balance);
-        $('#paymentAmount').max = String(balance);
+        const existingPayment = acquisitionPayments(acquisition).find(payment => payment.id === $('#paymentId').value);
+        $('#paymentAmount').max = String(balance + Number(existingPayment?.amount || 0));
     }
 
     function saveAcquisitionPayment(event) {
         event.preventDefault();
         const patient = patientFor($('#paymentDialog').dataset.patientId);
+        const paymentId = $('#paymentId').value;
+        if ($('#paymentSource').value === 'legacy') {
+            const existingLegacyPayment = patient && (patient.payments || []).find(payment => payment.id === paymentId);
+            if (!patient) return showToast('No se encontró la ficha del paciente.', true);
+            const amount = Number($('#paymentAmount').value);
+            const date = $('#paymentDate').value;
+            if (!Number.isSafeInteger(amount) || amount <= 0) return showToast('Ingresa un monto válido en pesos chilenos, mayor que cero.', true);
+            if (!date) return showToast('Indica la fecha del pago.', true);
+            const updatedPayment = {
+                ...(existingLegacyPayment || {}),
+                id: existingLegacyPayment ? existingLegacyPayment.id : makeId('pago'),
+                date,
+                amount,
+                method: $('#paymentMethod').value.trim() || 'Sin especificar',
+                note: $('#paymentNote').value.trim()
+            };
+            if (existingLegacyPayment) patient.payments[patient.payments.indexOf(existingLegacyPayment)] = updatedPayment;
+            else patient.payments.push(updatedPayment);
+            $('#paymentDialog').close();
+            persistAndRender('Pago anterior actualizado.');
+            return;
+        }
         const acquisition = patient && (patient.acquisitions || []).find(item => item.id === $('#paymentAcquisition').value);
         if (!acquisition) return showToast('Selecciona una adquisición válida.', true);
         const amount = Number($('#paymentAmount').value);
         const date = $('#paymentDate').value;
-        const balance = purchaseBalance(acquisition);
+        const existingPayment = acquisitionPayments(acquisition).find(payment => payment.id === paymentId);
+        const balance = purchaseBalance(acquisition) + Number(existingPayment?.amount || 0);
         if (!Number.isSafeInteger(amount) || amount <= 0) return showToast('Ingresa un abono válido en pesos chilenos, mayor que cero.', true);
         if (amount > balance) return showToast(`El abono no puede superar el saldo pendiente de ${formatMoney(balance)}.`, true);
         if (!date) return showToast('Indica la fecha del abono.', true);
         if (!Array.isArray(acquisition.payments)) acquisition.payments = [];
-        acquisition.payments.push({
-            id: makeId('pago'),
+        const payment = {
+            ...(existingPayment || {}),
+            id: existingPayment ? existingPayment.id : makeId('pago'),
             date,
             amount,
             method: $('#paymentMethod').value.trim() || 'Sin especificar',
             note: $('#paymentNote').value.trim()
-        });
+        };
+        if (existingPayment) acquisition.payments[acquisition.payments.indexOf(existingPayment)] = payment;
+        else acquisition.payments.push(payment);
         $('#paymentDialog').close();
-        persistAndRender('Abono registrado.');
+        persistAndRender(existingPayment ? 'Abono actualizado.' : 'Abono registrado.');
+    }
+
+    function deletePayment(patientId, acquisitionId, paymentId, source = 'acquisition') {
+        const patient = patientFor(patientId);
+        if (source === 'legacy') {
+            const legacyPayment = patient && (patient.payments || []).find(payment => payment.id === paymentId);
+            if (!patient || !legacyPayment) return;
+            if (!window.confirm('¿Eliminar este pago anterior sin asignar?')) return;
+            patient.payments = patient.payments.filter(payment => payment.id !== paymentId);
+            $('#paymentDialog').close();
+            persistAndRender('Pago anterior eliminado.');
+            return;
+        }
+        const acquisition = patient && (patient.acquisitions || []).find(item => item.id === acquisitionId);
+        if (!acquisition || !acquisitionPayments(acquisition).some(payment => payment.id === paymentId)) return;
+        if (!window.confirm('¿Eliminar este abono? El monto volverá a aparecer como saldo pendiente.')) return;
+        acquisition.payments = acquisitionPayments(acquisition).filter(payment => payment.id !== paymentId);
+        $('#paymentDialog').close();
+        persistAndRender('Abono eliminado y saldo actualizado.');
     }
 
     function addPackage(patientId) {
@@ -1658,8 +2281,29 @@
         if (!patient || !window.confirm(`Eliminar a ${patient.name} y todos sus datos locales (adquisiciones, pagos, sesiones, resúmenes y tareas)? Esta acción no se puede deshacer.`)) return;
         state.patients = state.patients.filter(item => item.id !== patientId);
         state.appointments = state.appointments.filter(item => item.patientId !== patientId);
+        state.workshopEnrollments = (state.workshopEnrollments || []).filter(item => item.patientId !== patientId);
         selectedPatientId = '';
         persistAndRender('Paciente y datos asociados eliminados.');
+    }
+
+    async function deleteAppointment(id) {
+        const appointment = state.appointments.find(item => item.id === id);
+        if (!appointment || !window.confirm('¿Eliminar esta sesión y su historial de resúmenes?')) return;
+        state.appointments = state.appointments.filter(item => item.id !== id);
+        if ($('#appointmentId').value === id && $('#appointmentDialog').open) $('#appointmentDialog').close();
+        await persistAndRender('Sesión eliminada.');
+    }
+
+    async function updateAppointmentStatus(id, status) {
+        const appointment = state.appointments.find(item => item.id === id);
+        if (!appointment || !['scheduled', 'completed', 'cancelled'].includes(status)) {
+            showToast('No se encontró la sesión o el estado seleccionado no es válido.', true);
+            return;
+        }
+        if (appointment.status === status) return;
+        appointment.status = status;
+        const statusLabel = status === 'completed' ? 'completada' : status === 'cancelled' ? 'cancelada' : 'programada';
+        await persistAndRender(`Sesión marcada como ${statusLabel}.`);
     }
 
     function exportBackup() {
@@ -1687,10 +2331,14 @@
                 )
             ));
             const validAppointments = data.appointments.every(item => item && typeof item.id === 'string' && typeof item.patientId === 'string' && typeof item.date === 'string');
+            const validWorkshopEnrollments = data.workshopEnrollments === undefined || Array.isArray(data.workshopEnrollments) && data.workshopEnrollments.every(item =>
+                item && typeof item.id === 'string' && typeof item.patientId === 'string' &&
+                typeof item.workshopSeriesId === 'string' && typeof item.acquisitionId === 'string'
+            );
             const validSlots = data.slots.every(item => item && typeof item.id === 'string' && typeof item.date === 'string' && ['open', 'blocked'].includes(item.type));
-            if (!validPatients || !validAcquisitions || !validAppointments || !validSlots) throw new Error('La copia tiene registros incompletos o no válidos.');
+            if (!validPatients || !validAcquisitions || !validAppointments || !validWorkshopEnrollments || !validSlots) throw new Error('La copia tiene registros incompletos o no válidos.');
             if (!window.confirm(`Importar reemplazará los datos locales actuales por ${data.patients.length} pacientes del archivo. ¿Continuar?`)) return;
-            state = data;
+            state = { ...data, workshopEnrollments: Array.isArray(data.workshopEnrollments) ? data.workshopEnrollments : [] };
             selectedPatientId = '';
             await persistAndRender('Copia importada correctamente.');
         } catch (error) {
@@ -1701,29 +2349,40 @@
     }
 
     function bindEvents() {
+        $('#cloudLoginForm').addEventListener('submit', handleCloudLogin);
+        $('#signOutButton').addEventListener('click', async () => {
+            const { error } = await supabaseClient.auth.signOut();
+            if (error) {
+                showToast(`No se pudo cerrar sesión: ${error.message}`, true);
+                return;
+            }
+            cloudUser = null;
+            localStorage.removeItem('renova-authorized-owner-id');
+            $('#patientApp').hidden = true;
+            $('#signOutButton').hidden = true;
+            setCloudStatus('Sesión cerrada');
+            $('#cloudLoginDialog').showModal();
+        });
         $$('.nav [data-view]').forEach(button => button.addEventListener('click', () => setView(button.dataset.view)));
         $$('[data-go]').forEach(button => button.addEventListener('click', () => setView(button.dataset.go)));
         $('#newPatientButton').addEventListener('click', () => openPatientDialog());
         $('#patientsNewButton').addEventListener('click', () => openPatientDialog());
         $('#patientSearch').addEventListener('input', renderDirectory);
-        $('#patientAppointmentDate').addEventListener('input', renderPatientSeriesPreview);
-        $('#patientAppointmentStart').addEventListener('input', renderPatientSeriesPreview);
-        $('#patientAppointmentEnd').addEventListener('input', renderPatientSeriesPreview);
-        $('#patientWeekdays').addEventListener('input', renderPatientSeriesPreview);
-        $('#patientWeekdays').addEventListener('change', event => {
-            const toggle = event.target.closest('[data-day-enabled]');
-            if (toggle) {
-                updatePatientScheduleRow(toggle.closest('[data-weekday-row]'));
-                updatePatientSingleScheduleVisibility();
-            }
-            renderPatientSeriesPreview();
-        });
         $('#patientForm').addEventListener('submit', savePatient);
         $('#acquisitionForm').addEventListener('submit', saveAcquisition);
         $('#acquisitionProduct').addEventListener('change', updateAcquisitionProduct);
+        $('#acquisitionSessions').addEventListener('input', () => renderAcquisitionScheduleFields());
+        $('#acquisitionScheduleSessions').addEventListener('change', () => renderAcquisitionScheduleFields(false));
+        $('#acquisitionDate').addEventListener('change', () => renderAcquisitionScheduleFields());
         $('#paymentForm').addEventListener('submit', saveAcquisitionPayment);
+        $('#packScheduleForm').addEventListener('submit', savePackSchedule);
         $('#paymentAcquisition').addEventListener('change', updatePaymentBalance);
+        $('#deleteAcquisitionButton').addEventListener('click', () => deleteAcquisition($('#acquisitionPatientId').value, $('#acquisitionId').value));
+        $('#deletePaymentButton').addEventListener('click', () => deletePayment($('#paymentDialog').dataset.patientId, $('#paymentAcquisition').value, $('#paymentId').value, $('#paymentSource').value));
         $('#appointmentForm').addEventListener('submit', saveAppointment);
+        $('#appointmentForm').addEventListener('input', clearAppointmentError);
+        $('#appointmentForm').addEventListener('change', clearAppointmentError);
+        $('#appointmentPatient').addEventListener('change', () => refreshAppointmentAcquisitions());
         $('#appointmentDialog').addEventListener('close', () => {
             if (!activeRecognition) return;
             const recognition = activeRecognition;
@@ -1734,6 +2393,7 @@
         });
         $('#slotForm').addEventListener('submit', saveSlot);
         $('#workshopForm').addEventListener('submit', saveWorkshopSeries);
+        $('#workshopEnrollmentForm').addEventListener('submit', saveWorkshopEnrollment);
         $('#workshopProduct').addEventListener('change', setWorkshopSessionCount);
         $('#workshopStartDate').addEventListener('input', renderWorkshopPreview);
         $('#workshopSessionCount').addEventListener('input', renderWorkshopPreview);
@@ -1743,9 +2403,13 @@
         $('#calendarNewSession').addEventListener('click', () => openAppointmentDialog(null, '', selectedDate));
         $('#agendaNewSlot').addEventListener('click', () => openSlotDialog(selectedDate));
         $('#tasksNewButton').addEventListener('click', () => openTaskDialog());
-        $('#previousMonth').addEventListener('click', () => changeCalendarMonth(-1));
-        $('#nextMonth').addEventListener('click', () => changeCalendarMonth(1));
+        $('#previousMonth').addEventListener('click', () => changeCalendarPeriod(-1));
+        $('#nextMonth').addEventListener('click', () => changeCalendarPeriod(1));
         $('#todayButton').addEventListener('click', () => { selectedDate = dateKey(new Date()); visibleMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1); renderCalendar(); });
+        $$('[data-calendar-view]').forEach(button => button.addEventListener('click', () => {
+            calendarView = button.dataset.calendarView;
+            renderCalendar();
+        }));
         $('#taskPatientFilter').addEventListener('change', renderTasks);
         $('#taskStatusFilter').addEventListener('change', renderTasks);
         $('#dictateButton').addEventListener('click', dictateNotes);
@@ -1753,13 +2417,7 @@
         $('#copyPromptButton').addEventListener('click', copyPrompt);
         $('#openGeminiButton').addEventListener('click', () => openAiSite('gemini'));
         $('#openChatGPTButton').addEventListener('click', () => openAiSite('chatgpt'));
-        $('#deleteAppointmentButton').addEventListener('click', async () => {
-            const id = $('#appointmentId').value;
-            if (!id || !window.confirm('¿Eliminar esta sesión y su historial de resúmenes?')) return;
-            state.appointments = state.appointments.filter(item => item.id !== id);
-            $('#appointmentDialog').close();
-            await persistAndRender('Sesión eliminada.');
-        });
+        $('#deleteAppointmentButton').addEventListener('click', () => deleteAppointment($('#appointmentId').value));
         $('#exportButton').addEventListener('click', exportBackup);
         $('#importButton').addEventListener('click', () => $('#importFile').click());
         $('#importFile').addEventListener('change', event => { const file = event.target.files[0]; if (file) importBackup(file); });
@@ -1770,13 +2428,36 @@
         document.body.addEventListener('click', async event => {
             const target = event.target.closest('button');
             if (!target) return;
+            if (target.dataset.addRecurrence) { addRecurrenceRule(target.dataset.addRecurrence); return; }
+            if (target.dataset.removeRecurrence) {
+                const container = $(`#${target.dataset.removeRecurrence}`);
+                const rules = container.querySelectorAll('[data-recurrence-rule]');
+                if (rules.length <= 1) return showToast('Debe quedar al menos un horario semanal.', true);
+                target.closest('[data-recurrence-rule]').remove();
+                Array.from(container.querySelectorAll('[data-recurrence-rule]')).forEach((rule, index) => {
+                    rule.querySelector('strong').textContent = `Horario semanal ${index + 1}`;
+                    rule.querySelector('[data-remove-recurrence]').setAttribute('aria-label', `Quitar horario semanal ${index + 1}`);
+                });
+                renderRecurrenceSummary(target.dataset.removeRecurrence);
+                return;
+            }
             if (target.dataset.selectDate) { selectedDate = target.dataset.selectDate; visibleMonth = new Date(`${selectedDate}T00:00:00`); renderCalendar(); return; }
             if (target.dataset.openAppointment) { const item = state.appointments.find(session => session.id === target.dataset.openAppointment); if (item) openAppointmentDialog(item); return; }
+            if (target.dataset.deleteAppointment) { await deleteAppointment(target.dataset.deleteAppointment); return; }
             if (target.dataset.selectPatient) { selectedPatientId = target.dataset.selectPatient; setView('pacientes'); renderDirectory(); return; }
+            if (target.dataset.togglePatientDetail) {
+                collapsedPatientDetailId = collapsedPatientDetailId === target.dataset.togglePatientDetail ? '' : target.dataset.togglePatientDetail;
+                renderPatientDetail();
+                return;
+            }
             if (target.dataset.editPatient) { const patient = patientFor(target.dataset.editPatient); if (patient) openPatientDialog(patient); return; }
             if (target.dataset.addSession) { setView('agenda'); openAppointmentDialog(null, target.dataset.addSession, selectedDate); return; }
+            if (target.dataset.scheduleAcquisition) { openPackScheduleDialog(target.dataset.scheduleAcquisition, target.dataset.acquisitionId); return; }
             if (target.dataset.addAcquisition) { openAcquisitionDialog(target.dataset.addAcquisition); return; }
+            if (target.dataset.editAcquisition) { openAcquisitionDialog(target.dataset.editAcquisition, false, target.dataset.acquisitionId); return; }
             if (target.dataset.addPayment) { registerPayment(target.dataset.addPayment, target.dataset.acquisitionId || ''); return; }
+            if (target.dataset.editPayment) { registerPayment(target.dataset.editPayment, target.dataset.acquisitionId || '', target.dataset.paymentId); return; }
+            if (target.dataset.deletePayment) { deletePayment(target.dataset.deletePayment, target.dataset.acquisitionId || '', target.dataset.paymentId, target.dataset.paymentSource || 'acquisition'); return; }
             if (target.dataset.addPackage) { addPackage(target.dataset.addPackage); return; }
             if (target.dataset.addTask) { openTaskDialog(target.dataset.addTask); return; }
             if (target.dataset.deletePatient) { deletePatient(target.dataset.deletePatient); return; }
@@ -1789,11 +2470,18 @@
             if (target.dataset.deleteWorkshopSeries) {
                 const seriesId = target.dataset.deleteWorkshopSeries;
                 const count = state.appointments.filter(item => item.workshopSeriesId === seriesId).length;
-                if (!window.confirm(`¿Eliminar las ${count} sesiones de este taller?`)) return;
+                const registrations = (state.workshopEnrollments || []).filter(item => item.workshopSeriesId === seriesId);
+                if (!window.confirm(`¿Eliminar las ${count} sesiones de este taller y ${registrations.length} inscripción(es) con sus adquisiciones y abonos?`)) return;
                 state.appointments = state.appointments.filter(item => item.workshopSeriesId !== seriesId);
+                const acquisitionIds = new Set(registrations.map(item => item.acquisitionId));
+                state.patients.forEach(patient => {
+                    patient.acquisitions = (patient.acquisitions || []).filter(acquisition => !acquisitionIds.has(acquisition.id));
+                });
+                state.workshopEnrollments = (state.workshopEnrollments || []).filter(item => item.workshopSeriesId !== seriesId);
                 await persistAndRender('Serie de taller eliminada del calendario.');
                 return;
             }
+            if (target.dataset.enrollWorkshop) { openWorkshopEnrollmentDialog(target.dataset.enrollWorkshop); return; }
             if (target.dataset.deleteTask !== undefined) {
                 const patient = patientFor(target.dataset.deleteTask);
                 if (patient && window.confirm('¿Quitar esta tarea del seguimiento?')) {
@@ -1805,6 +2493,11 @@
         document.body.addEventListener('change', event => {
             const input = event.target;
             if (input.matches('[data-task-toggle]')) toggleTask(input.dataset.taskToggle, Number(input.dataset.taskIndex));
+            if (input.matches('[data-appointment-status]')) updateAppointmentStatus(input.dataset.appointmentStatus, input.value);
+        });
+        document.body.addEventListener('input', event => {
+            const input = event.target;
+            if (input.matches('[data-recurrence-count]')) renderRecurrenceSummary(input.closest('[data-recurrence-rule]').parentElement.id);
         });
     }
 
@@ -1815,6 +2508,12 @@
             return;
         }
         try {
+            if (window.supabase && window.RENOVA_SUPABASE_CONFIG) {
+                supabaseClient = window.supabase.createClient(
+                    window.RENOVA_SUPABASE_CONFIG.url,
+                    window.RENOVA_SUPABASE_CONFIG.publishableKey
+                );
+            }
             db = await openDatabase();
             await loadState();
             await loadWorkshopCatalog();
@@ -1823,8 +2522,39 @@
             if ('serviceWorker' in navigator && location.protocol !== 'file:') {
                 navigator.serviceWorker.register('./sw.js').catch(error => showToast(`No se pudo activar el modo PWA sin conexión: ${error.message}`, true));
             }
+            if (!supabaseClient) {
+                setCloudStatus('Supabase no disponible');
+                if (localStorage.getItem('renova-authorized-owner-id')) {
+                    $('#patientApp').hidden = false;
+                    showToast('Estás sin conexión a Supabase. Los cambios se guardarán en este dispositivo hasta que vuelvas a conectarte.', true);
+                    return;
+                }
+                $('#cloudLoginError').textContent = 'No se pudo cargar la conexión con Supabase. Revisa tu conexión a internet.';
+                $('#cloudLoginError').hidden = false;
+                $('#cloudLoginDialog').showModal();
+                return;
+            }
+            const { data: { session }, error } = await supabaseClient.auth.getSession();
+            if (error) throw error;
+            if (session) {
+                try {
+                    await completeCloudSignIn(session);
+                } catch (error) {
+                    const { error: signOutError } = await supabaseClient.auth.signOut();
+                    $('#cloudLoginError').textContent = `No se pudo validar el acceso privado: ${error.message}${signOutError ? ` No se pudo cerrar la sesión: ${signOutError.message}` : ''}`;
+                    $('#cloudLoginError').hidden = false;
+                    $('#cloudLoginDialog').showModal();
+                }
+            }
+            else $('#cloudLoginDialog').showModal();
         } catch (error) {
-            showToast(`No fue posible iniciar la base local: ${error.message}`, true);
+            if ($('#patientApp').hidden) {
+                $('#cloudLoginError').textContent = `No se pudo iniciar el acceso privado: ${error.message}`;
+                $('#cloudLoginError').hidden = false;
+                if (!$('#cloudLoginDialog').open) $('#cloudLoginDialog').showModal();
+            } else {
+                showToast(`No fue posible iniciar la base local: ${error.message}`, true);
+            }
         }
     }
 

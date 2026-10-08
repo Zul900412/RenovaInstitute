@@ -11,6 +11,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./admin/supabase-config.js"></script>
     
     <style>
         .category-pill.active { background-color: #8C8660; color: white; border-color: #8C8660; }
@@ -1634,7 +1636,32 @@
         // Inicializamos la tienda al cargar la página
         window.onload = () => {
             inicializarTiendaConFiltro();
+            cargarCatalogoPublicado();
         };
+
+        async function cargarCatalogoPublicado() {
+            try {
+                if (!window.supabase || !window.RENOVA_SUPABASE_CONFIG) {
+                    throw new Error('El cliente de Supabase no está disponible.');
+                }
+                const cliente = window.supabase.createClient(
+                    window.RENOVA_SUPABASE_CONFIG.url,
+                    window.RENOVA_SUPABASE_CONFIG.publishableKey
+                );
+                const { data, error } = await cliente
+                    .from('renova_store_catalog')
+                    .select('products')
+                    .eq('id', 1)
+                    .maybeSingle();
+                if (error) throw error;
+                if (data && Array.isArray(data.products)) {
+                    catalogo.splice(0, catalogo.length, ...data.products);
+                    renderTienda();
+                }
+            } catch (error) {
+                console.warn(`No se pudo actualizar el catálogo público desde Supabase; se muestra el catálogo integrado: ${error.message}`);
+            }
+        }
     </script>
 </body>
 </html>

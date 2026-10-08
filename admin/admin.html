@@ -54,6 +54,10 @@
         .section-title { grid-column: 1 / -1; margin: 10px 0 -3px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--olive-dark); font: 700 11px Arial, sans-serif; letter-spacing: .1em; text-transform: uppercase; }
         .form-actions { position: sticky; bottom: 0; z-index: 5; display: flex; justify-content: space-between; gap: 10px; margin: 20px -20px -20px; padding: 14px 20px 20px; border-top: 1px solid var(--line); background: linear-gradient(to bottom, #fffdfb 0%, #fffdfb 85%); }
         .empty { padding: 24px 8px; color: var(--muted); text-align: center; }
+        .cloud-access { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; align-items: end; margin-bottom: 20px; padding: 18px; }
+        .cloud-login { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)) auto; gap: 10px; align-items: end; }
+        .cloud-status { grid-column: 1 / -1; margin: 0; color: var(--muted); font: 12px/1.5 Arial, sans-serif; }
+        .cloud-error { color: var(--danger); }
         
         /* Estilos para el modal del Banner */
         dialog { max-width: 500px; width: 100%; border: 1px solid var(--line); border-radius: 12px; padding: 24px; background: var(--paper); color: var(--ink); box-shadow: 0 10px 40px rgba(75, 58, 43, 0.2); }
@@ -78,10 +82,24 @@
             </div>
         </header>
 
+        <section class="panel cloud-access">
+            <div>
+                <h2>Acceso privado a la tienda</h2>
+                <p class="hint">Inicia sesión con la cuenta autorizada de Supabase para consultar y sincronizar el catálogo.</p>
+            </div>
+            <form id="storeLoginForm" class="cloud-login">
+                <label class="field">Correo electrónico<input id="storeEmail" type="email" autocomplete="username" required></label>
+                <label class="field">Contraseña<input id="storePassword" type="password" autocomplete="current-password" required></label>
+                <button class="button" id="storeLoginButton" type="submit">Iniciar sesión</button>
+            </form>
+            <p class="cloud-status" id="storeCloudStatus" role="status">No conectado</p>
+            <button class="button secondary" id="storeSignOutButton" type="button" hidden>Cerrar sesión</button>
+        </section>
+
         <section class="panel load-panel">
             <div>
-                <h2>1. Conecta tus archivos</h2>
-                <p class="hint">Cada botón carga un archivo distinto. Selecciona exactamente el archivo que indica el botón.</p>
+                <h2>Catálogo base del sitio</h2>
+                <p class="hint">Si todavía no existe un catálogo en Supabase, se usa Tienda.html como base inicial. Los cambios autenticados se guardan en la nube.</p>
                 <div class="dropzone" style="margin-bottom:10px">
                     <div style="flex:1"><strong>Tienda.html</strong><small class="file-status" id="estadoTiendaArchivo">No conectada</small></div>
                     <button class="button secondary" type="button" id="abrirConPermisoBtn">Cargar tienda</button>
@@ -93,14 +111,14 @@
                 </div>
             </div>
             <div>
-                <h2>2. Estado y guardado</h2>
+                <h2>Estado y sincronización</h2>
                 <p class="status" id="estado">Aún no has cargado un archivo.</p>
-                <p class="hint">Los productos se guardan únicamente en Tienda.html. El banner se guarda en ambos archivos cuando los dos están conectados.</p>
-                <button class="button success" type="button" id="guardarDirectoBtn" disabled>Guardar cambios de tienda</button>
+                <p class="hint">El catálogo es público para mostrar la tienda, pero solo la cuenta autorizada puede modificarlo.</p>
+                <button class="button success" type="button" id="guardarDirectoBtn" disabled>Sincronizar catálogo</button>
             </div>
         </section>
 
-        <main class="workspace">
+        <main class="workspace" id="storeWorkspace" inert>
             <aside class="panel list-panel">
                 <div class="toolbar">
                     <h2 style="margin-right:auto">Productos</h2>
@@ -227,6 +245,8 @@
         </div>
     </dialog>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./supabase-config.js"></script>
     <script>
         // --- Lógica del Banner Promocional ---
         const modalBanner = document.getElementById('modalBanner');
@@ -395,6 +415,9 @@
         let indiceSeleccionado = -1;
         let productoEnEdicion = null;
         let htmlGenerado = '';
+        let supabaseClient = null;
+        let cloudUser = null;
+        let initialCatalogPromise = null;
 
         const $ = selector => document.querySelector(selector);
         const claveRecursosPrivados = 'renova-recursos-gratuitos';
@@ -414,6 +437,112 @@
             localStorage.setItem(claveRecursosPrivados, JSON.stringify(recursos));
         }
 
+        function setStoreCloudStatus(message, isError = false) {
+            $('#storeCloudStatus').textContent = message;
+            $('#storeCloudStatus').classList.toggle('cloud-error', isError);
+        }
+
+        async function cargarCatalogoSupabase() {
+            const { data, error } = await supabaseClient
+                .from('renova_store_catalog')
+                .select('products')
+                .eq('id', 1)
+                .maybeSingle();
+            if (error) throw error;
+            const { data: privateData, error: privateError } = await supabaseClient
+                .from('renova_private_store_resources')
+                .select('resources')
+                .eq('owner_id', cloudUser.id)
+                .maybeSingle();
+            if (privateError) throw privateError;
+            if (privateData && privateData.resources && typeof privateData.resources === 'object' && !Array.isArray(privateData.resources)) {
+                localStorage.setItem(claveRecursosPrivados, JSON.stringify(privateData.resources));
+            }
+            if (data) {
+                if (!Array.isArray(data.products)) throw new Error('El catálogo remoto tiene un formato no válido.');
+                productos = data.products.map(normalizarProducto);
+                indiceSeleccionado = productos.length ? 0 : -1;
+                renderizarLista();
+                cargarFormulario();
+                generarSalida();
+                $('#estado').textContent = `${productos.length} productos cargados desde Supabase.`;
+            } else {
+                $('#estado').textContent = `${productos.length} productos base cargados. Al guardar se creará la copia en Supabase.`;
+            }
+            habilitarAdministracion();
+        }
+
+        async function validarUsuarioTienda(session) {
+            const { data: isOwner, error } = await supabaseClient.rpc('is_renova_workspace_owner');
+            if (error) throw error;
+            if (isOwner !== true) throw new Error('Esta cuenta no está autorizada para administrar la tienda.');
+            cloudUser = session.user;
+            await cargarCatalogoSupabase();
+            $('#storeWorkspace').inert = false;
+            $('#storeSignOutButton').hidden = false;
+            $('#storeLoginForm').hidden = true;
+            setStoreCloudStatus(`Conectado: ${cloudUser.email}`);
+        }
+
+        async function iniciarSesionTienda(event) {
+            event.preventDefault();
+            setStoreCloudStatus('Validando acceso…');
+            $('#storeLoginButton').disabled = true;
+            try {
+                const { data, error } = await supabaseClient.auth.signInWithPassword({
+                    email: $('#storeEmail').value.trim(),
+                    password: $('#storePassword').value
+                });
+                if (error) throw error;
+                await validarUsuarioTienda(data.session);
+            } catch (error) {
+                cloudUser = null;
+                await supabaseClient.auth.signOut();
+                setStoreCloudStatus(`No se pudo iniciar sesión: ${error.message}`, true);
+            } finally {
+                $('#storeLoginButton').disabled = false;
+            }
+        }
+
+        async function inicializarAccesoTienda() {
+            if (!window.supabase || !window.RENOVA_SUPABASE_CONFIG) {
+                setStoreCloudStatus('No se pudo cargar Supabase. Revisa la conexión a internet.', true);
+                $('#storeLoginButton').disabled = true;
+                return;
+            }
+            supabaseClient = window.supabase.createClient(
+                window.RENOVA_SUPABASE_CONFIG.url,
+                window.RENOVA_SUPABASE_CONFIG.publishableKey
+            );
+            $('#storeLoginForm').addEventListener('submit', iniciarSesionTienda);
+            $('#storeSignOutButton').addEventListener('click', async () => {
+                const { error } = await supabaseClient.auth.signOut();
+                if (error) {
+                    setStoreCloudStatus(`No se pudo cerrar sesión: ${error.message}`, true);
+                    return;
+                }
+                cloudUser = null;
+                $('#storeWorkspace').inert = true;
+                $('#storeLoginForm').hidden = false;
+                $('#storeSignOutButton').hidden = true;
+                habilitarAdministracion();
+                setStoreCloudStatus('Sesión cerrada');
+            });
+            await initialCatalogPromise;
+            const { data: { session }, error } = await supabaseClient.auth.getSession();
+            if (error) throw error;
+            if (session) {
+                try {
+                    await validarUsuarioTienda(session);
+                } catch (error) {
+                    await supabaseClient.auth.signOut();
+                    setStoreCloudStatus(`No se pudo validar el acceso privado: ${error.message}`, true);
+                }
+            } else {
+                setStoreCloudStatus('Inicia sesión para editar y sincronizar el catálogo.');
+            }
+        }
+
         function actualizarCampoUrlRecurso() {
             const esGratuito = $('#cat').value === 'Gratuitos';
             $('#urlRecursoField').hidden = !esGratuito;
@@ -426,7 +555,7 @@
             const tiendaCargada = Boolean(htmlOriginal);
             const tiendaConectada = Boolean(archivoHandle);
             const inicioCargado = Boolean(htmlInicio || archivoInicioHandle);
-            $('#guardarDirectoBtn').disabled = !tiendaCargada;
+            $('#guardarDirectoBtn').disabled = !tiendaCargada || !cloudUser;
             $('#estadoTiendaArchivo').textContent = tiendaConectada || (location.protocol !== 'file:' && tiendaCargada) ? 'Conectada y lista para guardar' : (tiendaCargada ? 'Cargada; conecta el archivo para el banner' : 'No conectada');
             $('#guardarBannerBtn').disabled = !puedeGuardarBanner();
         }
@@ -439,9 +568,6 @@
         $('#guardarDirectoBtn').addEventListener('click', guardarDirecto);
         $('#filtroCategoria').addEventListener('change', renderizarLista);
         $('#filtroEstado').addEventListener('change', renderizarLista);
-
-        window.addEventListener('DOMContentLoaded', cargarTiendaPredeterminada);
-        window.addEventListener('DOMContentLoaded', cargarInicioPredeterminado);
 
         $('#archivoTienda').addEventListener('change', async event => {
             const archivo = event.target.files[0];
@@ -482,11 +608,14 @@
         }
 
         function habilitarAdministracion() {
-            $('#nuevoBtn').disabled = false;
-            $('#duplicarBtn').disabled = false;
-            $('#buscar').disabled = false;
-            $('#filtroCategoria').disabled = false;
-            $('#filtroEstado').disabled = false;
+            const habilitado = Boolean(cloudUser);
+            $('#nuevoBtn').disabled = !habilitado;
+            $('#duplicarBtn').disabled = !habilitado;
+            $('#buscar').disabled = !habilitado;
+            $('#filtroCategoria').disabled = !habilitado;
+            $('#filtroEstado').disabled = !habilitado;
+            $('#eliminarBtn').disabled = !habilitado || !productos[indiceSeleccionado];
+            $('#guardarDirectoBtn').disabled = !habilitado || !htmlOriginal;
             actualizarEstadoArchivos();
         }
 
@@ -525,7 +654,7 @@
             productoEnEdicion = JSON.parse(JSON.stringify(producto));
             $('#productoForm').hidden = false;
             $('#tituloFormulario').textContent = producto.nombre || 'Producto sin nombre';
-            $('#ayudaFormulario').textContent = `Editando ${producto.id}. Los cambios se aplican al HTML generado.`;
+            $('#ayudaFormulario').textContent = `Editando ${producto.id}. Los cambios se sincronizan con Supabase.`;
             $('#eliminarBtn').disabled = false;
             camposTexto.forEach(campo => { $(('#' + campo)).value = producto[campo] || ''; });
             $('#estadoProducto').value = producto.estado === 'espera' ? 'espera' : 'activo';
@@ -633,21 +762,23 @@
         }
 
         async function sincronizarCambios(mensaje) {
-            if (location.protocol === 'file:') {
-                $('#estado').textContent = `${mensaje} Para escritura automatica, abre Abrir-Administracion.bat.`;
-                return;
-            }
             try {
-                const respuesta = await fetch('/api/tienda', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/html; charset=utf-8' },
-                    body: htmlGenerado
-                });
-                if (!respuesta.ok) throw new Error('El servidor no pudo guardar Tienda.html.');
+                if (!cloudUser) throw new Error('Inicia sesión con la cuenta autorizada antes de guardar.');
+                const { error } = await supabaseClient
+                    .from('renova_store_catalog')
+                    .upsert({ id: 1, owner_id: cloudUser.id, products: productos }, { onConflict: 'id' });
+                if (error) throw error;
+                const { error: resourcesError } = await supabaseClient
+                    .from('renova_private_store_resources')
+                    .upsert({
+                        owner_id: cloudUser.id,
+                        resources: leerRecursosPrivados()
+                    }, { onConflict: 'owner_id' });
+                if (resourcesError) throw resourcesError;
                 htmlOriginal = htmlGenerado;
                 $('#estado').textContent = mensaje;
             } catch (error) {
-                $('#estado').textContent = `No se pudo guardar automaticamente: ${error.message}`;
+                $('#estado').textContent = `No se pudo sincronizar con Supabase: ${error.message}`;
             }
         }
 
@@ -712,34 +843,16 @@
 
         async function guardarDirecto() {
             generarSalida();
-            try {
-                if (location.protocol !== 'file:') {
-                    const respuesta = await fetch('/api/tienda', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'text/html; charset=utf-8' },
-                        body: htmlGenerado
-                    });
-                    if (!respuesta.ok) throw new Error('El servidor no pudo guardar Tienda.html.');
-                    htmlOriginal = htmlGenerado;
-                    $('#estado').textContent = 'Tienda.html actualizado directamente.';
-                    return;
-                }
-                if (!archivoHandle) return $('#estado').textContent = 'Abre Tienda.html con el boton de permiso para guardarlo directamente.';
-                const permiso = await archivoHandle.requestPermission({ mode: 'readwrite' });
-                if (permiso !== 'granted') throw new Error('No se concedio permiso de escritura.');
-                const writable = await archivoHandle.createWritable();
-                await writable.write(htmlGenerado);
-                await writable.close();
-                htmlOriginal = htmlGenerado;
-                $('#estado').textContent = 'Tienda.html actualizado correctamente.';
-            } catch (error) {
-                $('#estado').textContent = `No se pudo guardar directamente: ${error.message}. Puedes descargar el HTML.`;
-            }
+            await sincronizarCambios('Catálogo sincronizado con Supabase.');
         }
 
         function escapeHtml(text) {
             return String(text).replace(/[&<>'"]/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[character]));
         }
+
+        initialCatalogPromise = cargarTiendaPredeterminada();
+        cargarInicioPredeterminado();
+        inicializarAccesoTienda().catch(error => setStoreCloudStatus(`No se pudo inicializar el acceso: ${error.message}`, true));
     </script>
 </body>
 </html>
