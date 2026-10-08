@@ -1448,81 +1448,90 @@
     }
 
     function dictateNotes() {
-    const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!Recognition) {
-        $('#dictationStatus').textContent = 'Este navegador no ofrece reconocimiento de voz. Prueba Chrome o Edge actualizado, con conexión a internet y desde HTTPS o localhost.';
-        return;
-    }
-    if (!window.isSecureContext) {
-        $('#dictationStatus').textContent = 'El navegador bloquea el micrófono en esta dirección. Abre el dashboard desde HTTPS o http://localhost.';
-        return;
-    }
-    if (activeRecognition) {
-        try {
-            activeRecognition.stop();
-            $('#dictationStatus').textContent = 'Finalizando el dictado…';
-        } catch (error) {
-            $('#dictationStatus').textContent = `No se pudo detener el dictado: ${error.message}`;
+        const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!Recognition) {
+            $('#dictationStatus').textContent = 'Este navegador no ofrece reconocimiento de voz. Prueba Chrome o Edge actualizado, con conexión a internet y desde HTTPS o localhost.';
+            return;
         }
-        return;
-    }
-    if (!window.confirm('Para transcribir, tu navegador puede procesar el audio mediante su servicio de reconocimiento. ¿Permites iniciar el dictado?')) return;
-    const recognition = new Recognition();
-    activeRecognition = recognition;
-    recognition.lang = 'es';
-    recognition.continuous = true;
-    recognition.interimResults = true;
-    recognition.maxAlternatives = 1;
-    $('#dictateButtonLabel').textContent = 'Detener dictado';
-    $('#dictateButton').setAttribute('aria-pressed', 'true');
-    $('#dictationStatus').textContent = 'Micrófono activo. Habla con claridad; las frases reconocidas se agregarán a las notas.';
-    recognition.onresult = event => {
-        const finalParts = [];
-        let interim = '';
-        for (let index = event.resultIndex; index < event.results.length; index += 1) {
-            const transcript = event.results[index][0].transcript;
-            if (event.results[index].isFinal) finalParts.push(transcript);
-            else interim += transcript;
+        if (!window.isSecureContext) {
+            $('#dictationStatus').textContent = 'El navegador bloquea el micrófono en esta dirección. Abre el dashboard desde HTTPS o http://localhost.';
+            return;
         }
-        if (finalParts.length) {
-            const notes = $('#appointmentNotes');
-            const transcript = finalParts.join(' ').trim();
-            notes.value = `${notes.value.trim()}${notes.value.trim() ? ' ' : ''}${transcript}`;
-            notes.dispatchEvent(new Event('input', { bubbles: true }));
+        if (activeRecognition) {
+            try {
+                activeRecognition.stop();
+                $('#dictationStatus').textContent = 'Finalizando el dictado…';
+            } catch (error) {
+                $('#dictationStatus').textContent = `No se pudo detener el dictado: ${error.message}`;
+            }
+            return;
         }
-        $('#dictationStatus').textContent = interim
-            ? `Escuchando: «${interim}»`
-            : activeRecognition ? 'Texto agregado a las notas. Continúa dictando o pulsa «Detener dictado».' : 'Dictado finalizado. Revisa las notas antes de guardar.';
-    };
-    recognition.onerror = event => {
-        const messages = {
-            'not-allowed': 'El permiso del micrófono está bloqueado. Actívalo para este sitio en los permisos del navegador y vuelve a intentar.',
-            'service-not-allowed': 'El navegador no autorizó el servicio de reconocimiento de voz.',
-            'audio-capture': 'No se detectó un micrófono disponible. Conéctalo y revisa los permisos del sistema.',
-            network: 'El servicio de reconocimiento no respondió. Comprueba tu conexión y vuelve a intentar.',
-            'no-speech': 'No se detectó voz. Comprueba el micrófono y vuelve a intentar.',
-            'language-not-supported': 'El navegador no tiene disponible el reconocimiento en español.',
-            aborted: 'El dictado se canceló.'
+        if (!window.confirm('Para transcribir, tu navegador puede procesar el audio mediante su servicio de reconocimiento. ¿Permites iniciar el dictado?')) return;
+        const recognition = new Recognition();
+        // Some mobile browsers resend earlier final results with resultIndex set to zero.
+        const committedResults = new Map();
+        activeRecognition = recognition;
+        recognition.lang = 'es';
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.maxAlternatives = 1;
+        $('#dictateButtonLabel').textContent = 'Detener dictado';
+        $('#dictateButton').setAttribute('aria-pressed', 'true');
+        $('#dictationStatus').textContent = 'Micrófono activo. Habla con claridad; las frases reconocidas se agregarán a las notas.';
+        recognition.onresult = event => {
+            const finalParts = [];
+            let interim = '';
+            for (let index = event.resultIndex; index < event.results.length; index += 1) {
+                const result = event.results[index];
+                const transcript = result[0].transcript.trim();
+                if (result.isFinal) {
+                    if (committedResults.get(index) !== transcript) {
+                        finalParts.push(transcript);
+                        committedResults.set(index, transcript);
+                    }
+                } else {
+                    interim += `${transcript} `;
+                }
+            }
+            if (finalParts.length) {
+                const notes = $('#appointmentNotes');
+                const currentNotes = notes.value.trim();
+                notes.value = `${currentNotes}${currentNotes ? ' ' : ''}${finalParts.join(' ')}`;
+                notes.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+            $('#dictationStatus').textContent = interim.trim()
+                ? `Escuchando: «${interim.trim()}»`
+                : activeRecognition ? 'Texto agregado a las notas. Continúa dictando o pulsa «Detener dictado».' : 'Dictado finalizado. Revisa las notas antes de guardar.';
         };
-        $('#dictationStatus').textContent = messages[event.error] || `No se pudo completar el dictado (${event.error}). Puedes escribir las notas manualmente.`;
-    };
-    recognition.onend = () => {
-        if (activeRecognition !== recognition) return;
-        activeRecognition = null;
-        $('#dictateButtonLabel').textContent = 'Iniciar dictado';
-        $('#dictateButton').setAttribute('aria-pressed', 'false');
-        if ($('#dictationStatus').textContent.startsWith('Micrófono activo') || $('#dictationStatus').textContent.startsWith('Escuchando:') || $('#dictationStatus').textContent.startsWith('Finalizando')) {
-            $('#dictationStatus').textContent = 'Dictado finalizado. Revisa las notas antes de guardar.';
+        recognition.onerror = event => {
+            const messages = {
+                'not-allowed': 'El permiso del micrófono está bloqueado. Actívalo para este sitio en los permisos del navegador y vuelve a intentar.',
+                'service-not-allowed': 'El navegador no autorizó el servicio de reconocimiento de voz.',
+                'audio-capture': 'No se detectó un micrófono disponible. Conéctalo y revisa los permisos del sistema.',
+                network: 'El servicio de reconocimiento no respondió. Comprueba tu conexión y vuelve a intentar.',
+                'no-speech': 'No se detectó voz. Comprueba el micrófono y vuelve a intentar.',
+                'language-not-supported': 'El navegador no tiene disponible el reconocimiento en español.',
+                aborted: 'El dictado se canceló.'
+            };
+            $('#dictationStatus').textContent = messages[event.error] || `No se pudo completar el dictado (${event.error}). Puedes escribir las notas manualmente.`;
+        };
+        recognition.onend = () => {
+            if (activeRecognition !== recognition) return;
+            activeRecognition = null;
+            $('#dictateButtonLabel').textContent = 'Iniciar dictado';
+            $('#dictateButton').setAttribute('aria-pressed', 'false');
+            if ($('#dictationStatus').textContent.startsWith('Micrófono activo') || $('#dictationStatus').textContent.startsWith('Escuchando:') || $('#dictationStatus').textContent.startsWith('Finalizando')) {
+                $('#dictationStatus').textContent = 'Dictado finalizado. Revisa las notas antes de guardar.';
+            }
+        };
+        try {
+            recognition.start();
+        } catch (error) {
+            activeRecognition = null;
+            $('#dictateButtonLabel').textContent = 'Iniciar dictado';
+            $('#dictateButton').setAttribute('aria-pressed', 'false');
+            $('#dictationStatus').textContent = `No se pudo iniciar el micrófono: ${error.message}`;
         }
-    };
-    try {
-        recognition.start();
-    } catch (error) {
-        activeRecognition = null;
-        $('#dictateButtonLabel').textContent = 'Iniciar dictado';
-        $('#dictateButton').setAttribute('aria-pressed', 'false');
-        $('#dictationStatus').textContent = `No se pudo iniciar el micrófono: ${error.message}`;
-    }
     }
 
     function updateDictationAvailability() {
