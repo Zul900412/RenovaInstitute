@@ -90,6 +90,9 @@
         input:focus, select:focus, textarea:focus { outline: 2px solid #77734f33; border-color: var(--olive); }
         .field { display: grid; gap: 5px; }
         .field[hidden] { display: none; }
+        .password-control { display: flex; gap: 7px; }
+        .password-control input { min-width: 0; }
+        .password-toggle { flex: 0 0 auto; min-width: 66px; padding: 7px 10px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--olive-dark); font: 700 11px Arial, sans-serif; }
         .section-label[hidden] { display: none; }
         .field label { color: var(--muted); font: 700 10px Arial, sans-serif; letter-spacing: .04em; }
         .validation-error { margin: 0; padding: 11px 12px; border: 1px solid #d9aaa5; border-radius: 8px; background: var(--red-soft); color: var(--red); font: 12px/1.5 Arial, sans-serif; }
@@ -350,7 +353,7 @@
         <div class="dialog-body">
             <p class="hint">Usa la cuenta creada en Supabase. No se permite el registro público desde esta pantalla.</p>
             <label class="field"><span>Correo electrónico</span><input id="cloudEmail" type="email" autocomplete="username" required></label>
-            <label class="field"><span>Contraseña</span><input id="cloudPassword" type="password" autocomplete="current-password" required></label>
+            <label class="field"><span>Contraseña</span><span class="password-control"><input id="cloudPassword" type="password" autocomplete="current-password" required><button class="password-toggle" type="button" data-toggle-password="cloudPassword" aria-label="Mostrar contraseña" aria-pressed="false">Ver</button></span></label>
             <p id="cloudLoginError" class="validation-error" hidden></p>
             <button class="button" type="submit">Iniciar sesión</button>
         </div>
@@ -2349,6 +2352,14 @@
     }
 
     function bindEvents() {
+        $$('[data-toggle-password]').forEach(button => button.addEventListener('click', () => {
+            const input = $(`#${button.dataset.togglePassword}`);
+            const showPassword = input.type === 'password';
+            input.type = showPassword ? 'text' : 'password';
+            button.textContent = showPassword ? 'Ocultar' : 'Ver';
+            button.setAttribute('aria-label', showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña');
+            button.setAttribute('aria-pressed', String(showPassword));
+        }));
         $('#cloudLoginForm').addEventListener('submit', handleCloudLogin);
         $('#signOutButton').addEventListener('click', async () => {
             const { error } = await supabaseClient.auth.signOut();

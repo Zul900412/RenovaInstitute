@@ -35,6 +35,9 @@
         .search { width: 100%; margin-bottom: 12px; }
         input, select, textarea { width: 100%; border: 1px solid var(--line); border-radius: 7px; padding: 9px 10px; color: var(--ink); background: #fff; }
         input:focus, select:focus, textarea:focus { outline: 2px solid #8c866055; border-color: var(--olive); }
+        .password-control { display: flex; gap: 7px; }
+        .password-control input { min-width: 0; }
+        .password-toggle { flex: 0 0 auto; min-width: 66px; padding: 7px 10px; border: 1px solid var(--line); border-radius: 7px; background: #fff; color: var(--olive-dark); font: 700 11px Arial, sans-serif; }
         textarea { min-height: 92px; resize: vertical; }
         .form-panel textarea { min-height: 68px; }
         .product-list { display: grid; gap: 7px; max-height: 680px; overflow-y: auto; }
@@ -89,7 +92,7 @@
             </div>
             <form id="storeLoginForm" class="cloud-login">
                 <label class="field">Correo electrónico<input id="storeEmail" type="email" autocomplete="username" required></label>
-                <label class="field">Contraseña<input id="storePassword" type="password" autocomplete="current-password" required></label>
+                <label class="field">Contraseña<span class="password-control"><input id="storePassword" type="password" autocomplete="current-password" required><button class="password-toggle" type="button" data-toggle-password="storePassword" aria-label="Mostrar contraseña" aria-pressed="false">Ver</button></span></label>
                 <button class="button" id="storeLoginButton" type="submit">Iniciar sesión</button>
             </form>
             <p class="cloud-status" id="storeCloudStatus" role="status">No conectado</p>
@@ -550,6 +553,15 @@
                 $('#urlRecurso').value = leerRecursosPrivados()[$('#id').value.trim()] || '';
             }
         }
+
+        document.querySelectorAll('[data-toggle-password]').forEach(button => button.addEventListener('click', () => {
+            const input = document.getElementById(button.dataset.togglePassword);
+            const showPassword = input.type === 'password';
+            input.type = showPassword ? 'text' : 'password';
+            button.textContent = showPassword ? 'Ocultar' : 'Ver';
+            button.setAttribute('aria-label', showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña');
+            button.setAttribute('aria-pressed', String(showPassword));
+        }));
 
         function actualizarEstadoArchivos() {
             const tiendaCargada = Boolean(htmlOriginal);
