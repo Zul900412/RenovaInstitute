@@ -160,5 +160,7 @@ for each row execute function public.set_renova_updated_at();
 insert into public.renova_workspace_owners (user_id)
 select id
 from auth.users
-where email = 'YOUR_SUPABASE_LOGIN_EMAIL'
+where email = 'zulmafuertes@gmail.com'
 on conflict (user_id) do nothing;
+
+notify pgrst, 'reload schema';
