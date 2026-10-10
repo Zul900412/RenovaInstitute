@@ -1433,6 +1433,9 @@
         if (patient && candidate.nextTopic) patient.pendingTopic = candidate.nextTopic;
         try {
             await saveState();
+            hasLocalState = true;
+            localRevision += 1;
+            localStorage.setItem(DIRTY_KEY, 'true');
         } catch (error) {
             if (index >= 0) state.appointments[index] = existing;
             else state.appointments = state.appointments.filter(item => item.id !== id);
@@ -1442,7 +1445,16 @@
         }
         renderAll();
         $('#appointmentDialog').close();
-        showToast('Sesión guardada localmente.');
+        if (cloudUser) {
+            try {
+                await syncStateToCloud();
+                showToast('Sesión guardada y sincronizada con Supabase.');
+            } catch (error) {
+                showToast(`Sesión guardada localmente, pero no se pudo sincronizar con Supabase: ${error.message}`, true);
+            }
+        } else {
+            showToast('Sesión guardada localmente. Queda pendiente de sincronizar al iniciar sesión.');
+        }
     }
 
     function saveSessionSummaryHistory() {
