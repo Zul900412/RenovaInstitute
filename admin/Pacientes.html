@@ -579,6 +579,8 @@
     let supabaseClient;
     let cloudUser = null;
     let hasLocalState = false;
+    let localRevision = 0;
+    let cloudSyncQueue = Promise.resolve();
     let state = { patients: [], appointments: [], slots: [], workshopEnrollments: [] };
     let selectedPatientId = '';
     let collapsedPatientDetailId = '';
@@ -779,6 +781,7 @@
         try {
             await saveState();
             hasLocalState = true;
+            localRevision += 1;
             localStorage.setItem(DIRTY_KEY, 'true');
             renderAll();
             if (cloudUser) {
@@ -802,13 +805,24 @@
 
     async function syncStateToCloud() {
         if (!cloudUser) throw new Error('Inicia sesión para sincronizar.');
-        setCloudStatus('Sincronizando…');
-        const { error } = await supabaseClient
-            .from('renova_patient_state')
-            .upsert({ owner_id: cloudUser.id, state }, { onConflict: 'owner_id' });
-        if (error) throw error;
-        localStorage.removeItem(DIRTY_KEY);
-        setCloudStatus('Sincronizado');
+        const sync = cloudSyncQueue.then(async () => {
+            if (!cloudUser) throw new Error('Inicia sesión para sincronizar.');
+            const revision = localRevision;
+            const stateSnapshot = JSON.parse(JSON.stringify(state));
+            setCloudStatus('Sincronizando…');
+            const { error } = await supabaseClient
+                .from('renova_patient_state')
+                .upsert({ owner_id: cloudUser.id, state: stateSnapshot }, { onConflict: 'owner_id' });
+            if (error) throw error;
+            if (revision === localRevision) {
+                localStorage.removeItem(DIRTY_KEY);
+                setCloudStatus('Sincronizado');
+            } else {
+                setCloudStatus('Hay cambios pendientes de sincronizar…');
+            }
+        });
+        cloudSyncQueue = sync.catch(() => {});
+        return sync;
     }
 
     function stateHasData(value) {
