@@ -11,8 +11,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="./admin/supabase-config.js"></script>
     
     <style>
         .category-pill.active { background-color: #8C8660; color: white; border-color: #8C8660; }
@@ -30,10 +28,10 @@
   "imagen": "images/Portada Ebook.jpg",
   "link1Nombre": "Amazon",
   "link1Url": "https://a.co/d/089ODs73",
-  "link2Nombre": "Píedelo por Whatsapp",
-  "link2Url": "https://a.co/d/089ODs73",
-  "link3Nombre": "Prueba",
-  "link3Url": "https://www.google.com/?hl=es&zx=1789778628592",
+  "link2Nombre": "",
+  "link2Url": "",
+  "link3Nombre": "",
+  "link3Url": "",
   "productoId": "N-018"
 }
 </script>
@@ -373,8 +371,7 @@
                     "precioFull": 800000,
                     "precio": 640000,
                     "fechaInicio": "Fecha de inicio: 25 de julio",
-                    "horario": "Sábados 11:00 am",
-                    "estado": "espera"
+                    "horario": "Sábados 11:00 am"
           },
           {
                     "id": "G-002",
@@ -421,8 +418,7 @@
                     "precioFull": 640000,
                     "precio": 464000,
                     "fechaInicio": "Fecha de inicio: 27 de julio",
-                    "horario": "Lunes y Jueves 5:00 pm",
-                    "estado": "espera"
+                    "horario": "Lunes y Jueves 5:00 pm"
           },
           {
                     "id": "G-004",
@@ -445,8 +441,7 @@
                     "precioFull": 880000,
                     "precio": 680000,
                     "fechaInicio": "Fecha de inicio: 27 de julio",
-                    "horario": "Lunes 7:00 am (Virtual) - Jueves 7:00 pm (Presencial)",
-                    "estado": "espera"
+                    "horario": "Lunes 7:00 am (Virtual) - Jueves 7:00 pm (Presencial)"
           },
           {
                     "id": "G-005",
@@ -493,8 +488,7 @@
                     "precioFull": 880000,
                     "precio": 680000,
                     "fechaInicio": "Fecha de inicio: 27 de julio",
-                    "horario": "Lunes 7:00 pm (presencial) y Miércoles 7:00 am (virtual)",
-                    "estado": "espera"
+                    "horario": "Lunes 7:00 pm (presencial) y Miércoles 7:00 am (virtual)"
           },
           {
                     "id": "G-007",
@@ -1239,7 +1233,7 @@
                     "aprenderemos": "A identificar los dones, talentos y evidencias de gracia que ya posees.\n\nA desactivar las anclas mentales (miedo, procrastinación y culpa) que frenan tus iniciativas.\nA estructurar un plan de acción claro, medible y sostenible de 30 días.",
                     "lograremos": "Claridad absoluta sobre tu propósito y hacia dónde canalizar tu energía.\n\nTránsito efectivo de las ideas abstractas a proyectos concretos en el calendario.\nUna vida alineada con valores sólidos y un enfoque de legado a largo plazo.",
                     "imagen": "images/Promocional kit propósito.jpg",
-                    "metodologia": "Proceso estructurado en 3 fases (Descubrir ➔ Activar ➔ Trasciende), fundamentado en neuropsicología, coaching e inteligencia emocional con ejercicios prácticos y reflexivos."
+                    "metodologia": "Proceso estructurado en 3 fases (Descubrir ➔ Activar ➔ Trasciende), fundamentado en neuropsicología clínica, coaching e inteligencia emocional con ejercicios prácticos y reflexivos."
           },
           {
                     "id": "P-007",
@@ -1539,7 +1533,7 @@
             if (!p) return;
 
             const numeroWhatsApp = "573114951646"; 
-            const mensaje = `Hola, me interesa el taller: ${p.nombre} (${p.id}).`;
+            const mensaje = `Hola, me interesa el taller: ${p.nombre}.`;
             const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
             
             window.open(url, '_blank');
@@ -1573,7 +1567,7 @@
 
         function solicitarCarrito() {
             if (!carrito.length) return alert('Agrega al menos un producto al carrito.');
-            const nombres = carrito.map(producto => `${producto.nombre} (${producto.id})`).join(', ');
+            const nombres = carrito.map(producto => producto.nombre).join(', ');
             const url = `https://wa.me/573114951646?text=${encodeURIComponent(`Hola, me interesan: ${nombres}.`)}`;
             window.open(url, '_blank');
         }
@@ -1636,32 +1630,7 @@
         // Inicializamos la tienda al cargar la página
         window.onload = () => {
             inicializarTiendaConFiltro();
-            cargarCatalogoPublicado();
         };
-
-        async function cargarCatalogoPublicado() {
-            try {
-                if (!window.supabase || !window.RENOVA_SUPABASE_CONFIG) {
-                    throw new Error('El cliente de Supabase no está disponible.');
-                }
-                const cliente = window.supabase.createClient(
-                    window.RENOVA_SUPABASE_CONFIG.url,
-                    window.RENOVA_SUPABASE_CONFIG.publishableKey
-                );
-                const { data, error } = await cliente
-                    .from('renova_store_catalog')
-                    .select('products')
-                    .eq('id', 1)
-                    .maybeSingle();
-                if (error) throw error;
-                if (data && Array.isArray(data.products)) {
-                    catalogo.splice(0, catalogo.length, ...data.products);
-                    renderTienda();
-                }
-            } catch (error) {
-                console.warn(`No se pudo actualizar el catálogo público desde Supabase; se muestra el catálogo integrado: ${error.message}`);
-            }
-        }
     </script>
 </body>
 </html>
