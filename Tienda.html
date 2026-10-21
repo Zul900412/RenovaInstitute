@@ -1539,7 +1539,7 @@
             if (!p) return;
 
             const numeroWhatsApp = "573114951646"; 
-            const mensaje = `Hola, me interesa el taller: ${p.nombre}.`;
+            const mensaje = `Hola, me interesa el taller: ${p.nombre} (${p.id}).`;
             const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
             
             window.open(url, '_blank');
@@ -1573,7 +1573,7 @@
 
         function solicitarCarrito() {
             if (!carrito.length) return alert('Agrega al menos un producto al carrito.');
-            const nombres = carrito.map(producto => producto.nombre).join(', ');
+            const nombres = carrito.map(producto => `${producto.nombre} (${producto.id})`).join(', ');
             const url = `https://wa.me/573114951646?text=${encodeURIComponent(`Hola, me interesan: ${nombres}.`)}`;
             window.open(url, '_blank');
         }
