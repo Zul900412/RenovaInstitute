@@ -1574,6 +1574,10 @@
 
         function agregarAlCarrito(id) {
             const p = catalogo.find(x => String(x.id) === String(id));
+            if (!p) {
+                alert(`No se encontró el producto con código ${id}.`);
+                return;
+            }
             
             let fechaTextoSeleccionada = p.duracion || p.sesiones || 'Recurso Inmediato / Sin Fecha';
             
@@ -1613,12 +1617,17 @@
                     }
                     const identificador = `${this.config.titulo}|${this.config.imagen}|${this.config.desc}`;
                     const bannerCerrado = sessionStorage.getItem('bannerLibroCerrado') === identificador;
+                    const agregandoDesdeBanner = new URLSearchParams(window.location.search).has('agregar');
 
-                    if (this.config.activo && !bannerCerrado) {
+                    if (this.config.activo && !bannerCerrado && !agregandoDesdeBanner) {
                         setTimeout(() => { this.mostrar = true; }, 1500); 
                     }
                 },
-                agregarProducto() { if (this.config.productoId) agregarAlCarrito(this.config.productoId); },
+                agregarProducto() {
+                    if (!this.config.productoId) return;
+                    this.mostrar = false;
+                    agregarAlCarrito(this.config.productoId);
+                },
                 cerrarBanner() {
                     this.mostrar = false;
                     const identificador = `${this.config.titulo}|${this.config.imagen}|${this.config.desc}`;

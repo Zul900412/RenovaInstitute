@@ -88,7 +88,7 @@
         <section class="panel cloud-access">
             <div>
                 <h2>Acceso privado a la tienda</h2>
-                <p class="hint">Inicia sesión con la cuenta autorizada de Supabase para consultar y sincronizar el catálogo.</p>
+                <p class="hint">Puedes explorar el catálogo sin iniciar sesión. Inicia sesión con la cuenta autorizada de Supabase para editar y sincronizarlo.</p>
             </div>
             <form id="storeLoginForm" class="cloud-login">
                 <label class="field">Correo electrónico<input id="storeEmail" type="email" autocomplete="username" required></label>
@@ -121,7 +121,7 @@
             </div>
         </section>
 
-        <main class="workspace" id="storeWorkspace" inert>
+        <main class="workspace" id="storeWorkspace">
             <aside class="panel list-panel">
                 <div class="toolbar">
                     <h2 style="margin-right:auto">Productos</h2>
@@ -346,9 +346,13 @@
                 productoId: document.getElementById('bannerProductoId').value.trim()
             };
             bannerConfig = config;
-            await guardarBannerEnArchivos(config);
-            sessionStorage.removeItem('bannerLibroCerrado');
-            modalBanner.close();
+            try {
+                await guardarBannerEnArchivos(config);
+                sessionStorage.removeItem('bannerLibroCerrado');
+                modalBanner.close();
+            } catch (error) {
+                $('#estado').textContent = `No se pudo confirmar el guardado en ambos archivos; puede que solo uno se haya actualizado: ${error.message}`;
+            }
         });
 
         document.getElementById('abrirInicioBtn').addEventListener('click', abrirInicio);
@@ -370,44 +374,46 @@
         }
 
         async function guardarHandle(handle, contenido) {
-            if (!handle) return;
-            const permiso = await handle.requestPermission({ mode: 'readwrite' });
-            if (permiso !== 'granted') throw new Error('No se concedió permiso de escritura.');
+            if (!handle) throw new Error('Falta seleccionar uno de los archivos del banner.');
             const writable = await handle.createWritable();
             await writable.write(contenido);
             await writable.close();
         }
 
         async function guardarBannerEnArchivos(config) {
-            try {
-                if (location.protocol !== 'file:') {
-                    const inicio = actualizarBanner(htmlInicio, config);
-                    const tienda = actualizarBanner(htmlOriginal, config);
-                    const respuestas = await Promise.all([
-                        fetch('/api/inicio', { method: 'POST', headers: { 'Content-Type': 'text/html; charset=utf-8' }, body: inicio }),
-                        fetch('/api/tienda', { method: 'POST', headers: { 'Content-Type': 'text/html; charset=utf-8' }, body: tienda })
-                    ]);
-                    if (respuestas.some(respuesta => !respuesta.ok)) throw new Error('El servidor no pudo guardar uno de los archivos.');
-                    htmlInicio = inicio;
-                    htmlOriginal = tienda;
-                    $('#estado').textContent = 'Banner guardado en index.html y Tienda.html.';
-                    actualizarEstadoArchivos();
-                    return;
+            if (archivoInicioHandle && archivoHandle) {
+                const inicioActual = await archivoInicioHandle.getFile();
+                const tiendaActual = await archivoHandle.getFile();
+                const inicio = actualizarBanner(await inicioActual.text(), config);
+                const tienda = actualizarBanner(await tiendaActual.text(), config);
+                const permisos = await Promise.all([
+                    archivoInicioHandle.requestPermission({ mode: 'readwrite' }),
+                    archivoHandle.requestPermission({ mode: 'readwrite' })
+                ]);
+                if (permisos.some(permiso => permiso !== 'granted')) {
+                    throw new Error('Se necesita permiso de escritura para index.html y Tienda.html.');
                 }
-                if (archivoInicioHandle) {
-                    const inicio = await archivoInicioHandle.getFile();
-                    await guardarHandle(archivoInicioHandle, actualizarBanner(await inicio.text(), config));
+                await guardarHandle(archivoInicioHandle, inicio);
+                await guardarHandle(archivoHandle, tienda);
+                htmlInicio = inicio;
+                htmlOriginal = tienda;
+            } else if (location.protocol !== 'file:') {
+                const inicio = actualizarBanner(htmlInicio, config);
+                const tienda = actualizarBanner(htmlOriginal, config);
+                const respuestas = await Promise.all([
+                    fetch('/api/inicio', { method: 'POST', headers: { 'Content-Type': 'text/html; charset=utf-8' }, body: inicio }),
+                    fetch('/api/tienda', { method: 'POST', headers: { 'Content-Type': 'text/html; charset=utf-8' }, body: tienda })
+                ]);
+                if (respuestas.some(respuesta => !respuesta.ok)) {
+                    throw new Error('El servidor rechazó la escritura de uno de los archivos.');
                 }
-                if (archivoHandle) {
-                    const tienda = await archivoHandle.getFile();
-                    const contenido = actualizarBanner(await tienda.text(), config);
-                    await guardarHandle(archivoHandle, contenido);
-                    htmlOriginal = contenido;
-                }
-                $('#estado').textContent = 'Banner guardado en index.html y Tienda.html.';
-            } catch (error) {
-                $('#estado').textContent = `No se pudo guardar el banner: ${error.message}`;
+                htmlInicio = inicio;
+                htmlOriginal = tienda;
+            } else {
+                throw new Error('Selecciona index.html y Tienda.html para poder guardarlos.');
             }
+            $('#estado').textContent = 'Banner guardado en index.html y Tienda.html.';
+            actualizarEstadoArchivos();
         }
         // ------------------------------------
 
@@ -481,7 +487,6 @@
             if (isOwner !== true) throw new Error('Esta cuenta no está autorizada para administrar la tienda.');
             cloudUser = session.user;
             await cargarCatalogoSupabase();
-            $('#storeWorkspace').inert = false;
             $('#storeSignOutButton').hidden = false;
             $('#storeLoginForm').hidden = true;
             setStoreCloudStatus(`Conectado: ${cloudUser.email}`);
@@ -525,7 +530,6 @@
                     return;
                 }
                 cloudUser = null;
-                $('#storeWorkspace').inert = true;
                 $('#storeLoginForm').hidden = false;
                 $('#storeSignOutButton').hidden = true;
                 habilitarAdministracion();
@@ -621,13 +625,17 @@
 
         function habilitarAdministracion() {
             const habilitado = Boolean(cloudUser);
+            const catalogoCargado = Boolean(htmlOriginal);
             $('#nuevoBtn').disabled = !habilitado;
             $('#duplicarBtn').disabled = !habilitado;
-            $('#buscar').disabled = !habilitado;
-            $('#filtroCategoria').disabled = !habilitado;
-            $('#filtroEstado').disabled = !habilitado;
+            $('#buscar').disabled = !catalogoCargado;
+            $('#filtroCategoria').disabled = !catalogoCargado;
+            $('#filtroEstado').disabled = !catalogoCargado;
             $('#eliminarBtn').disabled = !habilitado || !productos[indiceSeleccionado];
             $('#guardarDirectoBtn').disabled = !habilitado || !htmlOriginal;
+            $('#productoForm').querySelectorAll('input, select, textarea, button').forEach(control => {
+                control.disabled = !habilitado;
+            });
             actualizarEstadoArchivos();
         }
 
