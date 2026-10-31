@@ -2,16 +2,16 @@
 <html lang="es">
 <head>
     <!-- Título de la pestaña -->
-    <title>Renova Institute | Bienestar y Neurociencia</title>
+    <title>Renova Institute | Salud mental cristiana en Bogotá</title>
     
     <!-- Descripción para buscadores -->
-    <meta name="description" content="Renova Institute: Tu laboratorio de bienestar integral. Potenciamos tu salud mental, desempeño cognitivo y propósito de vida mediante herramientas neuropsicológicas y coaching personalizado.">
+    <meta name="description" content="Centro de salud mental cristiano en Bogotá. Conoce nuestros acompañamientos personalizados, grupales y de pareja, además de recursos para tu proceso.">
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="192x192" href="icono-192.png">
     <!-- Meta etiquetas para previsualización en WhatsApp / Redes Sociales -->
-    <meta property="og:title" content="Renova Institute | Bienestar y Neurociencia Aplicada">
-    <meta property="og:description" content="Descubre programas personalizados y grupales diseñados para potenciar tu salud mental, desempeño y propósito. ¡Agenda tu sesión hoy!">
+    <meta property="og:title" content="Renova Institute | Salud mental cristiana en Bogotá">
+    <meta property="og:description" content="Conoce nuestros acompañamientos y recursos. Solicita información sobre tu primera sesión gratuita por WhatsApp.">
     <meta property="og:image" content="URL_DE_TU_LOGO_AQUI">
     <meta property="og:url" content="https://zul900412.github.io/RenovaInstitute/">
     <meta property="og:type" content="website">
@@ -23,7 +23,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
-        /* Animaciones suaves para la carga de la página */
+        html { scroll-behavior: smooth; }
+        section[id] { scroll-margin-top: 6rem; }
         .fade-in-up {
             animation: fadeInUp 0.8s ease-out forwards;
             opacity: 0;
@@ -35,6 +36,30 @@
         
         @keyframes fadeInUp {
             to { opacity: 1; transform: translateY(0); }
+        }
+        .hero-photo {
+            background-image: linear-gradient(180deg, rgba(38, 28, 23, .04) 35%, rgba(38, 28, 23, .62) 100%), url("images/Fondos/5.jpg");
+            background-position: center;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        .service-photo {
+            background-position: center;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        .review-track { scrollbar-width: none; }
+        .review-track::-webkit-scrollbar { display: none; }
+        .review-slide { scroll-snap-align: center; }
+        .review-avatar {
+            background: linear-gradient(145deg, #F4DED4, #DCA38D);
+        }
+        @media (max-width: 767px) {
+            .hero-photo, .service-photo { background-attachment: scroll; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
         }
     </style>
     <script id="banner-data" type="application/json">
@@ -61,19 +86,21 @@
     <header class="bg-white/90 backdrop-blur-md sticky top-0 z-[150] border-b border-gray-100" x-data="{ mobileMenuOpen: false }">
         <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
             
-            <a href="./" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
-                <i class="ph ph-brain text-2xl text-[#8C8660]"></i>
+            <a href="#inicio" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                <i class="ph ph-brain text-2xl text-[#AA5238]"></i>
                 <div class="flex flex-col leading-tight">
-                    <span class="text-base font-bold text-[#8C8660]">RENOVA INSTITUTE</span>
+                    <span class="text-base font-bold text-[#AA5238]">RENOVA INSTITUTE</span>
                     <span class="text-[9px] font-medium text-[#54463C]">Centro de salud mental cristiano</span>
                 </div>
             </a>
             
             <div class="hidden lg:flex items-center gap-8 flex-1 justify-end px-8">
-                <a href="./" class="text-sm text-gray-600 hover:text-[#8C8660] font-medium transition-colors">Inicio</a>
-                <a href="./#nosotros" class="text-sm text-gray-600 hover:text-[#8C8660] font-medium transition-colors">Nosotros</a>
-                <a href="./#recursos" class="text-sm text-gray-600 hover:text-[#8C8660] font-medium transition-colors">Servicios y Talleres</a>
-                <a href="Tienda.html" class="text-sm text-gray-600 hover:text-[#8C8660] font-medium transition-colors">Tienda</a>
+                <a href="#inicio" class="text-sm text-gray-600 hover:text-[#AA5238] font-medium transition-colors">Inicio</a>
+                <a href="#nosotros" class="text-sm text-gray-600 hover:text-[#AA5238] font-medium transition-colors">Nuestra visión</a>
+                <a href="#acompanamientos" class="text-sm text-gray-600 hover:text-[#AA5238] font-medium transition-colors">Acompañamientos</a>
+                <a href="#preguntas" class="text-sm text-gray-600 hover:text-[#AA5238] font-medium transition-colors">Preguntas</a>
+                <a href="#resenas" class="text-sm text-gray-600 hover:text-[#AA5238] font-medium transition-colors">Reseñas</a>
+                <a href="#ubicacion" class="text-sm text-gray-600 hover:text-[#AA5238] font-medium transition-colors">Ubicación</a>
             </div>
 
             <div class="flex items-center gap-4">
@@ -84,162 +111,263 @@
         </div>
 
         <div x-show="mobileMenuOpen" style="display: none;" class="lg:hidden bg-white border-b absolute w-full shadow-lg p-4 z-[140]">
-            <a href="./" @click="mobileMenuOpen = false" class="block py-3 border-b text-gray-600 font-medium">Inicio</a>
-            <a href="./#nosotros" @click="mobileMenuOpen = false" class="block py-3 border-b text-gray-600 font-medium">Nosotros</a>
-            <a href="./#recursos" @click="mobileMenuOpen = false" class="block py-3 text-gray-600 font-medium">Servicios y Talleres</a>
-            <a href="Tienda.html" @click="mobileMenuOpen = false" class="block py-3 text-gray-600 font-medium">Tienda</a>
+            <a href="#inicio" @click="mobileMenuOpen = false" class="block py-3 border-b text-gray-600 font-medium">Inicio</a>
+            <a href="#nosotros" @click="mobileMenuOpen = false" class="block py-3 border-b text-gray-600 font-medium">Nuestra visión</a>
+            <a href="#acompanamientos" @click="mobileMenuOpen = false" class="block py-3 border-b text-gray-600 font-medium">Acompañamientos</a>
+            <a href="#preguntas" @click="mobileMenuOpen = false" class="block py-3 border-b text-gray-600 font-medium">Preguntas</a>
+            <a href="#resenas" @click="mobileMenuOpen = false" class="block py-3 border-b text-gray-600 font-medium">Reseñas</a>
+            <a href="#ubicacion" @click="mobileMenuOpen = false" class="block py-3 text-gray-600 font-medium">Ubicación</a>
         </div>
     </header>
 
-    <!-- Sección Hero -->
-    <header class="bg-[#F6F3EE] py-24 px-6 text-center relative overflow-hidden">
-        <div class="max-w-5xl mx-auto relative z-10">
-            <h1 class="text-6xl md:text-8xl font-black mb-6 tracking-tight fade-in-up">
-                <span class="text-[#54463C]">Renova</span> <span class="text-[#8C8660]">Institute</span>
-            </h1>
-            
-            <h2 class="text-2xl md:text-4xl text-[#54463C] font-medium mb-8 max-w-4xl mx-auto leading-tight fade-in-up delay-100">
-                Instituto para la restauración integral de la persona, conforme al diseño de DIOS mediante la integración de la neurociencia y la verdad bíblica
-            </h2>
-            
-            <p class="text-xl md:text-2xl text-[#8C8660] font-bold mb-8 max-w-3xl mx-auto fade-in-up delay-150" style="letter-spacing: 0.5px;">
-                Centro de salud mental cristiano
-            </p>
-            
-            <p class="text-lg md:text-xl text-[#54463C] max-w-4xl mx-auto mb-8 leading-relaxed fade-in-up delay-200">
-                Ofrecemos ayuda profesional y neurocientífica para la sanación de tu mente, tus emociones y tus relaciones. Además, te entrenamos para potenciar tu desempeño y éxito en áreas clave de tu vida: Académica, Laboral y Personal.
-            </p>
-            
-            <p class="text-sm md:text-base text-[#54463C] max-w-3xl mx-auto mb-10 italic font-light fade-in-up delay-200">
-                Todo nuestro trabajo se realiza con total profesionalismo científico, fundamentado en principios bíblicos. Somos un equipo profesional Cristiano practicante.
-            </p>
-            
-            <div class="fade-in-up delay-300">
-                <a href="Tienda.html" class="inline-block bg-[#8C8660] text-white font-bold text-lg px-10 py-5 rounded-full shadow-lg hover:shadow-xl hover:bg-[#54463C] transform hover:-translate-y-1 transition-all duration-300">
-                    ¡Comienza tu Transformación Hoy!
-                </a>
-            </div>
-        </div>
-        
-        <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-10">
-            <i class="ph ph-atom absolute -top-20 -left-20 text-[300px] text-[#8C8660]"></i>
-            <i class="ph ph-cross absolute -bottom-20 -right-20 text-[300px] text-[#8C8660]"></i>
-        </div>
-    </header>
-
-    <!-- Sección Nosotros -->
-    <section id="nosotros" class="py-20 px-6 max-w-7xl mx-auto">
-        <div class="text-center mb-16">
-            <span class="text-[#8C8660] font-bold text-sm uppercase tracking-widest">Nuestra Esencia</span>
-            <h2 class="text-4xl font-bold mt-2">¿Quiénes Somos?</h2>
-        </div>
-        
-        <div class="grid md:grid-cols-2 gap-12">
-            <div class="bg-white p-10 rounded-[32px] shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                <div class="w-16 h-16 bg-[#F7EBE5] rounded-2xl flex items-center justify-center mb-6">
-                    <i class="ph ph-target text-3xl text-[#8C8660]"></i>
+    <main>
+        <section id="inicio" class="bg-[#F8ECE6] px-5 py-8 md:px-8 md:py-12 lg:py-16">
+            <div class="mx-auto grid max-w-7xl items-stretch gap-6 lg:grid-cols-2 lg:gap-10">
+                <div class="hero-photo relative flex min-h-[430px] items-end overflow-hidden rounded-[2rem] shadow-xl md:min-h-[590px]">
+                    <div class="relative z-10 w-full p-6 md:p-10">
+                        <span class="mb-4 inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-xs font-bold uppercase tracking-widest text-[#54463C]">
+                            <i class="ph ph-sparkle text-lg text-[#AA5238]"></i> Un primer paso, sin costo
+                        </span>
+                        <a href="https://wa.me/573114951646?text=Hola%2C%20quisiera%20solicitar%20mi%20primera%20sesi%C3%B3n%20gratis.%20%C2%BFMe%20comparten%20informaci%C3%B3n%20sobre%20disponibilidad%3F" target="_blank" rel="noopener noreferrer" class="inline-flex w-full items-center justify-center gap-3 rounded-full bg-[#AA5238] px-6 py-4 text-center text-base font-bold text-white shadow-lg transition hover:-translate-y-1 hover:bg-[#8F402D] focus:outline-none focus:ring-4 focus:ring-white/70 md:w-auto md:px-8">
+                            <i class="ph ph-whatsapp-logo text-2xl"></i>
+                            Solicita tu primera sesión gratis
+                        </a>
+                    </div>
                 </div>
-                <h3 class="text-2xl font-bold mb-4">Nuestra Misión</h3>
-                <p class="text-gray-600 leading-relaxed">
-                    Facilitar procesos de restauración profunda y desarrollo personal, integrando el rigor de la neurociencia con la solidez de los principios bíblicos. Proveemos herramientas prácticas y terapéuticas para que cada individuo alcance la sanidad emocional y maximice su potencial cognitivo, cumpliendo su propósito de vida.
+
+                <div class="flex flex-col justify-center px-2 py-8 md:px-8 lg:py-12">
+                    <p class="mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-[.2em] text-[#AA5238]">
+                        <span class="h-px w-8 bg-[#AA5238]"></span> Centro de salud mental cristiano
+                    </p>
+                    <h1 class="mb-6 text-4xl font-black leading-[1.08] tracking-tight text-[#3E332D] sm:text-5xl xl:text-6xl">
+                        Fe, ciencia y acompañamiento para cada etapa de la vida.
+                    </h1>
+                    <p class="mb-7 max-w-xl text-lg leading-relaxed text-[#65574F]">
+                        Un espacio profesional para explorar tus emociones, tus relaciones y tus desafíos con respeto, herramientas basadas en evidencia y una visión bíblica.
+                    </p>
+                    <div class="mb-8 flex flex-wrap gap-3 text-sm font-medium text-[#54463C]">
+                        <span class="rounded-full border border-[#D9B7A8] bg-white/70 px-4 py-2"><i class="ph ph-heart text-[#AA5238]"></i> Acompañamiento cercano</span>
+                        <span class="rounded-full border border-[#D9B7A8] bg-white/70 px-4 py-2"><i class="ph ph-book-open-text text-[#AA5238]"></i> Principios bíblicos</span>
+                    </div>
+                    <a href="#acompanamientos" class="inline-flex items-center gap-2 self-start font-bold text-[#AA5238] hover:gap-3">
+                        Explora nuestros acompañamientos <i class="ph ph-arrow-down"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="nosotros" class="px-6 py-20 md:py-24">
+            <div class="mx-auto max-w-4xl text-center">
+                <span class="text-xs font-bold uppercase tracking-[.2em] text-[#AA5238]">Lo que creemos</span>
+                <h2 class="mt-3 text-3xl font-bold text-[#3E332D] sm:text-4xl">Dios en el centro de nuestra visión</h2>
+                <p class="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-[#65574F]">
+                    Nuestra mirada parte de la Biblia: acompañamos a cada persona con humildad, reconociendo que la vida y la sanidad no están bajo nuestro control.
                 </p>
+                <details class="group mx-auto mt-8 max-w-3xl rounded-2xl border border-[#E8D8CF] bg-white text-left shadow-sm">
+                    <summary class="flex cursor-pointer list-none items-center justify-between gap-4 p-5 font-bold text-[#54463C] marker:content-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#AA5238] md:px-7">
+                        <span class="flex items-center gap-3"><i class="ph ph-book-open-text text-2xl text-[#AA5238]"></i> Conoce nuestra convicción bíblica</span>
+                        <i class="ph ph-plus text-xl text-[#AA5238] transition-transform group-open:rotate-45"></i>
+                    </summary>
+                    <div class="space-y-4 border-t border-[#F0E7E2] px-5 py-6 leading-relaxed text-[#65574F] md:px-7">
+                        <p>Creemos que Dios es soberano y que solo Él sana, según su voluntad y sus tiempos. No presentamos la fe como una fórmula ni afirmamos que Dios esté obligado a conceder un resultado específico.</p>
+                        <p>Por eso, no ponemos al ser humano en el centro ni prometemos una transformación garantizada. Nuestro papel es acompañar con respeto y responsabilidad; la Biblia orienta nuestra visión de la persona y la atención profesional aporta herramientas para el proceso.</p>
+                        <p>La oración y la orientación espiritual no sustituyen la atención médica o psicológica que cada persona pueda necesitar. Reconocemos los límites de nuestro acompañamiento y honramos la dignidad, la historia y las decisiones de cada quien.</p>
+                    </div>
+                </details>
             </div>
-            
-            <div class="bg-white p-10 rounded-[32px] shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                <div class="w-16 h-16 bg-[#F7EBE5] rounded-2xl flex items-center justify-center mb-6">
-                    <i class="ph ph-eye text-3xl text-[#8C8660]"></i>
+        </section>
+
+        <section id="acompanamientos" class="bg-[#F8F3EF] px-5 py-20 md:px-8 md:py-24">
+            <div class="mx-auto mb-14 max-w-3xl text-center">
+                <span class="text-xs font-bold uppercase tracking-[.2em] text-[#AA5238]">Cómo podemos acompañarte</span>
+                <h2 class="mt-3 text-3xl font-bold text-[#3E332D] sm:text-4xl">Un espacio para avanzar a tu ritmo</h2>
+                <p class="mt-4 leading-relaxed text-[#65574F]">Conoce las distintas alternativas y encuentra la que mejor responda a tu momento.</p>
+            </div>
+
+            <div class="mx-auto grid max-w-7xl items-stretch gap-6 lg:grid-cols-2 lg:gap-10">
+                <div class="service-photo relative min-h-[300px] overflow-hidden rounded-[2rem] shadow-lg md:min-h-[390px]" style="background-image: url('images/Fondos/12.jpg')" role="img" aria-label="Ilustración de una figura tejida representando emociones"></div>
+                <article class="flex flex-col justify-center rounded-[2rem] bg-white p-7 shadow-sm md:p-10">
+                    <span class="mb-3 text-xs font-bold uppercase tracking-widest text-[#AA5238]">01 · A tu medida</span>
+                    <h3 class="mb-4 text-3xl font-bold text-[#3E332D]">Acompañamientos personalizados</h3>
+                    <p class="mb-6 leading-relaxed text-[#65574F]">Encuentros individuales para comprender tus necesidades y trabajar objetivos concretos con orientación profesional y herramientas prácticas.</p>
+                    <ul class="mb-8 space-y-3 text-sm text-[#54463C]">
+                        <li class="flex gap-3"><i class="ph ph-check-circle text-lg text-[#AA5238]"></i> Sana tu pasado y restaura tu identidad</li>
+                        <li class="flex gap-3"><i class="ph ph-check-circle text-lg text-[#AA5238]"></i> Comunicación asertiva desde la neurociencia</li>
+                        <li class="flex gap-3"><i class="ph ph-check-circle text-lg text-[#AA5238]"></i> Soluciones para dificultades de aprendizaje</li>
+                    </ul>
+                    <a href="Tienda.html?cat=Personalizados" class="inline-flex items-center gap-2 self-start rounded-full bg-[#AA5238] px-6 py-3 font-bold text-white transition hover:bg-[#8F402D]">Ver acompañamientos <i class="ph ph-arrow-right"></i></a>
+                </article>
+            </div>
+
+            <div class="mx-auto mt-8 grid max-w-7xl items-stretch gap-6 lg:grid-cols-2 lg:gap-10">
+                <article class="order-2 flex flex-col justify-center rounded-[2rem] bg-white p-7 shadow-sm lg:order-1 md:p-10">
+                    <span class="mb-3 text-xs font-bold uppercase tracking-widest text-[#AA5238]">02 · En comunidad</span>
+                    <h3 class="mb-4 text-3xl font-bold text-[#3E332D]">Acompañamientos grupales</h3>
+                    <p class="mb-6 leading-relaxed text-[#65574F]">Espacios de aprendizaje compartido para desarrollar recursos emocionales y relacionales junto a otras personas.</p>
+                    <ul class="mb-8 space-y-3 text-sm text-[#54463C]">
+                        <li class="flex gap-3"><i class="ph ph-check-circle text-lg text-[#AA5238]"></i> Niños emocionalmente fuertes</li>
+                        <li class="flex gap-3"><i class="ph ph-check-circle text-lg text-[#AA5238]"></i> Encuentra tu propósito y vence la ansiedad</li>
+                        <li class="flex gap-3"><i class="ph ph-check-circle text-lg text-[#AA5238]"></i> Comunicación asertiva para parejas</li>
+                    </ul>
+                    <a href="Tienda.html?cat=Grupales" class="inline-flex items-center gap-2 self-start rounded-full bg-[#AA5238] px-6 py-3 font-bold text-white transition hover:bg-[#8F402D]">Ver grupos y talleres <i class="ph ph-arrow-right"></i></a>
+                </article>
+                <div class="service-photo order-1 min-h-[300px] rounded-[2rem] shadow-lg lg:order-2 md:min-h-[390px]" style="background-image: url('images/Fondos/3.jpg')" role="img" aria-label="Ilustración de una figura tejida representando emociones"></div>
+            </div>
+
+            <div class="mx-auto mt-8 grid max-w-7xl items-stretch gap-6 lg:grid-cols-2 lg:gap-10">
+                <div class="service-photo relative min-h-[300px] overflow-hidden rounded-[2rem] shadow-lg md:min-h-[390px]" style="background-image: url('images/Fondos/4.jpg')" role="img" aria-label="Ilustración de una figura tejida representando emociones"></div>
+                <article class="flex flex-col justify-center rounded-[2rem] bg-white p-7 shadow-sm md:p-10">
+                    <span class="mb-3 text-xs font-bold uppercase tracking-widest text-[#AA5238]">03 · Construir juntos</span>
+                    <h3 class="mb-4 text-3xl font-bold text-[#3E332D]">Acompañamiento de pareja</h3>
+                    <p class="mb-6 leading-relaxed text-[#65574F]">Un lugar para conversar, comprender patrones de comunicación y explorar nuevas herramientas para la relación, con respeto por la historia de ambos.</p>
+                    <ul class="mb-8 space-y-3 text-sm text-[#54463C]">
+                        <li class="flex gap-3"><i class="ph ph-check-circle text-lg text-[#AA5238]"></i> Sesión de diagnóstico y claridad en pareja</li>
+                        <li class="flex gap-3"><i class="ph ph-check-circle text-lg text-[#AA5238]"></i> Pack de 10 sesiones de pareja</li>
+                        <li class="flex gap-3"><i class="ph ph-check-circle text-lg text-[#AA5238]"></i> Pack de 15 sesiones de pareja</li>
+                    </ul>
+                    <a href="Tienda.html?cat=Servicios" class="inline-flex items-center gap-2 self-start rounded-full bg-[#AA5238] px-6 py-3 font-bold text-white transition hover:bg-[#8F402D]">Ver sesiones de pareja <i class="ph ph-arrow-right"></i></a>
+                </article>
+            </div>
+
+            <div class="mx-auto mt-8 grid max-w-7xl items-stretch gap-6 lg:grid-cols-2 lg:gap-10">
+                <article class="order-2 flex flex-col justify-center rounded-[2rem] bg-white p-7 shadow-sm lg:order-1 md:p-10">
+                    <span class="mb-3 text-xs font-bold uppercase tracking-widest text-[#AA5238]">04 · Para explorar y practicar</span>
+                    <h3 class="mb-4 text-3xl font-bold text-[#3E332D]">Recursos para tu proceso</h3>
+                    <p class="mb-6 leading-relaxed text-[#65574F]">Guías, tests y materiales prácticos para aprender y reflexionar a tu propio ritmo, en casa o como complemento de un acompañamiento.</p>
+                    <ul class="mb-8 space-y-3 text-sm text-[#54463C]">
+                        <li class="flex gap-3"><i class="ph ph-check-circle text-lg text-[#AA5238]"></i> Workbook de sanidad emocional</li>
+                        <li class="flex gap-3"><i class="ph ph-check-circle text-lg text-[#AA5238]"></i> Test de inteligencia emocional</li>
+                        <li class="flex gap-3"><i class="ph ph-check-circle text-lg text-[#AA5238]"></i> A solas con Jesús: guía de 30 días</li>
+                    </ul>
+                    <a href="Tienda.html?cat=Productos" class="inline-flex items-center gap-2 self-start rounded-full bg-[#AA5238] px-6 py-3 font-bold text-white transition hover:bg-[#8F402D]">Explorar recursos <i class="ph ph-arrow-right"></i></a>
+                </article>
+                <div class="service-photo order-1 min-h-[300px] rounded-[2rem] shadow-lg lg:order-2 md:min-h-[390px]" style="background-image: url('images/Fondos/10.jpg')" role="img" aria-label="Ilustración de una figura tejida representando emociones"></div>
+            </div>
+
+            <div class="mt-12 text-center">
+                <a href="Tienda.html" class="inline-flex items-center gap-2 rounded-full border-2 border-[#AA5238] px-7 py-3 font-bold text-[#AA5238] transition hover:bg-[#AA5238] hover:text-white">Ver catálogo completo <i class="ph ph-arrow-right"></i></a>
+            </div>
+        </section>
+
+        <section id="preguntas" class="px-6 py-20 md:py-24">
+            <div class="mx-auto max-w-4xl">
+                <div class="mb-10 text-center">
+                    <span class="text-xs font-bold uppercase tracking-[.2em] text-[#AA5238]">Antes de empezar</span>
+                    <h2 class="mt-3 text-3xl font-bold text-[#3E332D] sm:text-4xl">Preguntas frecuentes</h2>
+                    <p class="mt-4 text-[#65574F]">Abre las preguntas que quieras consultar.</p>
                 </div>
-                <h3 class="text-2xl font-bold mb-4">Nuestra Visión</h3>
-                <p class="text-gray-600 leading-relaxed">
-                    Ser el laboratorio de transformación humana líder a nivel global, reconocido por fusionar armónicamente la fe cristiana y el conocimiento científico. Anhelamos ver generaciones de mentes renovadas, libres de ataduras emocionales y capacitadas para liderar con excelencia en todas las esferas de la sociedad.
+                <div class="space-y-3">
+                    <details class="group rounded-2xl border border-[#E8D8CF] bg-white p-5 shadow-sm">
+                        <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-bold text-[#54463C] marker:content-none"><span>¿Cómo solicito la primera sesión gratuita?</span><i class="ph ph-plus text-xl text-[#AA5238] transition-transform group-open:rotate-45"></i></summary>
+                        <p class="pt-4 leading-relaxed text-[#65574F]">Pulsa el botón de WhatsApp y escríbenos. Te compartiremos la disponibilidad y la información necesaria para coordinarla.</p>
+                    </details>
+                    <details class="group rounded-2xl border border-[#E8D8CF] bg-white p-5 shadow-sm">
+                        <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-bold text-[#54463C] marker:content-none"><span>¿Cómo sé qué tipo de acompañamiento elegir?</span><i class="ph ph-plus text-xl text-[#AA5238] transition-transform group-open:rotate-45"></i></summary>
+                        <p class="pt-4 leading-relaxed text-[#65574F]">Puedes contarnos qué estás buscando por WhatsApp. Revisaremos contigo las alternativas disponibles y cuál podría ajustarse mejor a tu necesidad.</p>
+                    </details>
+                    <details class="group rounded-2xl border border-[#E8D8CF] bg-white p-5 shadow-sm">
+                        <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-bold text-[#54463C] marker:content-none"><span>¿Ofrecen espacios para parejas y grupos?</span><i class="ph ph-plus text-xl text-[#AA5238] transition-transform group-open:rotate-45"></i></summary>
+                        <p class="pt-4 leading-relaxed text-[#65574F]">Sí. En el catálogo puedes consultar las sesiones de pareja, los acompañamientos grupales y sus fechas o disponibilidad.</p>
+                    </details>
+                    <details class="group rounded-2xl border border-[#E8D8CF] bg-white p-5 shadow-sm">
+                        <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-bold text-[#54463C] marker:content-none"><span>¿Se garantiza un resultado o una sanidad?</span><i class="ph ph-plus text-xl text-[#AA5238] transition-transform group-open:rotate-45"></i></summary>
+                        <p class="pt-4 leading-relaxed text-[#65574F]">No. Cada proceso es distinto y no prometemos resultados clínicos o espirituales. Creemos que Dios es soberano; el acompañamiento ofrece escucha y herramientas, no garantías.</p>
+                    </details>
+                    <details class="group rounded-2xl border border-[#E8D8CF] bg-white p-5 shadow-sm">
+                        <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-bold text-[#54463C] marker:content-none"><span>¿El acompañamiento reemplaza la atención médica o psicológica?</span><i class="ph ph-plus text-xl text-[#AA5238] transition-transform group-open:rotate-45"></i></summary>
+                        <p class="pt-4 leading-relaxed text-[#65574F]">No. Los recursos espirituales y educativos no sustituyen la evaluación ni el tratamiento de profesionales de salud. Si necesitas atención clínica, consulta con un profesional cualificado.</p>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <section id="resenas" class="bg-[#F8F3EF] px-5 py-20 md:px-8 md:py-24">
+            <div class="mx-auto max-w-7xl">
+                <div class="mb-8 flex flex-col justify-between gap-5 md:flex-row md:items-end">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-[.2em] text-[#AA5238]">Experiencias</span>
+                        <h2 class="mt-3 text-3xl font-bold text-[#3E332D] sm:text-4xl">Un espacio para ser escuchado</h2>
+                    </div>
+                    <div class="flex gap-2">
+                        <button type="button" onclick="moverResenas(-1)" aria-label="Ver reseñas anteriores" class="flex h-11 w-11 items-center justify-center rounded-full border border-[#D9B7A8] bg-white text-[#AA5238] transition hover:bg-[#AA5238] hover:text-white"><i class="ph ph-arrow-left text-xl"></i></button>
+                        <button type="button" onclick="moverResenas(1)" aria-label="Ver más reseñas" class="flex h-11 w-11 items-center justify-center rounded-full border border-[#D9B7A8] bg-white text-[#AA5238] transition hover:bg-[#AA5238] hover:text-white"><i class="ph ph-arrow-right text-xl"></i></button>
+                    </div>
+                </div>
+                <p class="mb-7 rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-900">
+                    <i class="ph ph-info mr-1"></i> Ejemplos ficticios para mostrar el diseño. No son reseñas ni testimonios reales; reemplázalos antes de publicar esta sección.
                 </p>
+                <div id="review-track" class="review-track flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth pb-4" role="region" aria-label="Carrusel de ejemplos de reseñas" tabindex="0">
+                    <article class="review-slide min-w-[88%] rounded-3xl bg-white p-6 shadow-sm sm:min-w-[48%] lg:min-w-[32%]">
+                        <div class="mb-5 flex items-center gap-3"><img src="images/Fondos/12.jpg" alt="Avatar ilustrativo, no corresponde a una cliente" loading="lazy" decoding="async" class="review-avatar h-12 w-12 rounded-full object-cover"><div><p class="font-bold text-[#3E332D]">Perfil de ejemplo 01</p><p class="text-xs font-semibold uppercase tracking-wide text-[#AA5238]">Reseña de demostración</p></div></div>
+                        <div class="mb-3 text-xl tracking-widest text-[#AA5238]" aria-label="5 estrellas">★★★★★</div>
+                        <p class="leading-relaxed text-[#65574F]">“Me sentí escuchada y pude ordenar mis ideas en un espacio respetuoso.”</p>
+                    </article>
+                    <article class="review-slide min-w-[88%] rounded-3xl bg-white p-6 shadow-sm sm:min-w-[48%] lg:min-w-[32%]">
+                        <div class="mb-5 flex items-center gap-3"><img src="images/Fondos/3.jpg" alt="Avatar ilustrativo, no corresponde a una cliente" loading="lazy" decoding="async" class="review-avatar h-12 w-12 rounded-full object-cover"><div><p class="font-bold text-[#3E332D]">Perfil de ejemplo 02</p><p class="text-xs font-semibold uppercase tracking-wide text-[#AA5238]">Reseña de demostración</p></div></div>
+                        <div class="mb-3 text-xl tracking-widest text-[#AA5238]" aria-label="5 estrellas">★★★★★</div>
+                        <p class="leading-relaxed text-[#65574F]">“Las herramientas prácticas me ayudaron a reflexionar sobre mi comunicación.”</p>
+                    </article>
+                    <article class="review-slide min-w-[88%] rounded-3xl bg-white p-6 shadow-sm sm:min-w-[48%] lg:min-w-[32%]">
+                        <div class="mb-5 flex items-center gap-3"><img src="images/Fondos/4.jpg" alt="Avatar ilustrativo, no corresponde a una cliente" loading="lazy" decoding="async" class="review-avatar h-12 w-12 rounded-full object-cover"><div><p class="font-bold text-[#3E332D]">Perfil de ejemplo 03</p><p class="text-xs font-semibold uppercase tracking-wide text-[#AA5238]">Reseña de demostración</p></div></div>
+                        <div class="mb-3 text-xl tracking-widest text-[#AA5238]" aria-label="5 estrellas">★★★★★</div>
+                        <p class="leading-relaxed text-[#65574F]">“El grupo fue un lugar amable para aprender y escuchar otras perspectivas.”</p>
+                    </article>
+                    <article class="review-slide min-w-[88%] rounded-3xl bg-white p-6 shadow-sm sm:min-w-[48%] lg:min-w-[32%]">
+                        <div class="mb-5 flex items-center gap-3"><img src="images/Fondos/10.jpg" alt="Avatar ilustrativo, no corresponde a una cliente" loading="lazy" decoding="async" class="review-avatar h-12 w-12 rounded-full object-cover"><div><p class="font-bold text-[#3E332D]">Perfil de ejemplo 04</p><p class="text-xs font-semibold uppercase tracking-wide text-[#AA5238]">Reseña de demostración</p></div></div>
+                        <div class="mb-3 text-xl tracking-widest text-[#AA5238]" aria-label="5 estrellas">★★★★★</div>
+                        <p class="leading-relaxed text-[#65574F]">“Pudimos conversar con más calma y conocer nuevas formas de escucharnos.”</p>
+                    </article>
+                    <article class="review-slide min-w-[88%] rounded-3xl bg-white p-6 shadow-sm sm:min-w-[48%] lg:min-w-[32%]">
+                        <div class="mb-5 flex items-center gap-3"><img src="images/Fondos/5.jpg" alt="Avatar ilustrativo, no corresponde a una cliente" loading="lazy" decoding="async" class="review-avatar h-12 w-12 rounded-full object-cover"><div><p class="font-bold text-[#3E332D]">Perfil de ejemplo 05</p><p class="text-xs font-semibold uppercase tracking-wide text-[#AA5238]">Reseña de demostración</p></div></div>
+                        <div class="mb-3 text-xl tracking-widest text-[#AA5238]" aria-label="5 estrellas">★★★★★</div>
+                        <p class="leading-relaxed text-[#65574F]">“Me gustó que el proceso se explicara con claridad y sin promesas.”</p>
+                    </article>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Sección Especialidades -->
-    <section id="especialidades" class="bg-[#F6F3EE] py-20 px-6">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16">
-                <span class="text-[#8C8660] font-bold text-sm uppercase tracking-widest">Nuestro Enfoque Clínico</span>
-                <h2 class="text-4xl font-bold mt-2">Especialidades</h2>
-            </div>
-            
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-white p-8 rounded-[24px] text-center group hover:-translate-y-2 transition-transform duration-300">
-                    <i class="ph ph-dna text-5xl text-[#8C8660] mb-4 group-hover:scale-110 transition-transform"></i>
-                    <h4 class="text-xl font-bold mb-3">Neurobiología Aplicada</h4>
-                    <p class="text-sm text-gray-600">
-                        Comprendemos a fondo las mecánicas del estrés y la regulación conductual. Intervenimos sobre la neuroplasticidad, analizando cómo la amígdala, la corteza prefrontal y los neurotransmisores impactan tu bienestar diario.
-                    </p>
+        <section id="ubicacion" class="px-6 py-20 md:py-24">
+            <div class="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[.8fr_1.2fr] lg:items-center">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-[.2em] text-[#AA5238]">Visítanos</span>
+                    <h2 class="mt-3 text-3xl font-bold text-[#3E332D] sm:text-4xl">Estamos en Bogotá</h2>
+                    <p class="mt-5 flex items-start gap-3 text-lg leading-relaxed text-[#65574F]"><i class="ph ph-map-pin-line mt-1 text-2xl text-[#AA5238]"></i><span>Cll 113 # 55-84<br>Bogotá, Colombia</span></p>
+                    <a href="https://www.google.com/maps/search/?api=1&query=Cl+113+%2355-84%2C+Bogot%C3%A1%2C+Colombia" target="_blank" rel="noopener noreferrer" class="mt-7 inline-flex items-center gap-2 rounded-full bg-[#AA5238] px-6 py-3 font-bold text-white transition hover:bg-[#8F402D]">Abrir en Google Maps <i class="ph ph-arrow-square-out"></i></a>
                 </div>
-                <div class="bg-white p-8 rounded-[24px] text-center group hover:-translate-y-2 transition-transform duration-300">
-                    <i class="ph ph-heartbeat text-5xl text-[#8C8660] mb-4 group-hover:scale-110 transition-transform"></i>
-                    <h4 class="text-xl font-bold mb-3">Sanación Emocional</h4>
-                    <p class="text-sm text-gray-600">
-                        Abordaje integral del trauma y la ansiedad. Aplicamos técnicas científicamente comprobadas para reestructurar esquemas de pensamiento dañinos, guiados siempre por la compasión y la verdad espiritual.
-                    </p>
-                </div>
-                <div class="bg-white p-8 rounded-[24px] text-center group hover:-translate-y-2 transition-transform duration-300">
-                    <i class="ph ph-trend-up text-5xl text-[#8C8660] mb-4 group-hover:scale-110 transition-transform"></i>
-                    <h4 class="text-xl font-bold mb-3">Alto Desempeño</h4>
-                    <p class="text-sm text-gray-600">
-                        Entrenamiento de funciones ejecutivas para acabar con la procrastinación. Optimizamos tu enfoque, toma de decisiones y productividad en tu vida académica, profesional y relacional.
-                    </p>
+                <div class="overflow-hidden rounded-[2rem] shadow-lg">
+                    <iframe title="Mapa de ubicación en Cll 113 # 55-84, Bogotá" src="https://maps.google.com/maps?q=Cl+113+%2355-84%2C+Bogot%C3%A1%2C+Colombia&output=embed" class="h-[340px] w-full border-0 md:h-[420px]" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Llamado a la acción -->
-    <section id="recursos" class="py-24 px-6 max-w-5xl mx-auto text-center">
-        <h2 class="text-3xl md:text-4xl font-bold mb-6">Explora Nuestros Recursos y Programas</h2>
-        <p class="text-gray-600 mb-10 max-w-2xl mx-auto">
-            Desde programas personalizados hasta material de trabajo independiente. Todo lo que necesitas para iniciar tu proceso de transformación está a un clic de distancia.
-        </p>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-            <a href="Tienda.html?cat=Personalizados" class="bg-white border border-gray-200 p-6 rounded-2xl hover:border-[#8C8660] hover:shadow-lg transition-all">
-                <i class="ph ph-user text-3xl text-[#8C8660] mb-2"></i>
-                <p class="font-bold text-sm">Personalizados</p>
-            </a>
-            <a href="Tienda.html?cat=Grupales" class="bg-white border border-gray-200 p-6 rounded-2xl hover:border-[#8C8660] hover:shadow-lg transition-all">
-                <i class="ph ph-users-three text-3xl text-[#8C8660] mb-2"></i>
-                <p class="font-bold text-sm">Grupales</p>
-            </a>
-            <a href="Tienda.html?cat=Servicios" class="bg-white border border-gray-200 p-6 rounded-2xl hover:border-[#8C8660] hover:shadow-lg transition-all">
-                <i class="ph ph-stethoscope text-3xl text-[#8C8660] mb-2"></i>
-                <p class="font-bold text-sm">Servicios</p>
-            </a>
-            <a href="Tienda.html?cat=Productos" class="bg-white border border-gray-200 p-6 rounded-2xl hover:border-[#8C8660] hover:shadow-lg transition-all">
-                <i class="ph ph-books text-3xl text-[#8C8660] mb-2"></i>
-                <p class="font-bold text-sm">Recursos</p>
-            </a>
-        </div>
-        <a href="Tienda.html" class="inline-flex items-center gap-2 bg-[#54463C] text-white font-bold px-8 py-4 rounded-full hover:bg-[#8C8660] transition-colors">
-            Ver Catálogo Completo <i class="ph ph-arrow-right"></i>
-        </a>
-    </section>
+        </section>
+    </main>
 
     <!-- Footer -->
     <footer class="bg-[#54463C] text-white py-12 px-6">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="flex items-center gap-2 text-2xl font-black">
-                <i class="ph ph-brain text-[#8C8660]"></i> Renova <span class="text-[#8C8660]">Institute</span>
+                <i class="ph ph-brain text-[#AA5238]"></i> Renova <span class="text-[#AA5238]">Institute</span>
             </div>
             <p class="text-sm text-gray-300 text-center md:text-left">
                 © 2026 Renova Institute. Todos los derechos reservados.<br>
                 <span class="italic text-xs">Centro de salud mental cristiano</span>
             </p>
             <div class="flex gap-4">
-                <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#8C8660] transition">
+                <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#AA5238] transition">
                     <i class="ph ph-instagram-logo text-xl"></i>
                 </a>
-                <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#8C8660] transition">
+                <a href="https://wa.me/573114951646" target="_blank" rel="noopener noreferrer" aria-label="Escríbenos por WhatsApp" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#AA5238] transition">
                     <i class="ph ph-whatsapp-logo text-xl"></i>
                 </a>
             </div>
         </div>
     </footer>
+
+    <script>
+        function moverResenas(direccion) {
+            const carrusel = document.getElementById('review-track');
+            carrusel.scrollBy({ left: direccion * carrusel.clientWidth * 0.8, behavior: 'smooth' });
+        }
+    </script>
 
     <!-- BANNER MODAL (NUEVO DISEÑO GRANDE) -->
     <div x-data="bannerLibro()" x-init="initBanner()" x-show="mostrar" x-transition.opacity.duration.500ms 
@@ -263,7 +391,7 @@
             
             <!-- Sección de Contenido y Botones -->
             <div class="md:w-7/12 p-8 md:p-12 flex flex-col justify-center bg-white">
-                <span class="text-xs font-bold text-[#8C8660] uppercase tracking-widest mb-3 flex items-center gap-2">
+                <span class="text-xs font-bold text-[#AA5238] uppercase tracking-widest mb-3 flex items-center gap-2">
                     <i class="ph ph-star-four text-yellow-500 text-lg"></i> Lanzamiento Exclusivo
                 </span>
                 
@@ -275,29 +403,29 @@
                     
                     <!-- Botón 1 -->
                     <template x-if="config.link1Nombre && config.link1Url">
-                        <a :href="config.link1Url" target="_blank" class="w-full flex items-center justify-between bg-white border-2 border-gray-100 text-[#54463C] font-bold px-6 py-4 rounded-xl hover:border-[#8C8660] hover:bg-[#FDFBFA] hover:shadow-md transition-all group">
-                            <span class="flex items-center gap-3"><i class="ph ph-book-open-text text-2xl text-[#8C8660]"></i> <span x-text="config.link1Nombre"></span></span>
-                            <i class="ph ph-arrow-right text-gray-400 group-hover:text-[#8C8660] transition-colors"></i>
+                        <a :href="config.link1Url" target="_blank" class="w-full flex items-center justify-between bg-white border-2 border-gray-100 text-[#54463C] font-bold px-6 py-4 rounded-xl hover:border-[#AA5238] hover:bg-[#FDFBFA] hover:shadow-md transition-all group">
+                            <span class="flex items-center gap-3"><i class="ph ph-book-open-text text-2xl text-[#AA5238]"></i> <span x-text="config.link1Nombre"></span></span>
+                            <i class="ph ph-arrow-right text-gray-400 group-hover:text-[#AA5238] transition-colors"></i>
                         </a>
                     </template>
                     
                     <!-- Botón 2 -->
                     <template x-if="config.link2Nombre && config.link2Url">
-                        <a :href="config.link2Url" target="_blank" class="w-full flex items-center justify-between bg-white border-2 border-gray-100 text-[#54463C] font-bold px-6 py-4 rounded-xl hover:border-[#8C8660] hover:bg-[#FDFBFA] hover:shadow-md transition-all group">
-                            <span class="flex items-center gap-3"><i class="ph ph-device-mobile text-2xl text-[#8C8660]"></i> <span x-text="config.link2Nombre"></span></span>
-                            <i class="ph ph-arrow-right text-gray-400 group-hover:text-[#8C8660] transition-colors"></i>
+                        <a :href="config.link2Url" target="_blank" class="w-full flex items-center justify-between bg-white border-2 border-gray-100 text-[#54463C] font-bold px-6 py-4 rounded-xl hover:border-[#AA5238] hover:bg-[#FDFBFA] hover:shadow-md transition-all group">
+                            <span class="flex items-center gap-3"><i class="ph ph-device-mobile text-2xl text-[#AA5238]"></i> <span x-text="config.link2Nombre"></span></span>
+                            <i class="ph ph-arrow-right text-gray-400 group-hover:text-[#AA5238] transition-colors"></i>
                         </a>
                     </template>
                     
                     <!-- Botón 3 -->
                     <template x-if="config.link3Nombre && config.link3Url">
-                        <a :href="config.link3Url" target="_blank" class="w-full flex items-center justify-between bg-[#54463C] border-2 border-[#54463C] text-white font-bold px-6 py-4 rounded-xl hover:bg-[#8C8660] hover:border-[#8C8660] hover:shadow-md transition-all group">
+                        <a :href="config.link3Url" target="_blank" class="w-full flex items-center justify-between bg-[#54463C] border-2 border-[#54463C] text-white font-bold px-6 py-4 rounded-xl hover:bg-[#AA5238] hover:border-[#AA5238] hover:shadow-md transition-all group">
                             <span class="flex items-center gap-3"><i class="ph ph-storefront text-2xl text-white"></i> <span x-text="config.link3Nombre"></span></span>
                             <i class="ph ph-arrow-right text-white/50 group-hover:text-white transition-colors"></i>
                         </a>
                     </template>
                     <template x-if="config.productoId">
-                        <button @click="irAlCarrito()" class="w-full flex items-center justify-between bg-[#8C8660] border-2 border-[#8C8660] text-white font-bold px-6 py-4 rounded-xl hover:bg-[#54463C] hover:border-[#54463C] transition-all group">
+                        <button @click="irAlCarrito()" class="w-full flex items-center justify-between bg-[#AA5238] border-2 border-[#AA5238] text-white font-bold px-6 py-4 rounded-xl hover:bg-[#54463C] hover:border-[#54463C] transition-all group">
                             <span class="flex items-center gap-3"><i class="ph ph-shopping-cart text-2xl text-white"></i> Agregar al carrito</span>
                             <i class="ph ph-arrow-right text-white/70 group-hover:text-white transition-colors"></i>
                         </button>

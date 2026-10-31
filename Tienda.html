@@ -13,11 +13,12 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     
     <style>
-        .category-pill.active { background-color: #8C8660; color: white; border-color: #8C8660; }
+        .category-pill.active { background-color: #AA5238; color: white; border-color: #AA5238; }
+        .catalog-title::after { content: ''; display: block; width: 3rem; height: 3px; margin-top: .75rem; border-radius: 999px; background: #AA5238; }
         .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #8C8660; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #AA5238; border-radius: 10px; }
         .cart-item + .cart-item { border-top: 1px solid #f3f4f6; padding-top: 1rem; }
     </style>
     <script id="banner-data" type="application/json">
@@ -42,27 +43,27 @@
         <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
             
             <a href="index.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
-                <i class="ph ph-brain text-2xl text-[#8C8660]"></i>
+                <i class="ph ph-brain text-2xl text-[#AA5238]"></i>
                 <div class="flex flex-col leading-tight">
-                    <span class="text-base font-bold text-[#8C8660]">RENOVA INSTITUTE</span>
+                    <span class="text-base font-bold text-[#AA5238]">RENOVA INSTITUTE</span>
                     <span class="text-[9px] font-medium text-[#54463C]">Centro de salud mental cristiano</span>
                 </div>
             </a>
             
             <div class="hidden lg:flex items-center gap-6 flex-1 justify-end px-8">
-                <a href="index.html" class="text-sm text-gray-800 hover:text-[#8C8660] font-bold transition-colors">Inicio</a>
+                <a href="index.html" class="text-sm text-gray-800 hover:text-[#AA5238] font-bold transition-colors">Inicio</a>
                 
                 <div class="relative w-80">
                     <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
                     <input type="text" id="buscador" onkeyup="renderTienda()" placeholder="Buscar programas..." 
-                           class="pl-12 pr-6 py-2.5 bg-gray-50 focus:bg-white border border-gray-200 rounded-full text-sm outline-none w-full transition-all shadow-sm focus:ring-2 focus:ring-[#8C8660]/20">
+                           class="pl-12 pr-6 py-2.5 bg-gray-50 focus:bg-white border border-gray-200 rounded-full text-sm outline-none w-full transition-all shadow-sm focus:ring-2 focus:ring-[#AA5238]/20">
                 </div>
             </div>
 
             <div class="flex items-center gap-4">
-                <button onclick="toggleCarrito()" class="relative p-2 text-[#54463C] hover:text-[#8C8660] transition">
+                <button onclick="toggleCarrito()" class="relative p-2 text-[#54463C] hover:text-[#AA5238] transition">
                     <i class="ph ph-shopping-cart text-2xl"></i>
-                    <span id="badge-carrito" class="absolute -top-1 -right-1 bg-[#8C8660] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full hidden shadow-sm">0</span>
+                    <span id="badge-carrito" class="absolute -top-1 -right-1 bg-[#AA5238] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full hidden shadow-sm">0</span>
                 </button>
                 
                 <button @click="mobileMenuOpen = !mobileMenuOpen" class="block lg:hidden text-[#54463C] p-2 hover:bg-gray-100 rounded-full transition-colors">
@@ -81,13 +82,13 @@
     </header>
 
     <div class="max-w-7xl mx-auto px-6 pt-10">
-        <h1 class="text-3xl font-bold mb-6 text-[#54463C]">Catálogo de Bienestar</h1>
+        <h1 class="catalog-title text-3xl font-bold mb-6 text-[#54463C]">Catálogo de Bienestar</h1>
         <div class="flex flex-wrap gap-2 mb-8" id="filtros-cat">
-            <button onclick="cambiarFiltro('todos')" class="category-pill active px-5 py-2 rounded-full border border-gray-200 text-sm font-bold transition hover:border-[#8C8660]">Todos</button>
-            <button onclick="cambiarFiltro('Personalizados')" class="category-pill px-5 py-2 rounded-full border border-gray-200 text-sm font-bold transition hover:border-[#8C8660]">Programas Personalizados</button>
-            <button onclick="cambiarFiltro('Grupales')" class="category-pill px-5 py-2 rounded-full border border-gray-200 text-sm font-bold transition hover:border-[#8C8660]">Programas Grupales</button>
-            <button onclick="cambiarFiltro('Servicios')" class="category-pill px-5 py-2 rounded-full border border-gray-200 text-sm font-bold transition hover:border-[#8C8660]">Sesiones y Asesorías</button>
-            <button onclick="cambiarFiltro('Productos')" class="category-pill px-5 py-2 rounded-full border border-gray-200 text-sm font-bold transition hover:border-[#8C8660]">Tests y Recursos</button>
+            <button onclick="cambiarFiltro('todos')" class="category-pill active px-5 py-2 rounded-full border border-gray-200 text-sm font-bold transition hover:border-[#AA5238]">Todos</button>
+            <button onclick="cambiarFiltro('Personalizados')" class="category-pill px-5 py-2 rounded-full border border-gray-200 text-sm font-bold transition hover:border-[#AA5238]">Programas Personalizados</button>
+            <button onclick="cambiarFiltro('Grupales')" class="category-pill px-5 py-2 rounded-full border border-gray-200 text-sm font-bold transition hover:border-[#AA5238]">Programas Grupales</button>
+            <button onclick="cambiarFiltro('Servicios')" class="category-pill px-5 py-2 rounded-full border border-gray-200 text-sm font-bold transition hover:border-[#AA5238]">Sesiones y Asesorías</button>
+            <button onclick="cambiarFiltro('Productos')" class="category-pill px-5 py-2 rounded-full border border-gray-200 text-sm font-bold transition hover:border-[#AA5238]">Tests y Recursos</button>
             <button onclick="cambiarFiltro('Gratuitos')" class="category-pill px-5 py-2 rounded-full border border-emerald-200 text-sm font-bold transition bg-emerald-50 text-emerald-700 hover:bg-emerald-100">Recursos Gratuitos 🎁</button>
         </div>
     </div>
@@ -110,11 +111,11 @@
     <div id="carrito-overlay" onclick="toggleCarrito(false)" class="fixed inset-0 bg-black/30 z-[180] hidden"></div>
     <aside id="carrito-sidebar" class="fixed right-0 top-0 h-full w-full max-w-md bg-white z-[190] shadow-2xl translate-x-full transition-transform duration-300 flex flex-col">
         <div class="flex items-center justify-between p-6 border-b border-gray-100">
-            <div><p class="text-xs uppercase tracking-widest text-[#8C8660] font-bold">Tu selección</p><h2 class="text-2xl font-bold text-[#54463C]">Carrito</h2></div>
+            <div><p class="text-xs uppercase tracking-widest text-[#AA5238] font-bold">Tu selección</p><h2 class="text-2xl font-bold text-[#54463C]">Carrito</h2></div>
             <button onclick="toggleCarrito(false)" aria-label="Cerrar carrito" class="p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200"><i class="ph ph-x text-xl"></i></button>
         </div>
         <div id="carrito-items" class="flex-1 overflow-y-auto p-6 custom-scrollbar"></div>
-        <div class="p-6 border-t border-gray-100 bg-[#FDFBFA]"><div class="flex justify-between items-center mb-4 text-lg font-bold text-[#54463C]"><span>Total</span><span id="carrito-total">$ 0</span></div><button onclick="solicitarCarrito()" class="w-full bg-[#54463C] text-white py-3 rounded-xl font-bold hover:bg-[#8C8660] transition flex items-center justify-center gap-2"><i class="ph ph-whatsapp-logo text-xl"></i> Solicitar por WhatsApp</button></div>
+        <div class="p-6 border-t border-gray-100 bg-[#FDFBFA]"><div class="flex justify-between items-center mb-4 text-lg font-bold text-[#54463C]"><span>Total</span><span id="carrito-total">$ 0</span></div><button onclick="solicitarCarrito()" class="w-full bg-[#54463C] text-white py-3 rounded-xl font-bold hover:bg-[#AA5238] transition flex items-center justify-center gap-2"><i class="ph ph-whatsapp-logo text-xl"></i> Solicitar por WhatsApp</button></div>
     </aside>
 
     <!-- BANNER MODAL PARA LA TIENDA (Idéntico al de Index) -->
@@ -139,7 +140,7 @@
             
             <!-- Sección de Contenido y Botones -->
             <div class="md:w-7/12 p-8 md:p-12 flex flex-col justify-center bg-white">
-                <span class="text-xs font-bold text-[#8C8660] uppercase tracking-widest mb-3 flex items-center gap-2">
+                <span class="text-xs font-bold text-[#AA5238] uppercase tracking-widest mb-3 flex items-center gap-2">
                     <i class="ph ph-star-four text-yellow-500 text-lg"></i> Lanzamiento Exclusivo
                 </span>
                 
@@ -151,29 +152,29 @@
                     
                     <!-- Botón 1 -->
                     <template x-if="config.link1Nombre && config.link1Url">
-                        <a :href="config.link1Url" target="_blank" class="w-full flex items-center justify-between bg-white border-2 border-gray-100 text-[#54463C] font-bold px-6 py-4 rounded-xl hover:border-[#8C8660] hover:bg-[#FDFBFA] hover:shadow-md transition-all group">
-                            <span class="flex items-center gap-3"><i class="ph ph-book-open-text text-2xl text-[#8C8660]"></i> <span x-text="config.link1Nombre"></span></span>
-                            <i class="ph ph-arrow-right text-gray-400 group-hover:text-[#8C8660] transition-colors"></i>
+                        <a :href="config.link1Url" target="_blank" class="w-full flex items-center justify-between bg-white border-2 border-gray-100 text-[#54463C] font-bold px-6 py-4 rounded-xl hover:border-[#AA5238] hover:bg-[#FDFBFA] hover:shadow-md transition-all group">
+                            <span class="flex items-center gap-3"><i class="ph ph-book-open-text text-2xl text-[#AA5238]"></i> <span x-text="config.link1Nombre"></span></span>
+                            <i class="ph ph-arrow-right text-gray-400 group-hover:text-[#AA5238] transition-colors"></i>
                         </a>
                     </template>
                     
                     <!-- Botón 2 -->
                     <template x-if="config.link2Nombre && config.link2Url">
-                        <a :href="config.link2Url" target="_blank" class="w-full flex items-center justify-between bg-white border-2 border-gray-100 text-[#54463C] font-bold px-6 py-4 rounded-xl hover:border-[#8C8660] hover:bg-[#FDFBFA] hover:shadow-md transition-all group">
-                            <span class="flex items-center gap-3"><i class="ph ph-device-mobile text-2xl text-[#8C8660]"></i> <span x-text="config.link2Nombre"></span></span>
-                            <i class="ph ph-arrow-right text-gray-400 group-hover:text-[#8C8660] transition-colors"></i>
+                        <a :href="config.link2Url" target="_blank" class="w-full flex items-center justify-between bg-white border-2 border-gray-100 text-[#54463C] font-bold px-6 py-4 rounded-xl hover:border-[#AA5238] hover:bg-[#FDFBFA] hover:shadow-md transition-all group">
+                            <span class="flex items-center gap-3"><i class="ph ph-device-mobile text-2xl text-[#AA5238]"></i> <span x-text="config.link2Nombre"></span></span>
+                            <i class="ph ph-arrow-right text-gray-400 group-hover:text-[#AA5238] transition-colors"></i>
                         </a>
                     </template>
                     
                     <!-- Botón 3 -->
                     <template x-if="config.link3Nombre && config.link3Url">
-                        <a :href="config.link3Url" target="_blank" class="w-full flex items-center justify-between bg-[#54463C] border-2 border-[#54463C] text-white font-bold px-6 py-4 rounded-xl hover:bg-[#8C8660] hover:border-[#8C8660] hover:shadow-md transition-all group">
+                        <a :href="config.link3Url" target="_blank" class="w-full flex items-center justify-between bg-[#54463C] border-2 border-[#54463C] text-white font-bold px-6 py-4 rounded-xl hover:bg-[#AA5238] hover:border-[#AA5238] hover:shadow-md transition-all group">
                             <span class="flex items-center gap-3"><i class="ph ph-storefront text-2xl text-white"></i> <span x-text="config.link3Nombre"></span></span>
                             <i class="ph ph-arrow-right text-white/50 group-hover:text-white transition-colors"></i>
                         </a>
                     </template>
                     <template x-if="config.productoId">
-                        <button @click="agregarProducto()" class="w-full flex items-center justify-between bg-[#8C8660] border-2 border-[#8C8660] text-white font-bold px-6 py-4 rounded-xl hover:bg-[#54463C] hover:border-[#54463C] transition-all group">
+                        <button @click="agregarProducto()" class="w-full flex items-center justify-between bg-[#AA5238] border-2 border-[#AA5238] text-white font-bold px-6 py-4 rounded-xl hover:bg-[#54463C] hover:border-[#54463C] transition-all group">
                             <span class="flex items-center gap-3"><i class="ph ph-shopping-cart text-2xl text-white"></i> Agregar al carrito</span>
                             <i class="ph ph-plus text-white/70 group-hover:text-white transition-colors"></i>
                         </button>
@@ -1302,8 +1303,8 @@
                         let cuposBarra = '';
                         if (p.cuposTotales && p.cuposDisponibles) {
                             const porcentajeOcupado = ((p.cuposTotales - p.cuposDisponibles) / p.cuposTotales) * 100;
-                            const colorCupos = p.cuposDisponibles <= 3 ? 'text-red-500' : 'text-[#8C8660]';
-                            const bgBarra = p.cuposDisponibles <= 3 ? 'bg-red-500' : 'bg-[#8C8660]';
+                            const colorCupos = p.cuposDisponibles <= 3 ? 'text-red-500' : 'text-[#AA5238]';
+                            const bgBarra = p.cuposDisponibles <= 3 ? 'bg-red-500' : 'bg-[#AA5238]';
                             
                             cuposBarra = `
                                 <div class="mt-3 bg-white p-2 rounded border border-gray-100">
@@ -1320,12 +1321,12 @@
 
                         infoFechasCupos = `
                             <div class="mb-4 bg-gray-50 rounded-xl p-3 border border-gray-100">
-                                <p class="text-[11px] text-gray-700 flex items-center gap-1.5 mb-1"><i class="ph ph-calendar-check text-[#8C8660] text-sm"></i> <b>Inicia:</b> ${p.fechaInicio}</p>
-                                <p class="text-[11px] text-gray-700 flex items-center gap-1.5 mb-1"><i class="ph ph-clock text-[#8C8660] text-sm"></i> <b>Horario:</b> ${p.horario}</p>
-                                ${p.duracion ? `<p class="text-[11px] text-gray-700 flex items-center gap-1.5 mb-1"><i class="ph ph-hourglass text-[#8C8660] text-sm"></i> <b>Duración:</b> ${p.duracion}</p>` : ''}
-                                ${p.modalidad ? `<p class="text-[11px] text-gray-700 flex items-center gap-1.5 mb-1"><i class="ph ph-laptop text-[#8C8660] text-sm"></i> <b>Modalidad:</b> ${p.modalidad}</p>` : ''}
+                                <p class="text-[11px] text-gray-700 flex items-center gap-1.5 mb-1"><i class="ph ph-calendar-check text-[#AA5238] text-sm"></i> <b>Inicia:</b> ${p.fechaInicio}</p>
+                                <p class="text-[11px] text-gray-700 flex items-center gap-1.5 mb-1"><i class="ph ph-clock text-[#AA5238] text-sm"></i> <b>Horario:</b> ${p.horario}</p>
+                                ${p.duracion ? `<p class="text-[11px] text-gray-700 flex items-center gap-1.5 mb-1"><i class="ph ph-hourglass text-[#AA5238] text-sm"></i> <b>Duración:</b> ${p.duracion}</p>` : ''}
+                                ${p.modalidad ? `<p class="text-[11px] text-gray-700 flex items-center gap-1.5 mb-1"><i class="ph ph-laptop text-[#AA5238] text-sm"></i> <b>Modalidad:</b> ${p.modalidad}</p>` : ''}
                                 ${cuposBarra}
-                                ${mostrarAviso ? `<div class="mt-2 pt-2 border-t border-gray-200 text-[10px] text-[#8C8660] font-bold italic flex items-center gap-1"><i class="ph ph-users text-sm"></i> Cupos limitados - Grupos pequeños</div>` : ''}
+                                ${mostrarAviso ? `<div class="mt-2 pt-2 border-t border-gray-200 text-[10px] text-[#AA5238] font-bold italic flex items-center gap-1"><i class="ph ph-users text-sm"></i> Cupos limitados - Grupos pequeños</div>` : ''}
                             </div>
                         `;
                     } else if (p.fechaInicio === "Por definir" || esEspera) {
@@ -1342,13 +1343,13 @@
                 let etiquetaInversion = (!esEspera && !esGratis) ? '<span class="text-[11px] text-gray-500 font-medium block mb-1 mt-2 uppercase tracking-wide">Inversión:</span>' : '';
 
                 return `
-                <div class="bg-white p-6 rounded-[24px] border border-gray-100 hover:border-[#8C8660]/30 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#8C8660]/5 to-transparent rounded-bl-[100px] -z-10 transition-transform group-hover:scale-110"></div>
+                <div class="bg-white p-6 rounded-[24px] border border-gray-100 hover:border-[#AA5238]/30 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#AA5238]/5 to-transparent rounded-bl-[100px] -z-10 transition-transform group-hover:scale-110"></div>
                     <div>
                         <div class="flex justify-between items-start mb-4 gap-2 flex-wrap">
                             <div class="flex gap-2 flex-wrap">
                                 ${tagEdad ? `<span class="bg-gray-100 text-gray-700 text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">${tagEdad}</span>` : ''}
-                                ${tagEnfoque ? `<span class="text-[10px] font-bold text-[#8C8660] bg-[#8C8660]/10 px-3 py-1.5 rounded-full uppercase tracking-wider">${tagEnfoque}</span>` : ''}
+                                ${tagEnfoque ? `<span class="text-[10px] font-bold text-[#AA5238] bg-[#AA5238]/10 px-3 py-1.5 rounded-full uppercase tracking-wider">${tagEnfoque}</span>` : ''}
                             </div>
                             ${esGratis ? '<span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2 py-1 rounded-md shrink-0"><i class="ph ph-gift text-sm"></i></span>' : ''}
                         </div>
@@ -1364,14 +1365,14 @@
                                     <span class="text-[11px] text-gray-400 line-through">Normal${p.precioDesde ? ' desde' : ''}: $ ${precioNormalTotal.toLocaleString()}</span>
                                 </div>
                             ` : ''}
-                            <p class="text-[#8C8660] font-bold text-xl mb-6">
+                            <p class="text-[#AA5238] font-bold text-xl mb-6">
                                 ${esEspera || p.fechaInicio === "Por definir" && p.precio === 0 ? '<span class="text-sm font-normal text-gray-400">Próximamente</span>' : (esGratis ? '¡GRATIS!' : `${p.precioDesde ? 'Desde ' : ''}$ ${precioTotal.toLocaleString()}${cantidadSesiones > 1 ? ' total' : ''}`)}
                             </p>
                             ${cantidadSesiones > 1 && !esEspera ? `<p class="text-[11px] text-gray-500 -mt-5 mb-5">${cantidadSesiones} sesiones × $ ${Number(p.precio).toLocaleString()} por sesión</p>` : ''}
                         </div>
                     </div>
                     <div>
-                        <button onclick="verMas('${p.id}')" class="w-full bg-white text-[#8C8660] border-2 border-[#8C8660] py-3 rounded-xl font-bold text-sm hover:bg-[#8C8660] hover:text-white transition-all shadow-sm flex items-center justify-center gap-2">
+                        <button onclick="verMas('${p.id}')" class="w-full bg-white text-[#AA5238] border-2 border-[#AA5238] py-3 rounded-xl font-bold text-sm hover:bg-[#AA5238] hover:text-white transition-all shadow-sm flex items-center justify-center gap-2">
                             <i class="ph ${esEspera ? 'ph-bell' : (esGratis ? 'ph-download-simple' : 'ph-eye')} text-lg"></i>
                             ${esEspera ? 'Solicitar apertura' : 'Ver Detalles'}
                         </button>
@@ -1401,11 +1402,11 @@
             if (esEspera || esPorDefinir) {
                 precioHtml = `<p class="text-gray-400 font-bold text-2xl mb-4">Próximamente</p>`;
             } else if (esGratis) {
-                precioHtml = `<p class="text-[#8C8660] font-bold text-2xl mb-4">¡GRATIS!</p>`;
+                precioHtml = `<p class="text-[#AA5238] font-bold text-2xl mb-4">¡GRATIS!</p>`;
             } else {
                 precioHtml = `
                     <p class="text-sm text-gray-600 mb-1 font-medium">${cantidadSesiones > 1 ? 'Inversión total:' : 'Tu inversión por este programa es de:'}</p>
-                    <p class="text-[#8C8660] font-bold text-2xl mb-1">${p.precioDesde ? 'Desde ' : ''}$ ${precioTotal.toLocaleString()}${cantidadSesiones > 1 ? ' total' : ''}</p>
+                    <p class="text-[#AA5238] font-bold text-2xl mb-1">${p.precioDesde ? 'Desde ' : ''}$ ${precioTotal.toLocaleString()}${cantidadSesiones > 1 ? ' total' : ''}</p>
                     ${cantidadSesiones > 1 ? `<p class="text-sm text-gray-600 mb-4">${cantidadSesiones} sesiones${p.precioDesde ? ' mínimo' : ''} × $ ${Number(p.precio).toLocaleString()} por sesión</p>` : '<div class="mb-4"></div>'}
                 `;
             }
@@ -1425,8 +1426,8 @@
                 let barraModal = '';
                 if (p.cuposTotales && p.cuposDisponibles) {
                     const porcentajeOcupado = ((p.cuposTotales - p.cuposDisponibles) / p.cuposTotales) * 100;
-                    const colorCupos = p.cuposDisponibles <= 3 ? 'text-red-600' : 'text-[#8C8660]';
-                    const bgBarra = p.cuposDisponibles <= 3 ? 'bg-red-500' : 'bg-[#8C8660]';
+                    const colorCupos = p.cuposDisponibles <= 3 ? 'text-red-600' : 'text-[#AA5238]';
+                    const bgBarra = p.cuposDisponibles <= 3 ? 'bg-red-500' : 'bg-[#AA5238]';
                     
                     barraModal = `
                         <div class="bg-white border border-gray-200 rounded-lg p-3 mt-3 shadow-sm">
@@ -1441,8 +1442,8 @@
                     `;
                 }
                 bloqueFechasModal = `
-                    <div class="flex items-start gap-3 bg-[#8C8660]/5 p-4 rounded-xl border border-[#8C8660]/20 mb-4">
-                        <div class="bg-white p-2 rounded-lg shadow-sm"><i class="ph ph-calendar-check text-xl text-[#8C8660]"></i></div>
+                    <div class="flex items-start gap-3 bg-[#AA5238]/5 p-4 rounded-xl border border-[#AA5238]/20 mb-4">
+                        <div class="bg-white p-2 rounded-lg shadow-sm"><i class="ph ph-calendar-check text-xl text-[#AA5238]"></i></div>
                         <div class="w-full">
                             <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Próximo inicio</p>
                             <p class="text-gray-800 text-sm font-bold">${p.fechaInicio}</p>
@@ -1459,24 +1460,24 @@
                         <h3 class="text-3xl font-bold text-gray-800 mb-3">${p.nombre}</h3>
                         <div class="flex gap-2">
                             <span class="bg-gray-100 text-gray-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">${p.grupoEtario || p.grupoEdad || p.cat}</span>
-                            ${p.enfoque ? `<span class="bg-[#8C8660]/10 text-[#8C8660] text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">${p.enfoque}</span>` : ''}
+                            ${p.enfoque ? `<span class="bg-[#AA5238]/10 text-[#AA5238] text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">${p.enfoque}</span>` : ''}
                         </div>
                     </div>
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
                     <div class="md:col-span-3 space-y-6">
-                        ${p.desc ? `<div><h4 class="text-lg font-bold text-gray-800 mb-2 flex items-center gap-2"><i class="ph ph-info text-[#8C8660]"></i> Descripción</h4><p class="text-gray-600 leading-relaxed">${p.desc}</p></div>` : ''}
+                        ${p.desc ? `<div><h4 class="text-lg font-bold text-gray-800 mb-2 flex items-center gap-2"><i class="ph ph-info text-[#AA5238]"></i> Descripción</h4><p class="text-gray-600 leading-relaxed">${p.desc}</p></div>` : ''}
                         
-                        ${p.paraQuien ? `<div><h4 class="text-lg font-bold text-gray-800 mb-2 flex items-center gap-2"><i class="ph ph-user text-[#8C8660]"></i> ¿Para quién es?</h4><p class="text-gray-600 leading-relaxed">${p.paraQuien}</p></div>` : ''}
+                        ${p.paraQuien ? `<div><h4 class="text-lg font-bold text-gray-800 mb-2 flex items-center gap-2"><i class="ph ph-user text-[#AA5238]"></i> ¿Para quién es?</h4><p class="text-gray-600 leading-relaxed">${p.paraQuien}</p></div>` : ''}
                         
-                        ${p.aprenderemos ? `<div><h4 class="text-lg font-bold text-gray-800 mb-2 flex items-center gap-2"><i class="ph ph-brain text-[#8C8660]"></i> ¿Qué aprenderemos?</h4><p class="text-gray-600 leading-relaxed">${p.aprenderemos}</p></div>` : ''}
+                        ${p.aprenderemos ? `<div><h4 class="text-lg font-bold text-gray-800 mb-2 flex items-center gap-2"><i class="ph ph-brain text-[#AA5238]"></i> ¿Qué aprenderemos?</h4><p class="text-gray-600 leading-relaxed">${p.aprenderemos}</p></div>` : ''}
                         
-                        ${p.lograremos ? `<div><h4 class="text-lg font-bold text-gray-800 mb-2 flex items-center gap-2"><i class="ph ph-target text-[#8C8660]"></i> ¿Qué lograremos?</h4><p class="text-gray-600 leading-relaxed">${p.lograremos}</p></div>` : ''}
+                        ${p.lograremos ? `<div><h4 class="text-lg font-bold text-gray-800 mb-2 flex items-center gap-2"><i class="ph ph-target text-[#AA5238]"></i> ¿Qué lograremos?</h4><p class="text-gray-600 leading-relaxed">${p.lograremos}</p></div>` : ''}
                         
-                        ${p.metodologia ? `<div><h4 class="text-lg font-bold text-gray-800 mb-2 flex items-center gap-2"><i class="ph ph-gear text-[#8C8660]"></i> Metodología</h4><p class="text-gray-600 leading-relaxed">${p.metodologia}</p></div>` : ''}
+                        ${p.metodologia ? `<div><h4 class="text-lg font-bold text-gray-800 mb-2 flex items-center gap-2"><i class="ph ph-gear text-[#AA5238]"></i> Metodología</h4><p class="text-gray-600 leading-relaxed">${p.metodologia}</p></div>` : ''}
                         
-                        ${p.incluye ? `<div><h4 class="text-lg font-bold text-gray-800 mb-2 flex items-center gap-2"><i class="ph ph-list-plus text-[#8C8660]"></i> ¿Qué incluye?</h4><ul class="list-disc pl-5 text-gray-600 space-y-1">${p.incluye.map(i => `<li>${i}</li>`).join('')}</ul></div>` : ''}
+                        ${p.incluye ? `<div><h4 class="text-lg font-bold text-gray-800 mb-2 flex items-center gap-2"><i class="ph ph-list-plus text-[#AA5238]"></i> ¿Qué incluye?</h4><ul class="list-disc pl-5 text-gray-600 space-y-1">${p.incluye.map(i => `<li>${i}</li>`).join('')}</ul></div>` : ''}
                     </div>
                     
                     <div class="md:col-span-2 bg-gray-50 rounded-2xl p-6 border border-gray-100 h-fit">
@@ -1486,7 +1487,7 @@
                             ${precioNormalHtml}
                             ${precioHtml}
                             <button onclick="${funcionClick}" 
-                                class="w-full ${(esEspera || esPorDefinir) ? 'bg-amber-600' : 'bg-[#8C8660]'} text-white py-4 rounded-xl font-bold text-sm hover:opacity-90 transition shadow-md flex items-center justify-center gap-2">
+                                class="w-full ${(esEspera || esPorDefinir) ? 'bg-amber-600' : 'bg-[#AA5238]'} text-white py-4 rounded-xl font-bold text-sm hover:opacity-90 transition shadow-md flex items-center justify-center gap-2">
                                 <i class="ph ${(esEspera || esPorDefinir) ? 'ph-bell' : 'ph-shopping-cart-simple'} text-xl"></i>
                                 ${btnText}
                             </button>
@@ -1556,8 +1557,8 @@
             document.getElementById('badge-carrito').classList.toggle('hidden', carrito.length === 0);
             contenedor.innerHTML = carrito.length ? carrito.map((producto, indice) => `
                 <div class="cart-item py-4 first:pt-0 flex gap-3">
-                    ${producto.imagen ? `<img src="${producto.imagen}" alt="${producto.nombre}" class="w-16 h-16 rounded-lg object-cover shrink-0">` : '<div class="w-16 h-16 rounded-lg bg-[#F6F3EE] flex items-center justify-center shrink-0"><i class="ph ph-book-open text-2xl text-[#8C8660]"></i></div>'}
-                    <div class="min-w-0 flex-1"><p class="font-bold text-sm text-[#54463C]">${producto.nombre}</p><p class="text-xs text-gray-500 mt-1">${producto.fechaSeleccionada || 'Recurso'}</p>${obtenerCantidadSesiones(producto) > 1 ? `<p class="text-xs text-gray-500 mt-1">${producto.precioDesde ? 'Desde ' : ''}${obtenerCantidadSesiones(producto)} sesiones × $ ${Number(producto.precio).toLocaleString()} por sesión</p>` : ''}<p class="text-sm font-bold text-[#8C8660] mt-2">${producto.precio === 0 ? 'Gratis' : `${producto.precioDesde ? 'Desde ' : ''}$ ${obtenerPrecioTotal(producto).toLocaleString()}`}</p></div>
+                    ${producto.imagen ? `<img src="${producto.imagen}" alt="${producto.nombre}" class="w-16 h-16 rounded-lg object-cover shrink-0">` : '<div class="w-16 h-16 rounded-lg bg-[#F6F3EE] flex items-center justify-center shrink-0"><i class="ph ph-book-open text-2xl text-[#AA5238]"></i></div>'}
+                    <div class="min-w-0 flex-1"><p class="font-bold text-sm text-[#54463C]">${producto.nombre}</p><p class="text-xs text-gray-500 mt-1">${producto.fechaSeleccionada || 'Recurso'}</p>${obtenerCantidadSesiones(producto) > 1 ? `<p class="text-xs text-gray-500 mt-1">${producto.precioDesde ? 'Desde ' : ''}${obtenerCantidadSesiones(producto)} sesiones × $ ${Number(producto.precio).toLocaleString()} por sesión</p>` : ''}<p class="text-sm font-bold text-[#AA5238] mt-2">${producto.precio === 0 ? 'Gratis' : `${producto.precioDesde ? 'Desde ' : ''}$ ${obtenerPrecioTotal(producto).toLocaleString()}`}</p></div>
                     <button onclick="quitarDelCarrito(${indice})" aria-label="Quitar producto" class="text-gray-400 hover:text-red-500 self-start"><i class="ph ph-trash text-lg"></i></button>
                 </div>`).join('') : '<div class="h-full flex flex-col items-center justify-center text-center text-gray-500"><i class="ph ph-shopping-cart-simple text-5xl text-gray-300 mb-3"></i><p class="font-bold text-[#54463C]">Tu carrito está vacío</p><p class="text-sm mt-1">Agrega un producto desde Ver Detalles.</p></div>';
         }
