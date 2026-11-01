@@ -1647,6 +1647,10 @@
                 alert(`No se encontró el producto con código ${id}.`);
                 return;
             }
+            if (carrito.some(producto => String(producto.id) === String(p.id))) {
+                alert(`"${p.nombre}" ya está en tu carrito. Cada recurso solo se puede agregar una vez.`);
+                return;
+            }
             
             let fechaTextoSeleccionada = p.duracion || p.sesiones || 'Recurso Inmediato / Sin Fecha';
             
