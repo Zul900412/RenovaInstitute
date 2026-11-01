@@ -137,6 +137,17 @@
         </div>
     </div>
 
+    <div id="modal-duplicado" class="fixed inset-0 z-[220] hidden items-center justify-center bg-black/40 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="modal-duplicado-titulo">
+        <div class="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl">
+            <h2 id="modal-duplicado-titulo" class="text-xl font-bold text-[#54463C]">Este servicio ya está en tu carrito</h2>
+            <p class="mt-3 text-sm leading-relaxed text-gray-600">Ya agregaste <strong id="modal-duplicado-nombre" class="text-[#54463C]"></strong>. Si lo agregas de nuevo, se sumará otra vez a la inversión.</p>
+            <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                <button type="button" onclick="cancelarAgregarDuplicado()" class="rounded-xl border border-gray-200 px-4 py-3 font-bold text-[#54463C] transition hover:bg-gray-50">Cancelar</button>
+                <button type="button" onclick="confirmarAgregarDuplicado()" class="rounded-xl bg-[#AA5238] px-4 py-3 font-bold text-white transition hover:bg-[#8F402D]">Agregar de todos modos</button>
+            </div>
+        </div>
+    </div>
+
     <div id="carrito-overlay" onclick="toggleCarrito(false)" class="fixed inset-0 bg-black/30 z-[180] hidden"></div>
     <aside id="carrito-sidebar" class="fixed right-0 top-0 h-full w-full max-w-md bg-white z-[190] shadow-2xl translate-x-full transition-transform duration-300 flex flex-col">
         <div class="flex items-center justify-between p-6 border-b border-gray-100">
@@ -1641,14 +1652,32 @@
             window.open(url, '_blank');
         }
 
-        function agregarAlCarrito(id) {
+        let productoDuplicadoPendiente = null;
+
+        function cancelarAgregarDuplicado() {
+            productoDuplicadoPendiente = null;
+            document.getElementById('modal-duplicado').classList.add('hidden');
+            document.getElementById('modal-duplicado').classList.remove('flex');
+        }
+
+        function confirmarAgregarDuplicado() {
+            if (productoDuplicadoPendiente === null) return;
+            const id = productoDuplicadoPendiente;
+            cancelarAgregarDuplicado();
+            agregarAlCarrito(id, true);
+        }
+
+        function agregarAlCarrito(id, permitirDuplicado = false) {
             const p = catalogo.find(x => String(x.id) === String(id));
             if (!p) {
                 alert(`No se encontró el producto con código ${id}.`);
                 return;
             }
-            if (carrito.some(producto => String(producto.id) === String(p.id))) {
-                alert(`"${p.nombre}" ya está en tu carrito. Cada recurso solo se puede agregar una vez.`);
+            if (!permitirDuplicado && carrito.some(producto => String(producto.id) === String(p.id))) {
+                productoDuplicadoPendiente = p.id;
+                document.getElementById('modal-duplicado-nombre').textContent = p.nombre;
+                document.getElementById('modal-duplicado').classList.remove('hidden');
+                document.getElementById('modal-duplicado').classList.add('flex');
                 return;
             }
             
