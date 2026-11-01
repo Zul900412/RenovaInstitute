@@ -20,6 +20,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="cart-storage.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
@@ -104,6 +105,10 @@
             </div>
 
             <div class="flex items-center gap-4">
+                <button type="button" onclick="toggleIndexCart()" aria-label="Abrir carrito" aria-controls="index-cart-sidebar" aria-expanded="false" class="relative rounded-full border border-[#E8D8CF] p-2 text-[#54463C] transition hover:border-[#AA5238] hover:text-[#AA5238]">
+                    <i class="ph ph-shopping-cart text-2xl"></i>
+                    <span id="index-cart-badge" class="absolute -right-1 -top-1 hidden min-w-5 rounded-full bg-[#AA5238] px-1.5 py-0.5 text-[10px] font-bold text-white">0</span>
+                </button>
                 <button @click="mobileMenuOpen = !mobileMenuOpen" class="block lg:hidden text-[#54463C] p-2">
                     <i class="ph text-2xl" :class="mobileMenuOpen ? 'ph-x' : 'ph-list'"></i>
                 </button>
@@ -174,6 +179,22 @@
                         <p>La oración y la orientación espiritual no sustituyen la atención médica o psicológica que cada persona pueda necesitar. Reconocemos los límites de nuestro acompañamiento y honramos la dignidad, la historia y las decisiones de cada quien.</p>
                     </div>
                 </details>
+                <div class="mt-4 grid gap-4 text-left sm:grid-cols-2">
+                    <details class="group rounded-2xl border border-[#E8D8CF] bg-white shadow-sm">
+                        <summary class="flex cursor-pointer list-none items-center justify-between gap-4 p-5 font-bold text-[#54463C] marker:content-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#AA5238]">
+                            <span class="flex items-center gap-3"><i class="ph ph-compass text-2xl text-[#AA5238]"></i> Nuestra misión</span>
+                            <i class="ph ph-plus text-xl text-[#AA5238] transition-transform group-open:rotate-45"></i>
+                        </summary>
+                        <p class="border-t border-[#F0E7E2] px-5 py-5 leading-relaxed text-[#65574F]">Acompañar con responsabilidad y compasión a personas, parejas y comunidades, ofreciendo herramientas profesionales y una orientación bíblica que reconoce a Dios como soberano sobre toda vida y proceso.</p>
+                    </details>
+                    <details class="group rounded-2xl border border-[#E8D8CF] bg-white shadow-sm">
+                        <summary class="flex cursor-pointer list-none items-center justify-between gap-4 p-5 font-bold text-[#54463C] marker:content-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#AA5238]">
+                            <span class="flex items-center gap-3"><i class="ph ph-eye text-2xl text-[#AA5238]"></i> Nuestra visión</span>
+                            <i class="ph ph-plus text-xl text-[#AA5238] transition-transform group-open:rotate-45"></i>
+                        </summary>
+                        <p class="border-t border-[#F0E7E2] px-5 py-5 leading-relaxed text-[#65574F]">Ser una comunidad de acompañamiento centrada en Dios y fiel a la verdad bíblica, que sirva con excelencia profesional, humildad y esperanza, sin poner al ser humano en el centro ni prometer resultados que solo dependen de la voluntad de Dios.</p>
+                    </details>
+                </div>
             </div>
         </section>
 
@@ -190,11 +211,17 @@
                     <span class="mb-3 text-xs font-bold uppercase tracking-widest text-[#AA5238]">01 · A tu medida</span>
                     <h3 class="mb-4 text-3xl font-bold text-[#3E332D]">Acompañamientos personalizados</h3>
                     <p class="mb-6 leading-relaxed text-[#65574F]">Encuentros individuales para comprender tus necesidades y trabajar objetivos concretos con orientación profesional y herramientas prácticas.</p>
-                    <ul class="mb-8 space-y-3 text-sm text-[#54463C]">
-                        <li class="flex gap-3"><i class="ph ph-check-circle text-lg text-[#AA5238]"></i> Sana tu pasado y restaura tu identidad</li>
-                        <li class="flex gap-3"><i class="ph ph-check-circle text-lg text-[#AA5238]"></i> Comunicación asertiva desde la neurociencia</li>
-                        <li class="flex gap-3"><i class="ph ph-check-circle text-lg text-[#AA5238]"></i> Soluciones para dificultades de aprendizaje</li>
-                    </ul>
+                    <div class="mb-8 grid gap-3 sm:grid-cols-2">
+                        <a href="Tienda.html?cat=Personalizados&amp;detalle=I-001" class="group rounded-2xl border border-[#E8D8CF] p-4 transition hover:-translate-y-1 hover:border-[#AA5238] hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#AA5238]">
+                            <i class="ph ph-heart-break text-2xl text-[#AA5238]"></i><h4 class="mt-2 font-bold text-[#3E332D]">Sana tu pasado</h4><p class="mt-1 text-sm leading-relaxed text-[#65574F]">Un proceso personalizado para trabajar heridas e identidad.</p><span class="mt-3 inline-flex items-center gap-1 text-sm font-bold text-[#AA5238]">Ver detalles <i class="ph ph-arrow-right transition group-hover:translate-x-1"></i></span>
+                        </a>
+                        <a href="Tienda.html?cat=Personalizados&amp;detalle=I-004" class="group rounded-2xl border border-[#E8D8CF] p-4 transition hover:-translate-y-1 hover:border-[#AA5238] hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#AA5238]">
+                            <i class="ph ph-chat-circle-dots text-2xl text-[#AA5238]"></i><h4 class="mt-2 font-bold text-[#3E332D]">Comunicación asertiva</h4><p class="mt-1 text-sm leading-relaxed text-[#65574F]">Practica formas más claras y respetuosas de comunicarte.</p><span class="mt-3 inline-flex items-center gap-1 text-sm font-bold text-[#AA5238]">Ver detalles <i class="ph ph-arrow-right transition group-hover:translate-x-1"></i></span>
+                        </a>
+                        <a href="Tienda.html?cat=Personalizados&amp;detalle=I-005" class="group rounded-2xl border border-[#E8D8CF] p-4 transition hover:-translate-y-1 hover:border-[#AA5238] hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#AA5238] sm:col-span-2">
+                            <i class="ph ph-brain text-2xl text-[#AA5238]"></i><h4 class="mt-2 font-bold text-[#3E332D]">Apoyo al aprendizaje</h4><p class="mt-1 text-sm leading-relaxed text-[#65574F]">Acompañamiento individual para fortalecer habilidades de aprendizaje.</p><span class="mt-3 inline-flex items-center gap-1 text-sm font-bold text-[#AA5238]">Ver detalles <i class="ph ph-arrow-right transition group-hover:translate-x-1"></i></span>
+                        </a>
+                    </div>
                     <a href="Tienda.html?cat=Personalizados" class="inline-flex items-center gap-2 self-start rounded-full bg-[#AA5238] px-6 py-3 font-bold text-white transition hover:bg-[#8F402D]">Ver acompañamientos <i class="ph ph-arrow-right"></i></a>
                 </article>
             </div>
@@ -204,11 +231,17 @@
                     <span class="mb-3 text-xs font-bold uppercase tracking-widest text-[#AA5238]">02 · En comunidad</span>
                     <h3 class="mb-4 text-3xl font-bold text-[#3E332D]">Acompañamientos grupales</h3>
                     <p class="mb-6 leading-relaxed text-[#65574F]">Espacios de aprendizaje compartido para desarrollar recursos emocionales y relacionales junto a otras personas.</p>
-                    <ul class="mb-8 space-y-3 text-sm text-[#54463C]">
-                        <li class="flex gap-3"><i class="ph ph-check-circle text-lg text-[#AA5238]"></i> Niños emocionalmente fuertes</li>
-                        <li class="flex gap-3"><i class="ph ph-check-circle text-lg text-[#AA5238]"></i> Encuentra tu propósito y vence la ansiedad</li>
-                        <li class="flex gap-3"><i class="ph ph-check-circle text-lg text-[#AA5238]"></i> Comunicación asertiva para parejas</li>
-                    </ul>
+                    <div class="mb-8 grid gap-3 sm:grid-cols-2">
+                        <a href="Tienda.html?cat=Grupales&amp;detalle=G-001" class="group rounded-2xl border border-[#E8D8CF] p-4 transition hover:-translate-y-1 hover:border-[#AA5238] hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#AA5238]">
+                            <i class="ph ph-users-three text-2xl text-[#AA5238]"></i><h4 class="mt-2 font-bold text-[#3E332D]">Niños emocionalmente fuertes</h4><p class="mt-1 text-sm leading-relaxed text-[#65574F]">Herramientas para desarrollar recursos emocionales en la infancia.</p><span class="mt-3 inline-flex items-center gap-1 text-sm font-bold text-[#AA5238]">Ver detalles <i class="ph ph-arrow-right transition group-hover:translate-x-1"></i></span>
+                        </a>
+                        <a href="Tienda.html?cat=Grupales&amp;detalle=G-004" class="group rounded-2xl border border-[#E8D8CF] p-4 transition hover:-translate-y-1 hover:border-[#AA5238] hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#AA5238]">
+                            <i class="ph ph-compass text-2xl text-[#AA5238]"></i><h4 class="mt-2 font-bold text-[#3E332D]">Propósito y ansiedad</h4><p class="mt-1 text-sm leading-relaxed text-[#65574F]">Explora herramientas para afrontar la ansiedad y pensar el futuro.</p><span class="mt-3 inline-flex items-center gap-1 text-sm font-bold text-[#AA5238]">Ver detalles <i class="ph ph-arrow-right transition group-hover:translate-x-1"></i></span>
+                        </a>
+                        <a href="Tienda.html?cat=Grupales&amp;detalle=G-006" class="group rounded-2xl border border-[#E8D8CF] p-4 transition hover:-translate-y-1 hover:border-[#AA5238] hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#AA5238] sm:col-span-2">
+                            <i class="ph ph-leaf text-2xl text-[#AA5238]"></i><h4 class="mt-2 font-bold text-[#3E332D]">Recupera tu paz interior</h4><p class="mt-1 text-sm leading-relaxed text-[#65574F]">Un espacio de aprendizaje compartido para fortalecer tu bienestar.</p><span class="mt-3 inline-flex items-center gap-1 text-sm font-bold text-[#AA5238]">Ver detalles <i class="ph ph-arrow-right transition group-hover:translate-x-1"></i></span>
+                        </a>
+                    </div>
                     <a href="Tienda.html?cat=Grupales" class="inline-flex items-center gap-2 self-start rounded-full bg-[#AA5238] px-6 py-3 font-bold text-white transition hover:bg-[#8F402D]">Ver grupos y talleres <i class="ph ph-arrow-right"></i></a>
                 </article>
                 <div class="service-photo order-1 min-h-[300px] rounded-[2rem] shadow-lg lg:order-2 md:min-h-[390px]" style="background-image: url('images/Fondos/3.jpg')" role="img" aria-label="Ilustración de una figura tejida representando emociones"></div>
@@ -220,11 +253,17 @@
                     <span class="mb-3 text-xs font-bold uppercase tracking-widest text-[#AA5238]">03 · Construir juntos</span>
                     <h3 class="mb-4 text-3xl font-bold text-[#3E332D]">Acompañamiento de pareja</h3>
                     <p class="mb-6 leading-relaxed text-[#65574F]">Un lugar para conversar, comprender patrones de comunicación y explorar nuevas herramientas para la relación, con respeto por la historia de ambos.</p>
-                    <ul class="mb-8 space-y-3 text-sm text-[#54463C]">
-                        <li class="flex gap-3"><i class="ph ph-check-circle text-lg text-[#AA5238]"></i> Sesión de diagnóstico y claridad en pareja</li>
-                        <li class="flex gap-3"><i class="ph ph-check-circle text-lg text-[#AA5238]"></i> Pack de 10 sesiones de pareja</li>
-                        <li class="flex gap-3"><i class="ph ph-check-circle text-lg text-[#AA5238]"></i> Pack de 15 sesiones de pareja</li>
-                    </ul>
+                    <div class="mb-8 grid gap-3 sm:grid-cols-2">
+                        <a href="Tienda.html?cat=Servicios&amp;detalle=S-006" class="group rounded-2xl border border-[#E8D8CF] p-4 transition hover:-translate-y-1 hover:border-[#AA5238] hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#AA5238]">
+                            <i class="ph ph-chat-centered-text text-2xl text-[#AA5238]"></i><h4 class="mt-2 font-bold text-[#3E332D]">Sesión inicial</h4><p class="mt-1 text-sm leading-relaxed text-[#65574F]">Un espacio conjunto de diagnóstico y orientación.</p><span class="mt-3 inline-flex items-center gap-1 text-sm font-bold text-[#AA5238]">Ver detalles <i class="ph ph-arrow-right transition group-hover:translate-x-1"></i></span>
+                        </a>
+                        <a href="Tienda.html?cat=Servicios&amp;detalle=S-007" class="group rounded-2xl border border-[#E8D8CF] p-4 transition hover:-translate-y-1 hover:border-[#AA5238] hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#AA5238]">
+                            <i class="ph ph-heart-half text-2xl text-[#AA5238]"></i><h4 class="mt-2 font-bold text-[#3E332D]">Proceso de 10 sesiones</h4><p class="mt-1 text-sm leading-relaxed text-[#65574F]">Acompañamiento para fortalecer la comunicación y el vínculo.</p><span class="mt-3 inline-flex items-center gap-1 text-sm font-bold text-[#AA5238]">Ver detalles <i class="ph ph-arrow-right transition group-hover:translate-x-1"></i></span>
+                        </a>
+                        <a href="Tienda.html?cat=Servicios&amp;detalle=S-008" class="group rounded-2xl border border-[#E8D8CF] p-4 transition hover:-translate-y-1 hover:border-[#AA5238] hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#AA5238] sm:col-span-2">
+                            <i class="ph ph-hands-praying text-2xl text-[#AA5238]"></i><h4 class="mt-2 font-bold text-[#3E332D]">Proceso de 15 sesiones</h4><p class="mt-1 text-sm leading-relaxed text-[#65574F]">Un acompañamiento extendido para abordar necesidades complejas de pareja.</p><span class="mt-3 inline-flex items-center gap-1 text-sm font-bold text-[#AA5238]">Ver detalles <i class="ph ph-arrow-right transition group-hover:translate-x-1"></i></span>
+                        </a>
+                    </div>
                     <a href="Tienda.html?cat=Servicios" class="inline-flex items-center gap-2 self-start rounded-full bg-[#AA5238] px-6 py-3 font-bold text-white transition hover:bg-[#8F402D]">Ver sesiones de pareja <i class="ph ph-arrow-right"></i></a>
                 </article>
             </div>
@@ -234,11 +273,17 @@
                     <span class="mb-3 text-xs font-bold uppercase tracking-widest text-[#AA5238]">04 · Para explorar y practicar</span>
                     <h3 class="mb-4 text-3xl font-bold text-[#3E332D]">Recursos para tu proceso</h3>
                     <p class="mb-6 leading-relaxed text-[#65574F]">Guías, tests y materiales prácticos para aprender y reflexionar a tu propio ritmo, en casa o como complemento de un acompañamiento.</p>
-                    <ul class="mb-8 space-y-3 text-sm text-[#54463C]">
-                        <li class="flex gap-3"><i class="ph ph-check-circle text-lg text-[#AA5238]"></i> Workbook de sanidad emocional</li>
-                        <li class="flex gap-3"><i class="ph ph-check-circle text-lg text-[#AA5238]"></i> Test de inteligencia emocional</li>
-                        <li class="flex gap-3"><i class="ph ph-check-circle text-lg text-[#AA5238]"></i> A solas con Jesús: guía de 30 días</li>
-                    </ul>
+                    <div class="mb-8 grid gap-3 sm:grid-cols-2">
+                        <a href="Tienda.html?cat=Productos&amp;detalle=P-004" class="group rounded-2xl border border-[#E8D8CF] p-4 transition hover:-translate-y-1 hover:border-[#AA5238] hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#AA5238]">
+                            <i class="ph ph-book-open-text text-2xl text-[#AA5238]"></i><h4 class="mt-2 font-bold text-[#3E332D]">Libro: ¿Cómo sanar?</h4><p class="mt-1 text-sm leading-relaxed text-[#65574F]">Una invitación a comprender pensamientos, emociones y hábitos.</p><span class="mt-3 inline-flex items-center gap-1 text-sm font-bold text-[#AA5238]">Ver detalles <i class="ph ph-arrow-right transition group-hover:translate-x-1"></i></span>
+                        </a>
+                        <a href="Tienda.html?cat=Productos&amp;detalle=P-006" class="group rounded-2xl border border-[#E8D8CF] p-4 transition hover:-translate-y-1 hover:border-[#AA5238] hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#AA5238]">
+                            <i class="ph ph-map-trifold text-2xl text-[#AA5238]"></i><h4 class="mt-2 font-bold text-[#3E332D]">Proyecto Propósito</h4><p class="mt-1 text-sm leading-relaxed text-[#65574F]">Material práctico para explorar dones, valores y proyectos.</p><span class="mt-3 inline-flex items-center gap-1 text-sm font-bold text-[#AA5238]">Ver detalles <i class="ph ph-arrow-right transition group-hover:translate-x-1"></i></span>
+                        </a>
+                        <a href="Tienda.html?cat=Productos&amp;detalle=P-007" class="group rounded-2xl border border-[#E8D8CF] p-4 transition hover:-translate-y-1 hover:border-[#AA5238] hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#AA5238] sm:col-span-2">
+                            <i class="ph ph-sparkle text-2xl text-[#AA5238]"></i><h4 class="mt-2 font-bold text-[#3E332D]">A solas con Jesús</h4><p class="mt-1 text-sm leading-relaxed text-[#65574F]">30 días de tarjetas imprimibles para reflexionar y orar.</p><span class="mt-3 inline-flex items-center gap-1 text-sm font-bold text-[#AA5238]">Ver detalles <i class="ph ph-arrow-right transition group-hover:translate-x-1"></i></span>
+                        </a>
+                    </div>
                     <a href="Tienda.html?cat=Productos" class="inline-flex items-center gap-2 self-start rounded-full bg-[#AA5238] px-6 py-3 font-bold text-white transition hover:bg-[#8F402D]">Explorar recursos <i class="ph ph-arrow-right"></i></a>
                 </article>
                 <div class="service-photo order-1 min-h-[300px] rounded-[2rem] shadow-lg lg:order-2 md:min-h-[390px]" style="background-image: url('images/Fondos/10.jpg')" role="img" aria-label="Ilustración de una figura tejida representando emociones"></div>
@@ -288,9 +333,10 @@
                         <span class="text-xs font-bold uppercase tracking-[.2em] text-[#AA5238]">Experiencias</span>
                         <h2 class="mt-3 text-3xl font-bold text-[#3E332D] sm:text-4xl">Un espacio para ser escuchado</h2>
                     </div>
-                    <div class="flex gap-2">
+                    <div id="review-controls" class="flex gap-2">
                         <button type="button" onclick="moverResenas(-1)" aria-label="Ver reseñas anteriores" class="flex h-11 w-11 items-center justify-center rounded-full border border-[#D9B7A8] bg-white text-[#AA5238] transition hover:bg-[#AA5238] hover:text-white"><i class="ph ph-arrow-left text-xl"></i></button>
                         <button type="button" onclick="moverResenas(1)" aria-label="Ver más reseñas" class="flex h-11 w-11 items-center justify-center rounded-full border border-[#D9B7A8] bg-white text-[#AA5238] transition hover:bg-[#AA5238] hover:text-white"><i class="ph ph-arrow-right text-xl"></i></button>
+                        <button id="review-toggle" type="button" onclick="toggleAutoResenas()" aria-label="Pausar avance automático" aria-pressed="false" class="flex h-11 w-11 items-center justify-center rounded-full border border-[#D9B7A8] bg-white text-[#AA5238] transition hover:bg-[#AA5238] hover:text-white"><i id="review-toggle-icon" class="ph ph-pause text-xl"></i></button>
                     </div>
                 </div>
                 <p class="mb-7 rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-900">
@@ -341,6 +387,23 @@
         </section>
     </main>
 
+    <div id="index-cart-overlay" onclick="toggleIndexCart(false)" class="fixed inset-0 z-[180] hidden bg-black/30" aria-hidden="true"></div>
+    <aside id="index-cart-sidebar" class="fixed right-0 top-0 z-[190] flex h-full w-full max-w-md translate-x-full flex-col bg-white shadow-2xl transition-transform duration-300" aria-labelledby="index-cart-title" aria-hidden="true">
+        <div class="flex items-center justify-between border-b border-gray-100 p-6">
+            <div>
+                <p class="text-xs font-bold uppercase tracking-widest text-[#AA5238]">Tu selección</p>
+                <h2 id="index-cart-title" class="text-2xl font-bold text-[#54463C]">Carrito</h2>
+            </div>
+            <button type="button" onclick="toggleIndexCart(false)" aria-label="Cerrar carrito" class="rounded-full bg-gray-100 p-2 text-gray-600 hover:bg-gray-200"><i class="ph ph-x text-xl"></i></button>
+        </div>
+        <div id="index-cart-items" class="custom-scrollbar flex-1 overflow-y-auto p-6" aria-live="polite"></div>
+        <div class="border-t border-gray-100 bg-[#FDFBFA] p-6">
+            <div class="mb-4 flex items-center justify-between text-lg font-bold text-[#54463C]"><span>Total</span><span id="index-cart-total">$ 0</span></div>
+            <button type="button" onclick="solicitarIndexCart()" class="flex w-full items-center justify-center gap-2 rounded-xl bg-[#54463C] py-3 font-bold text-white transition hover:bg-[#AA5238]"><i class="ph ph-whatsapp-logo text-xl"></i> Solicitar por WhatsApp</button>
+            <a href="Tienda.html" class="mt-4 block text-center text-sm font-bold text-[#AA5238] hover:underline">Seguir explorando la tienda</a>
+        </div>
+    </aside>
+
     <!-- Footer -->
     <footer class="bg-[#54463C] text-white py-12 px-6">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
@@ -363,10 +426,183 @@
     </footer>
 
     <script>
+        let indexCartItems = RenovaCart.read();
+
+        function escaparCarritoHtml(value) {
+            return String(value ?? '').replace(/[&<>"']/g, character => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            })[character]);
+        }
+
+        function renderIndexCart() {
+            const badge = document.getElementById('index-cart-badge');
+            const container = document.getElementById('index-cart-items');
+            const total = indexCartItems.reduce((sum, product) => {
+                return sum + (Number(product.precio) || 0) * Math.max(1, Number(product.cantidadSesiones) || 1);
+            }, 0);
+
+            badge.textContent = String(indexCartItems.length);
+            badge.classList.toggle('hidden', indexCartItems.length === 0);
+            document.getElementById('index-cart-total').textContent = '$ ' + total.toLocaleString('es-CO');
+            container.innerHTML = indexCartItems.length ? indexCartItems.map((product, index) => {
+                const quantity = Math.max(1, Number(product.cantidadSesiones) || 1);
+                const productTotal = (Number(product.precio) || 0) * quantity;
+                return `
+                    <div class="flex gap-3 border-b border-gray-100 py-4 first:pt-0">
+                        ${product.imagen ? `<img src="${escaparCarritoHtml(product.imagen)}" alt="" class="h-16 w-16 shrink-0 rounded-lg object-cover">` : '<div class="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg bg-[#F6F3EE]"><i class="ph ph-book-open text-2xl text-[#AA5238]"></i></div>'}
+                        <div class="min-w-0 flex-1">
+                            <p class="text-sm font-bold text-[#54463C]">${escaparCarritoHtml(product.nombre)}</p>
+                            <p class="mt-1 text-xs text-gray-500">${escaparCarritoHtml(product.fechaSeleccionada || 'Recurso')}</p>
+                            ${quantity > 1 ? `<p class="mt-1 text-xs text-gray-500">${quantity} sesiones × $ ${(Number(product.precio) || 0).toLocaleString('es-CO')} por sesión</p>` : ''}
+                            <p class="mt-2 text-sm font-bold text-[#AA5238]">${product.precio === 0 ? 'Gratis' : `${product.precioDesde ? 'Desde ' : ''}$ ${productTotal.toLocaleString('es-CO')}`}</p>
+                        </div>
+                        <button type="button" onclick="quitarDelIndexCart(${index})" aria-label="Quitar ${escaparCarritoHtml(product.nombre)}" class="self-start text-gray-400 transition hover:text-red-500"><i class="ph ph-trash text-lg"></i></button>
+                    </div>
+                `;
+            }).join('') : '<div class="flex h-full flex-col items-center justify-center text-center text-gray-500"><i class="ph ph-shopping-cart-simple mb-3 text-5xl text-gray-300"></i><p class="font-bold text-[#54463C]">Tu carrito está vacío</p><p class="mt-1 text-sm">Agrega un producto desde la tienda para verlo aquí.</p><a href="Tienda.html" class="mt-4 font-bold text-[#AA5238] hover:underline">Explorar la tienda</a></div>';
+        }
+
+        function toggleIndexCart(open = null) {
+            const sidebar = document.getElementById('index-cart-sidebar');
+            const overlay = document.getElementById('index-cart-overlay');
+            const button = document.querySelector('[aria-controls="index-cart-sidebar"]');
+            const shouldOpen = open === null ? sidebar.classList.contains('translate-x-full') : open;
+
+            sidebar.classList.toggle('translate-x-full', !shouldOpen);
+            overlay.classList.toggle('hidden', !shouldOpen);
+            sidebar.setAttribute('aria-hidden', String(!shouldOpen));
+            button.setAttribute('aria-expanded', String(shouldOpen));
+            document.body.classList.toggle('overflow-hidden', shouldOpen);
+        }
+
+        function quitarDelIndexCart(index) {
+            indexCartItems.splice(index, 1);
+            RenovaCart.save(indexCartItems);
+            renderIndexCart();
+        }
+
+        function solicitarIndexCart() {
+            if (!indexCartItems.length) {
+                toggleIndexCart(true);
+                return;
+            }
+
+            const products = indexCartItems.map(product => {
+                const quantity = Math.max(1, Number(product.cantidadSesiones) || 1);
+                const total = (Number(product.precio) || 0) * quantity;
+                return `• ${product.nombre}${quantity > 1 ? ` (${quantity} sesiones)` : ''}${total > 0 ? ` — $ ${total.toLocaleString('es-CO')}` : ' — Gratis'}`;
+            });
+            const total = indexCartItems.reduce((sum, product) => {
+                return sum + (Number(product.precio) || 0) * Math.max(1, Number(product.cantidadSesiones) || 1);
+            }, 0);
+            const message = `Hola, quisiera solicitar información sobre estos productos:\n${products.join('\n')}\n\nTotal estimado: $ ${total.toLocaleString('es-CO')}`;
+            window.open(`https://wa.me/573114951646?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
+        }
+
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape') toggleIndexCart(false);
+        });
+        RenovaCart.subscribe(items => {
+            indexCartItems = items;
+            renderIndexCart();
+        });
+        renderIndexCart();
+
         function moverResenas(direccion) {
             const carrusel = document.getElementById('review-track');
             carrusel.scrollBy({ left: direccion * carrusel.clientWidth * 0.8, behavior: 'smooth' });
         }
+
+        let intervaloResenas = null;
+        let pausaManualResenas = false;
+        let pausaInteraccionResenas = false;
+        let punteroSobreResenas = false;
+        let focoEnResenas = false;
+        let pausaTactilResenas = false;
+        let timeoutTactilResenas = null;
+
+        function detenerAutoResenas() {
+            if (intervaloResenas) {
+                clearInterval(intervaloResenas);
+                intervaloResenas = null;
+            }
+        }
+
+        function iniciarAutoResenas() {
+            const carrusel = document.getElementById('review-track');
+            const movimientoReducido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (intervaloResenas || pausaManualResenas || pausaInteraccionResenas || movimientoReducido || document.hidden) return;
+
+            intervaloResenas = setInterval(() => {
+                const limite = carrusel.scrollWidth - carrusel.clientWidth;
+                if (carrusel.scrollLeft >= limite - 8) {
+                    carrusel.scrollTo({ left: 0, behavior: 'smooth' });
+                } else {
+                    moverResenas(1);
+                }
+            }, 5000);
+        }
+
+        function actualizarPausaInteraccionResenas() {
+            pausaInteraccionResenas = punteroSobreResenas || focoEnResenas || pausaTactilResenas;
+            if (pausaInteraccionResenas) detenerAutoResenas();
+            else iniciarAutoResenas();
+        }
+
+        function toggleAutoResenas() {
+            pausaManualResenas = !pausaManualResenas;
+            const boton = document.getElementById('review-toggle');
+            const icono = document.getElementById('review-toggle-icon');
+            boton.setAttribute('aria-pressed', String(pausaManualResenas));
+            boton.setAttribute('aria-label', pausaManualResenas ? 'Reanudar avance automático' : 'Pausar avance automático');
+            icono.classList.toggle('ph-pause', !pausaManualResenas);
+            icono.classList.toggle('ph-play', pausaManualResenas);
+            detenerAutoResenas();
+            iniciarAutoResenas();
+        }
+
+        const carruselResenas = document.getElementById('review-track');
+        const controlesResenas = document.getElementById('review-controls');
+        [carruselResenas, controlesResenas].forEach(elemento => {
+            elemento.addEventListener('pointerenter', () => {
+                punteroSobreResenas = true;
+                actualizarPausaInteraccionResenas();
+            });
+            elemento.addEventListener('pointerleave', () => {
+                punteroSobreResenas = false;
+                actualizarPausaInteraccionResenas();
+            });
+            elemento.addEventListener('focusin', () => {
+                focoEnResenas = true;
+                actualizarPausaInteraccionResenas();
+            });
+            elemento.addEventListener('focusout', () => {
+                setTimeout(() => {
+                    focoEnResenas = carruselResenas.contains(document.activeElement) || controlesResenas.contains(document.activeElement);
+                    actualizarPausaInteraccionResenas();
+                }, 0);
+            });
+        });
+        carruselResenas.addEventListener('touchstart', () => {
+            clearTimeout(timeoutTactilResenas);
+            pausaTactilResenas = true;
+            actualizarPausaInteraccionResenas();
+        }, { passive: true });
+        carruselResenas.addEventListener('touchend', () => {
+            timeoutTactilResenas = setTimeout(() => {
+                pausaTactilResenas = false;
+                actualizarPausaInteraccionResenas();
+            }, 3000);
+        }, { passive: true });
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) detenerAutoResenas();
+            else iniciarAutoResenas();
+        });
+        iniciarAutoResenas();
     </script>
 
     <!-- BANNER MODAL (NUEVO DISEÑO GRANDE) -->

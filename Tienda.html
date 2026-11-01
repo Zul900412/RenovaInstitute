@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="cart-storage.js"></script>
     <title>Renova Institute | Bienestar y Neurociencia</title>
     <link rel="icon" type="image/png" sizes="192x192" href="icono-192.png">
     
@@ -13,13 +14,19 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     
     <style>
+        html { scroll-behavior: smooth; }
+        #filtros-cat, #catalogo { scroll-margin-top: 6rem; }
         .category-pill.active { background-color: #AA5238; color: white; border-color: #AA5238; }
-        .catalog-title::after { content: ''; display: block; width: 3rem; height: 3px; margin-top: .75rem; border-radius: 999px; background: #AA5238; }
         .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .catalog-photo { background-image: linear-gradient(180deg, rgba(38, 28, 23, .04) 35%, rgba(38, 28, 23, .62) 100%), url("images/Fondos/5.jpg"); background-position: center; background-size: cover; background-attachment: fixed; }
+        .category-list { scrollbar-width: none; }
+        .category-list::-webkit-scrollbar { display: none; }
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #AA5238; border-radius: 10px; }
         .cart-item + .cart-item { border-top: 1px solid #f3f4f6; padding-top: 1rem; }
+        @media (max-width: 767px) { .catalog-photo { background-attachment: scroll; } }
+        @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
     </style>
     <script id="banner-data" type="application/json">
 {
@@ -52,12 +59,7 @@
             
             <div class="hidden lg:flex items-center gap-6 flex-1 justify-end px-8">
                 <a href="index.html" class="text-sm text-gray-800 hover:text-[#AA5238] font-bold transition-colors">Inicio</a>
-                
-                <div class="relative w-80">
-                    <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
-                    <input type="text" id="buscador" onkeyup="renderTienda()" placeholder="Buscar programas..." 
-                           class="pl-12 pr-6 py-2.5 bg-gray-50 focus:bg-white border border-gray-200 rounded-full text-sm outline-none w-full transition-all shadow-sm focus:ring-2 focus:ring-[#AA5238]/20">
-                </div>
+                <a href="#filtros-cat" class="text-sm text-gray-600 hover:text-[#AA5238] font-medium transition-colors">Explorar catálogo</a>
             </div>
 
             <div class="flex items-center gap-4">
@@ -73,28 +75,53 @@
         </div>
 
         <div x-show="mobileMenuOpen" style="display: none;" class="lg:hidden bg-white/95 backdrop-blur-xl border-b absolute w-full shadow-lg p-4 z-[140]">
-            <div class="relative mb-4">
-                <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                <input type="text" onkeyup="document.getElementById('buscador').value = this.value; renderTienda();" placeholder="Buscar programas..." class="pl-12 pr-6 py-3 bg-gray-100 w-full rounded-xl text-sm outline-none">
-            </div>
             <a href="index.html" class="block py-3 border-b text-gray-800 font-bold">Inicio</a>
+            <a href="#filtros-cat" @click="mobileMenuOpen = false" class="block py-3 text-gray-800 font-bold">Explorar catálogo</a>
         </div>
     </header>
 
-    <div class="max-w-7xl mx-auto px-6 pt-10">
-        <h1 class="catalog-title text-3xl font-bold mb-6 text-[#54463C]">Catálogo de Bienestar</h1>
-        <div class="flex flex-wrap gap-2 mb-8" id="filtros-cat">
-            <button onclick="cambiarFiltro('todos')" class="category-pill active px-5 py-2 rounded-full border border-gray-200 text-sm font-bold transition hover:border-[#AA5238]">Todos</button>
-            <button onclick="cambiarFiltro('Personalizados')" class="category-pill px-5 py-2 rounded-full border border-gray-200 text-sm font-bold transition hover:border-[#AA5238]">Programas Personalizados</button>
-            <button onclick="cambiarFiltro('Grupales')" class="category-pill px-5 py-2 rounded-full border border-gray-200 text-sm font-bold transition hover:border-[#AA5238]">Programas Grupales</button>
-            <button onclick="cambiarFiltro('Servicios')" class="category-pill px-5 py-2 rounded-full border border-gray-200 text-sm font-bold transition hover:border-[#AA5238]">Sesiones y Asesorías</button>
-            <button onclick="cambiarFiltro('Productos')" class="category-pill px-5 py-2 rounded-full border border-gray-200 text-sm font-bold transition hover:border-[#AA5238]">Tests y Recursos</button>
-            <button onclick="cambiarFiltro('Gratuitos')" class="category-pill px-5 py-2 rounded-full border border-emerald-200 text-sm font-bold transition bg-emerald-50 text-emerald-700 hover:bg-emerald-100">Recursos Gratuitos 🎁</button>
+    <section class="bg-[#F8ECE6] px-5 py-7 md:px-8 md:py-10">
+        <div class="mx-auto grid max-w-7xl overflow-hidden rounded-[2rem] bg-white shadow-sm lg:grid-cols-2">
+            <div class="flex flex-col justify-center px-6 py-9 md:px-10 md:py-12">
+                <p class="mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-[.2em] text-[#AA5238]">
+                    <span class="h-px w-8 bg-[#AA5238]"></span> Un espacio para ti
+                </p>
+                <h1 class="mb-4 text-3xl font-black leading-tight tracking-tight text-[#3E332D] sm:text-4xl">Encuentra el acompañamiento o recurso que necesitas</h1>
+                <p class="mb-6 max-w-xl leading-relaxed text-[#65574F]">Explora acompañamientos y herramientas pensadas para distintas etapas de la vida, con una mirada profesional y cristiana.</p>
+                <label for="buscador" class="mb-2 text-sm font-bold text-[#54463C]">¿Qué estás buscando?</label>
+                <div class="relative">
+                    <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-xl text-[#AA5238]"></i>
+                    <input type="search" id="buscador" oninput="renderTienda()" placeholder="Busca un tema o acompañamiento..." aria-label="Buscar en el catálogo" class="w-full rounded-2xl border border-[#E8D8CF] bg-[#FDFBFA] py-3.5 pl-12 pr-4 text-sm text-[#54463C] outline-none transition focus:border-[#AA5238] focus:ring-4 focus:ring-[#AA5238]/10">
+                </div>
+                <a href="#filtros-cat" class="mt-5 inline-flex items-center gap-2 self-start font-bold text-[#AA5238] transition hover:gap-3">Explora por categoría <i class="ph ph-arrow-down"></i></a>
+            </div>
+            <div class="catalog-photo relative flex min-h-[260px] items-end md:min-h-[340px] lg:min-h-[420px]">
+                <div class="relative z-10 p-6 text-white md:p-9">
+                    <span class="mb-3 inline-flex items-center gap-2 rounded-full bg-white/90 px-3 py-1.5 text-xs font-bold text-[#54463C]"><i class="ph ph-heart text-base text-[#AA5238]"></i> Fe, ciencia y propósito</span>
+                    <p class="max-w-sm text-xl font-bold leading-snug sm:text-2xl">Pequeños pasos también forman parte del camino.</p>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <main class="max-w-7xl mx-auto px-6 pb-24">
-        <div id="grid-tienda" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <section id="filtros-cat" class="mx-auto max-w-7xl px-6 pb-5 pt-10">
+        <div class="mb-5">
+            <p class="text-xs font-bold uppercase tracking-[.18em] text-[#AA5238]">Navega a tu ritmo</p>
+            <h2 class="mt-1 text-2xl font-bold text-[#3E332D]">Explora por categoría</h2>
+        </div>
+        <div class="category-list -mx-6 flex gap-2 overflow-x-auto px-6 pb-2 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0" aria-label="Filtrar productos por categoría">
+            <button type="button" data-category="todos" onclick="cambiarFiltro('todos')" aria-pressed="true" class="category-pill active shrink-0 rounded-full border border-gray-200 px-5 py-2.5 text-sm font-bold transition hover:border-[#AA5238] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#AA5238]"><i class="ph ph-squares-four mr-1"></i> Todo</button>
+            <button type="button" data-category="Personalizados" onclick="cambiarFiltro('Personalizados')" aria-pressed="false" class="category-pill shrink-0 rounded-full border border-gray-200 px-5 py-2.5 text-sm font-bold transition hover:border-[#AA5238] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#AA5238]"><i class="ph ph-user-focus mr-1"></i> Personalizados</button>
+            <button type="button" data-category="Grupales" onclick="cambiarFiltro('Grupales')" aria-pressed="false" class="category-pill shrink-0 rounded-full border border-gray-200 px-5 py-2.5 text-sm font-bold transition hover:border-[#AA5238] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#AA5238]"><i class="ph ph-users-three mr-1"></i> Grupales</button>
+            <button type="button" data-category="Servicios" onclick="cambiarFiltro('Servicios')" aria-pressed="false" class="category-pill shrink-0 rounded-full border border-gray-200 px-5 py-2.5 text-sm font-bold transition hover:border-[#AA5238] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#AA5238]"><i class="ph ph-chat-circle-text mr-1"></i> Sesiones y asesorías</button>
+            <button type="button" data-category="Productos" onclick="cambiarFiltro('Productos')" aria-pressed="false" class="category-pill shrink-0 rounded-full border border-gray-200 px-5 py-2.5 text-sm font-bold transition hover:border-[#AA5238] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#AA5238]"><i class="ph ph-book-open-text mr-1"></i> Tests y recursos</button>
+            <button type="button" data-category="Gratuitos" onclick="cambiarFiltro('Gratuitos')" aria-pressed="false" class="category-pill shrink-0 rounded-full border border-emerald-200 bg-emerald-50 px-5 py-2.5 text-sm font-bold text-emerald-700 transition hover:bg-emerald-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-700"><i class="ph ph-gift mr-1"></i> Recursos gratuitos</button>
+        </div>
+    </section>
+
+    <main id="catalogo" class="max-w-7xl mx-auto px-6 pb-24">
+        <p id="catalogo-resultado" aria-live="polite" class="mb-5 text-sm text-[#786A62]"></p>
+        <div id="grid-tienda" class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
             <!-- Los productos se inyectan aquí dinámicamente -->
         </div>
     </main>
@@ -1260,7 +1287,7 @@
 ];
 
         let filtroActual = 'todos';
-        let carrito = [];
+        let carrito = RenovaCart.read();
 
         function obtenerCantidadSesiones(producto) {
             return Math.max(1, Number(producto.cantidadSesiones) || 1);
@@ -1276,13 +1303,34 @@
 
         function renderTienda() {
             const grid = document.getElementById('grid-tienda');
-            const busqueda = document.getElementById('buscador').value.toLowerCase();
+            const busqueda = document.getElementById('buscador').value.trim().toLocaleLowerCase('es');
             
             const filtrados = catalogo.filter(p => p.visible !== false).filter(p => {
-                const matchBusqueda = p.nombre.toLowerCase().includes(busqueda);
+                const textoProducto = [p.nombre, p.desc, p.paraQuien, p.enfoque]
+                    .filter(Boolean)
+                    .join(' ')
+                    .toLocaleLowerCase('es');
+                const matchBusqueda = textoProducto.includes(busqueda);
                 const matchFiltro = filtroActual === 'todos' || p.cat === filtroActual;
                 return matchBusqueda && matchFiltro;
             });
+
+            const resultado = document.getElementById('catalogo-resultado');
+            resultado.textContent = filtrados.length === 1
+                ? '1 opción disponible'
+                : `${filtrados.length} opciones disponibles`;
+
+            if (!filtrados.length) {
+                grid.innerHTML = `
+                    <div class="col-span-full rounded-3xl border border-[#E8D8CF] bg-white px-6 py-12 text-center">
+                        <i class="ph ph-magnifying-glass text-4xl text-[#AA5238]"></i>
+                        <h3 class="mt-3 text-xl font-bold text-[#3E332D]">No encontramos resultados</h3>
+                        <p class="mt-2 text-sm text-[#786A62]">Prueba con otras palabras o explora todas las categorías.</p>
+                        <button type="button" onclick="limpiarFiltros()" class="mt-5 rounded-full bg-[#AA5238] px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[#8F432D]">Ver todo el catálogo</button>
+                    </div>
+                `;
+                return;
+            }
 
             grid.innerHTML = filtrados.map(p => {
                 const cantidadSesiones = obtenerCantidadSesiones(p);
@@ -1343,9 +1391,13 @@
                 let etiquetaInversion = (!esEspera && !esGratis) ? '<span class="text-[11px] text-gray-500 font-medium block mb-1 mt-2 uppercase tracking-wide">Inversión:</span>' : '';
 
                 return `
-                <div class="bg-white p-6 rounded-[24px] border border-gray-100 hover:border-[#AA5238]/30 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#AA5238]/5 to-transparent rounded-bl-[100px] -z-10 transition-transform group-hover:scale-110"></div>
+                <article class="rounded-[28px] border border-[#EFE7E2] bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#AA5238]/30 hover:shadow-xl">
                     <div>
+                        <div class="mb-5 flex h-44 items-center justify-center overflow-hidden rounded-[20px] bg-[#F8F3EF]">
+                            ${p.imagen
+                                ? `<img src="${p.imagen}" alt="${p.nombre}" loading="lazy" decoding="async" class="h-full w-full object-contain p-2">`
+                                : `<div class="flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-[#F8ECE6] to-[#F4E6DD] text-[#AA5238]"><i class="ph ${p.cat === 'Grupales' ? 'ph-users-three' : (p.cat === 'Servicios' ? 'ph-chat-circle-text' : (p.cat === 'Personalizados' ? 'ph-user-focus' : 'ph-book-open-text'))} text-5xl"></i><span class="mt-2 text-xs font-bold uppercase tracking-widest">${p.cat === 'Servicios' ? 'Acompañamiento' : (p.cat === 'Gratuitos' ? 'Recurso gratuito' : 'Bienestar')}</span></div>`}
+                        </div>
                         <div class="flex justify-between items-start mb-4 gap-2 flex-wrap">
                             <div class="flex gap-2 flex-wrap">
                                 ${tagEdad ? `<span class="bg-gray-100 text-gray-700 text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">${tagEdad}</span>` : ''}
@@ -1372,12 +1424,12 @@
                         </div>
                     </div>
                     <div>
-                        <button onclick="verMas('${p.id}')" class="w-full bg-white text-[#AA5238] border-2 border-[#AA5238] py-3 rounded-xl font-bold text-sm hover:bg-[#AA5238] hover:text-white transition-all shadow-sm flex items-center justify-center gap-2">
+                        <button type="button" onclick="verMas('${p.id}')" class="w-full rounded-xl border-2 border-[#AA5238] bg-white py-3 font-bold text-sm text-[#AA5238] shadow-sm transition-all hover:bg-[#AA5238] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#AA5238] flex items-center justify-center gap-2">
                             <i class="ph ${esEspera ? 'ph-bell' : (esGratis ? 'ph-download-simple' : 'ph-eye')} text-lg"></i>
                             ${esEspera ? 'Solicitar apertura' : 'Ver Detalles'}
                         </button>
                     </div>
-                </div>
+                </article>
                 `;
             }).join('');
         }
@@ -1508,20 +1560,31 @@
         function cambiarFiltro(cat) {
             filtroActual = cat;
             document.querySelectorAll('.category-pill').forEach(btn => {
-                btn.classList.toggle('active', btn.innerText.includes(cat) || (cat === 'todos' && btn.innerText === 'Todos'));
+                const activo = btn.dataset.category === cat;
+                btn.classList.toggle('active', activo);
+                btn.setAttribute('aria-pressed', String(activo));
             });
             renderTienda();
+        }
+
+        function limpiarFiltros() {
+            document.getElementById('buscador').value = '';
+            cambiarFiltro('todos');
         }
 
         function inicializarTiendaConFiltro() {
             const urlParams = new URLSearchParams(window.location.search);
             const categoriaUrl = urlParams.get('cat');
+            const productoParaVer = urlParams.get('detalle');
             const productoParaAgregar = urlParams.get('agregar');
 
             if (categoriaUrl) {
                 cambiarFiltro(categoriaUrl);
             } else {
                 renderTienda();
+            }
+            if (productoParaVer) {
+                verMas(productoParaVer);
             }
             if (productoParaAgregar) {
                 setTimeout(() => agregarAlCarrito(productoParaAgregar), 0);
@@ -1563,7 +1626,11 @@
                 </div>`).join('') : '<div class="h-full flex flex-col items-center justify-center text-center text-gray-500"><i class="ph ph-shopping-cart-simple text-5xl text-gray-300 mb-3"></i><p class="font-bold text-[#54463C]">Tu carrito está vacío</p><p class="text-sm mt-1">Agrega un producto desde Ver Detalles.</p></div>';
         }
 
-        function quitarDelCarrito(indice) { carrito.splice(indice, 1); renderizarCarrito(); }
+        function quitarDelCarrito(indice) {
+            carrito.splice(indice, 1);
+            renderizarCarrito();
+            RenovaCart.save(carrito);
+        }
 
         function solicitarCarrito() {
             if (!carrito.length) return alert('Agrega al menos un producto al carrito.');
@@ -1598,9 +1665,15 @@
             // Agrega al carrito y actualiza la vista
             carrito.push({ ...p, fechaSeleccionada: fechaTextoSeleccionada });
             renderizarCarrito();
+            RenovaCart.save(carrito);
             cerrarDetalle();
             toggleCarrito(true);
         }
+
+        RenovaCart.subscribe(items => {
+            carrito = items;
+            renderizarCarrito();
+        });
 
         // --- LÓGICA DEL BANNER DEL LIBRO ---
         function bannerLibro() {
@@ -1617,9 +1690,10 @@
                     }
                     const identificador = `${this.config.titulo}|${this.config.imagen}|${this.config.desc}`;
                     const bannerCerrado = sessionStorage.getItem('bannerLibroCerrado') === identificador;
-                    const agregandoDesdeBanner = new URLSearchParams(window.location.search).has('agregar');
+                    const parametrosUrl = new URLSearchParams(window.location.search);
+                    const navegandoCatalogo = parametrosUrl.has('agregar') || parametrosUrl.has('detalle');
 
-                    if (this.config.activo && !bannerCerrado && !agregandoDesdeBanner) {
+                    if (this.config.activo && !bannerCerrado && !navegandoCatalogo) {
                         setTimeout(() => { this.mostrar = true; }, 1500); 
                     }
                 },
@@ -1638,6 +1712,8 @@
 
         // Inicializamos la tienda al cargar la página
         window.onload = () => {
+            carrito = RenovaCart.read();
+            renderizarCarrito();
             inicializarTiendaConFiltro();
         };
     </script>
