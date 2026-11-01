@@ -88,11 +88,6 @@
                 </p>
                 <h1 class="mb-4 text-3xl font-black leading-tight tracking-tight text-[#3E332D] sm:text-4xl">Encuentra el acompañamiento o recurso que necesitas</h1>
                 <p class="mb-6 max-w-xl leading-relaxed text-[#65574F]">Explora acompañamientos y herramientas pensadas para distintas etapas de la vida, con una mirada profesional y cristiana.</p>
-                <label for="buscador" class="mb-2 text-sm font-bold text-[#54463C]">¿Qué estás buscando?</label>
-                <div class="relative">
-                    <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-xl text-[#AA5238]"></i>
-                    <input type="search" id="buscador" oninput="renderTienda()" placeholder="Busca un tema o acompañamiento..." aria-label="Buscar en el catálogo" class="w-full rounded-2xl border border-[#E8D8CF] bg-[#FDFBFA] py-3.5 pl-12 pr-4 text-sm text-[#54463C] outline-none transition focus:border-[#AA5238] focus:ring-4 focus:ring-[#AA5238]/10">
-                </div>
                 <a href="#filtros-cat" class="mt-5 inline-flex items-center gap-2 self-start font-bold text-[#AA5238] transition hover:gap-3">Explora por categoría <i class="ph ph-arrow-down"></i></a>
             </div>
             <div class="catalog-photo relative flex min-h-[260px] items-end md:min-h-[340px] lg:min-h-[420px]">
@@ -116,6 +111,13 @@
             <button type="button" data-category="Servicios" onclick="cambiarFiltro('Servicios')" aria-pressed="false" class="category-pill flex min-h-11 w-full items-center justify-center rounded-full border border-gray-200 px-3 py-2.5 text-center text-sm font-bold leading-tight transition hover:border-[#AA5238] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#AA5238] sm:w-auto sm:px-5"><i class="ph ph-chat-circle-text mr-1 shrink-0"></i> Sesiones y asesorías</button>
             <button type="button" data-category="Productos" onclick="cambiarFiltro('Productos')" aria-pressed="false" class="category-pill flex min-h-11 w-full items-center justify-center rounded-full border border-gray-200 px-3 py-2.5 text-center text-sm font-bold leading-tight transition hover:border-[#AA5238] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#AA5238] sm:w-auto sm:px-5"><i class="ph ph-book-open-text mr-1 shrink-0"></i> Tests y recursos</button>
             <button type="button" data-category="Gratuitos" onclick="cambiarFiltro('Gratuitos')" aria-pressed="false" class="category-pill flex min-h-11 w-full items-center justify-center rounded-full border border-emerald-200 bg-emerald-50 px-3 py-2.5 text-center text-sm font-bold leading-tight text-emerald-700 transition hover:bg-emerald-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-700 sm:w-auto sm:px-5"><i class="ph ph-gift mr-1 shrink-0"></i> Recursos gratuitos</button>
+        </div>
+        <div class="mt-5 max-w-2xl">
+            <label for="buscador" class="mb-2 block text-sm font-bold text-[#54463C]">¿Qué estás buscando?</label>
+            <div class="relative">
+                <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-xl text-[#AA5238]"></i>
+                <input type="search" id="buscador" oninput="renderTienda()" placeholder="Busca un tema o acompañamiento..." aria-label="Buscar en el catálogo" class="w-full rounded-2xl border border-[#E8D8CF] bg-white py-3.5 pl-12 pr-4 text-sm text-[#54463C] outline-none transition focus:border-[#AA5238] focus:ring-4 focus:ring-[#AA5238]/10">
+            </div>
         </div>
     </section>
 
