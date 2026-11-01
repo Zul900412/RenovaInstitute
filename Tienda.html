@@ -1447,7 +1447,7 @@
             const precioTotal = obtenerPrecioTotal(p);
             const precioNormalTotal = obtenerPrecioNormalTotal(p);
 
-            let btnText = (esEspera || esPorDefinir) ? 'Solicitar apertura' : (esGratis ? 'Solicitar Descarga' : 'Agregar al Carrito');
+            let btnText = (esEspera || esPorDefinir) ? 'Solicitar apertura' : (esGratis ? 'Solicitar recurso' : 'Agregar al Carrito');
             let funcionClick = (esEspera || esPorDefinir) ? `solicitarApertura('${p.id}')` : `agregarAlCarrito('${p.id}')`;
             
             let precioNormalHtml = (precioNormalTotal && !esEspera && !esPorDefinir) ? `<p class="text-gray-400 line-through text-sm">Normal${p.precioDesde ? ' desde' : ''}: $ ${precioNormalTotal.toLocaleString()}</p>` : '';
