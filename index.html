@@ -496,7 +496,8 @@
             const products = indexCartItems.map(product => {
                 const quantity = Math.max(1, Number(product.cantidadSesiones) || 1);
                 const total = (Number(product.precio) || 0) * quantity;
-                return `• ${product.nombre}${quantity > 1 ? ` (${quantity} sesiones)` : ''}${total > 0 ? ` — $ ${total.toLocaleString('es-CO')}` : ' — Gratis'}`;
+                const code = product.id ? ` (Código: ${product.id})` : '';
+                return `• ${product.nombre}${code}${quantity > 1 ? ` (${quantity} sesiones)` : ''}${total > 0 ? ` — $ ${total.toLocaleString('es-CO')}` : ' — Gratis'}`;
             });
             const total = indexCartItems.reduce((sum, product) => {
                 return sum + (Number(product.precio) || 0) * Math.max(1, Number(product.cantidadSesiones) || 1);
