@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test de Carga Emocional | Psique Lab</title>
+    <title>Autochequeo de Bienestar | Renova Institute</title>
     
     <!-- Configuración para PWA (Instalación en celular) -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#8C8660">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Psique Lab Test">
+    <meta name="apple-mobile-web-app-title" content="Renova Bienestar">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -35,6 +35,10 @@
             background-color: rgba(140, 134, 96, 0.1);
             font-weight: bold;
         }
+        .option-card:focus-visible {
+            outline: 2px solid #8C8660;
+            outline-offset: 2px;
+        }
     </style>
 </head>
 <body class="bg-[#FDFBFA] text-[#54463C] min-h-screen flex flex-col font-sans">
@@ -47,12 +51,12 @@
                 <div class="w-8 h-8 rounded-full bg-[#8C8660]/10 flex items-center justify-center text-[#8C8660]">
                     <i class="ph ph-brain text-lg"></i>
                 </div>
-                <span class="text-lg font-bold text-[#8C8660] tracking-wide">PSIQUE LAB</span>
+                <span class="text-lg font-bold text-[#8C8660] tracking-wide">RENOVA INSTITUTE</span>
             </div>
 
             <!-- Botón de Tienda -->
             <div>
-                <a href="../../tienda.html" style="cursor: pointer;" class="bg-[#8C8660]/10 hover:bg-[#8C8660]/20 text-[#8C8660] px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 select-none">
+                <a href="../../Tienda.html" style="cursor: pointer;" class="bg-[#8C8660]/10 hover:bg-[#8C8660]/20 text-[#8C8660] px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 select-none">
                     <i class="ph ph-storefront text-base"></i> Para más recursos
                 </a>
             </div>
@@ -75,11 +79,12 @@
                 <div class="w-16 h-16 bg-[#8C8660]/10 text-[#8C8660] rounded-full flex items-center justify-center mx-auto mb-4">
                     <i class="ph ph-pulse text-3xl"></i>
                 </div>
-                <h1 class="text-2xl md:text-3xl font-bold text-[#54463C] mb-3">Test de Carga Emocional y Bienestar</h1>
-                <p class="text-gray-500 text-xs md:text-sm max-w-lg mx-auto mb-8 leading-relaxed">Descubre en qué estado se encuentra tu sistema nervioso y tu nivel de desgaste mental actual. Responde con honestidad a estas 10 preguntas para recibir un diagnóstico personalizado y alternativas para tu equilibrio.</p>
+                <h1 class="text-2xl md:text-3xl font-bold text-[#54463C] mb-3">Autochequeo de carga emocional y bienestar</h1>
+                <p class="text-gray-500 text-xs md:text-sm max-w-lg mx-auto mb-4 leading-relaxed">Responde estas 10 preguntas para reflexionar sobre cómo te has sentido. Es una herramienta orientativa, no un diagnóstico ni una evaluación clínica; no mide hormonas ni determina una condición de salud.</p>
+                <p class="text-gray-500 text-xs md:text-sm max-w-lg mx-auto mb-8 leading-relaxed">Si el malestar es intenso, persiste o afecta tu vida diaria, consulta con un profesional cualificado.</p>
                 
                 <button onclick="iniciarTest()" style="cursor: pointer;" class="w-full sm:w-auto px-8 py-3.5 bg-[#8C8660] text-white rounded-xl text-sm font-bold shadow-md hover:bg-[#726d4e] transition-colors flex items-center justify-center gap-2 mx-auto select-none">
-                    Comenzar Evaluación <i class="ph ph-arrow-right text-base"></i>
+                    Comenzar autochequeo <i class="ph ph-arrow-right text-base"></i>
                 </button>
             </div>
 
@@ -123,22 +128,23 @@
                     <span id="res-nivel-tag" class="text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider"></span>
                     <h2 id="res-titulo" class="text-2xl font-bold text-[#54463C] mt-2 mb-1"></h2>
                     <p id="res-descripcion" class="text-xs text-gray-600 max-w-lg mx-auto leading-relaxed"></p>
+                    <p class="mt-3 text-xs text-gray-500">Este resultado es orientativo y se basa solo en tus respuestas; no es un diagnóstico ni una evaluación clínica.</p>
                 </div>
 
                 <!-- Tarjeta de Sugerencias Útiles -->
                 <div class="bg-gray-50 border border-gray-200 p-5 rounded-2xl mb-6 space-y-3">
                     <h3 class="font-bold text-xs text-[#8C8660] uppercase tracking-wide flex items-center gap-2">
-                        <i class="ph ph-lightbulb text-base"></i> Estrategias Clave para tu Momento Actual
+                        <i class="ph ph-lightbulb text-base"></i> Ideas generales para el autocuidado
                     </h3>
                     <ul id="res-sugerencias" class="space-y-2 text-xs text-gray-700">
                         <!-- Dinámico -->
                     </ul>
                 </div>
 
-                <!-- Opciones de Servicios y Talleres Psique Lab -->
+                <!-- Recursos relacionados -->
                 <div class="bg-amber-50/60 border border-amber-200 p-5 rounded-2xl mb-6">
                     <h3 class="font-bold text-amber-800 text-xs uppercase tracking-wide mb-2 flex items-center gap-2">
-                        <i class="ph ph-sparkle text-base"></i> Servicio o Taller Recomendado para ti
+                        <i class="ph ph-sparkle text-base"></i> Si deseas conocer opciones de acompañamiento
                     </h3>
                     <div id="res-servicio-recomendado" class="text-xs text-gray-700 leading-relaxed mb-4">
                         <!-- Dinámico -->
@@ -252,7 +258,6 @@
 
         let preguntaActual = 0;
         let respuestasUsuario = Array(preguntas.length).fill(null);
-        let resultadoActualTexto = "";
 
         function iniciarTest() {
             document.getElementById('vista-intro').classList.add('hidden');
@@ -274,16 +279,18 @@
 
             p.opciones.forEach((opcion, index) => {
                 const seleccionada = respuestasUsuario[preguntaActual] === index ? 'selected' : '';
-                const div = document.createElement('div');
-                div.className = `option-card p-4 rounded-2xl border border-gray-200 bg-white text-xs md:text-sm text-[#54463C] flex items-center justify-between ${seleccionada}`;
-                div.innerHTML = `
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.setAttribute('aria-pressed', String(Boolean(seleccionada)));
+                button.className = `option-card w-full text-left p-4 rounded-2xl border border-gray-200 bg-white text-xs md:text-sm text-[#54463C] flex items-center justify-between ${seleccionada}`;
+                button.innerHTML = `
                     <span>${opcion.texto}</span>
                     <div class="w-4 h-4 rounded-full border border-gray-300 flex items-center justify-center">
                         <div class="w-2 h-2 rounded-full ${seleccionada ? 'bg-[#8C8660]' : 'bg-transparent'}"></div>
                     </div>
                 `;
-                div.onclick = () => seleccionarOpcion(index);
-                container.appendChild(div);
+                button.onclick = () => seleccionarOpcion(index);
+                container.appendChild(button);
             });
 
             if (preguntaActual > 0) {
@@ -342,82 +349,80 @@
 
             if (puntajeTotal <= 15) {
                 nivelInfo = {
-                    tag: "Nivel 1 • Paz Mental Óptima",
+                    tag: "Orientativo 1 • Menor carga reportada",
                     tagBg: "bg-emerald-100 text-emerald-800",
                     icono: "ph-check-circle",
                     iconoBg: "bg-emerald-50 text-emerald-700 border border-emerald-200",
-                    titulo: "Tu sistema nervioso muestra equilibrio",
-                    desc: "Tienes una excelente gestión de tus cargas y un estilo de vida que respeta tus espacios de bienestar. Tu mente opera con claridad y bajo niveles mínimos de cortisol.",
+                    titulo: "Tus respuestas reflejan una carga baja en este momento",
+                    desc: "Este puntaje resume tus respuestas y no evalúa tu sistema nervioso ni tus niveles hormonales. Puedes seguir cuidando tus rutinas de descanso y bienestar.",
                     sugerencias: [
                         "<li>• <strong>Consolida tus hábitos:</strong> Mantén tus rutinas de autocuidado y pausas conscientes.</li>",
                         "<li>• <strong>Prevención activa:</strong> Utiliza herramientas de planificación para anticiparte a momentos de alta exigencia.</li>",
                         "<li>• <strong>Cultiva tu propósito:</strong> Es el momento ideal para potenciar proyectos de crecimiento personal a largo plazo.</li>"
                     ],
-                    servicio: "<strong>Recomendación Psique Lab:</strong> Potencia tu autoconocimiento y liderazgo interno con nuestro <em>Programa de Bienestar Integral y Crecimiento Consciente</em>."
+                    servicio: "Este puntaje no determina qué servicio necesitas. Si deseas, puedes consultar el catálogo o solicitar información general sobre las opciones disponibles."
                 };
             } else if (puntajeTotal <= 22) {
                 nivelInfo = {
-                    tag: "Nivel 2 • Alerta Temprana",
+                    tag: "Orientativo 2 • Algunas señales de carga",
                     tagBg: "bg-blue-100 text-blue-800",
                     icono: "ph-shield-warning",
                     iconoBg: "bg-blue-50 text-blue-700 border border-blue-200",
-                    titulo: "Se asoman pequeños desequilibrios",
-                    desc: "Estás comenzando a acumular tensiones cotidianas. Aunque funcionas con normalidad, tu cuerpo y mente empiezan a enviar señales leves de que el ritmo exige atención.",
+                    titulo: "Tus respuestas incluyen algunas señales de carga",
+                    desc: "El resultado no determina una condición de salud. Si te sirve, puedes observar qué situaciones te generan tensión y probar pausas que se ajusten a tu rutina.",
                     sugerencias: [
                         "<li>• <strong>Pausas activas:</strong> Introduce micro-descansos de 5 minutos durante tu jornada laboral.</li>",
                         "<li>• <strong>Higiene mental:</strong> Desconéctate de pantallas y exigencias al menos una hora antes de dormir.</li>",
                         "<li>• <strong>Monitoreo de hábitos:</strong> Rastrea tus detonantes de estrés para frenarlos a tiempo.</li>"
                     ],
-                    servicio: "<strong>Recomendación Psique Lab:</strong> Aprende herramientas prácticas de autorregulación participando en nuestro <em>Taller de Gestión Emocional y Hábitos de Paz</em>."
+                    servicio: "Este puntaje no determina qué servicio necesitas. Si deseas, puedes consultar el catálogo o solicitar información general sobre las opciones disponibles."
                 };
             } else if (puntajeTotal <= 29) {
                 nivelInfo = {
-                    tag: "Nivel 3 • Carga Moderada",
+                    tag: "Orientativo 3 • Carga reportada moderada",
                     tagBg: "bg-amber-100 text-amber-800",
                     icono: "ph-warning",
                     iconoBg: "bg-amber-50 text-amber-700 border border-amber-200",
-                    titulo: "Tu mente y cuerpo resienten el ritmo",
-                    desc: "El desgaste comienza a pasar factura en tu energía diaria, tus patrones de sueño o tu nivel de paciencia. Es un llamado clave para reestructurar prioridades y poner límites.",
+                    titulo: "Reportas una carga moderada",
+                    desc: "Tus respuestas pueden servir como punto de partida para revisar descanso, exigencias y límites. No permiten diagnosticar ni explicar por sí solas lo que estás sintiendo.",
                     sugerencias: [
                         "<li>• <strong>Auditoría de límites:</strong> Identifica qué exigencias externas no te corresponden y aprende a decir 'no'.</li>",
-                        "<li>• <strong>Regulación somática:</strong> Prácticas de respiración consciente para descender la activación de la amígdala.</li>",
+                        "<li>• <strong>Pausa consciente:</strong> Si te resulta cómoda, prueba una respiración lenta y vuelve a tu ritmo habitual si te causa incomodidad.</li>",
                         "<li>• <strong>Espacios de descompresión:</strong> Asegura momentos en la semana donde no tengas ninguna obligación pendiente.</li>"
                     ],
-                    servicio: "<strong>Recomendación Psique Lab:</strong> Transforma tus patrones de sobrecarga con nuestra <em>Asesoría Personalizada y Acompañamiento en Psicoterapia Breve</em>."
+                    servicio: "Este puntaje no determina qué servicio necesitas. Si deseas, puedes consultar el catálogo o solicitar información general sobre las opciones disponibles."
                 };
             } else if (puntajeTotal <= 35) {
                 nivelInfo = {
-                    tag: "Nivel 4 • Alta Tensión Emocional",
+                    tag: "Orientativo 4 • Alta carga reportada",
                     tagBg: "bg-orange-100 text-orange-800",
                     icono: "ph-fire",
                     iconoBg: "bg-orange-50 text-orange-700 border border-orange-200",
-                    titulo: "Operando en modo supervivencia",
-                    desc: "Te encuentras bajo una presión significativa. El cortisol elevado está afectando tu bienestar físico, tu claridad mental y tu capacidad de disfrute. Necesitas frenar conscientemente.",
+                    titulo: "Reportas una carga alta",
+                    desc: "Tus respuestas sugieren que podrías estar atravesando un momento exigente, pero este autochequeo no mide cortisol ni evalúa tu salud. Considera buscar apoyo si lo necesitas.",
                     sugerencias: [
                         "<li>• <strong>Simplificación radical:</strong> Reduce temporalmente tus compromisos no esenciales al mínimo absoluto.</li>",
                         "<li>• <strong>Red de apoyo:</strong> Comparte lo que estás viviendo con personas de confianza o un profesional; no tienes que cargar todo solo/a.</li>",
                         "<li>• <strong>Sueño y nutrición:</strong> Prioriza el descanso físico como prioridad absoluta de tu agenda.</li>"
                     ],
-                    servicio: "<strong>Recomendación Psique Lab:</strong> Diseña un plan de rescate emocional y reestructuración de vida con nuestro <em>Taller Intensivo de Sanación y Límites Emocionales</em>."
+                    servicio: "Este puntaje no determina qué servicio necesitas. Si deseas, puedes consultar el catálogo o solicitar información general sobre las opciones disponibles."
                 };
             } else {
                 nivelInfo = {
-                    tag: "Nivel 5 • Saturación / Burnout",
+                    tag: "Orientativo 5 • Carga muy alta reportada",
                     tagBg: "bg-red-100 text-red-800",
                     icono: "ph-shield-slash",
                     iconoBg: "bg-red-50 text-red-700 border border-red-200",
-                    titulo: "Tu sistema está al límite absoluto",
-                    desc: "El agotamiento mental y emocional ha llegado a un punto crítico. Tu mente y cuerpo exigen una pausa profunda e innegociable. Es momento de priorizarte por completo.",
+                    titulo: "Reportas una carga muy alta",
+                    desc: "Este puntaje no es una evaluación clínica. Si lo que sientes te abruma, afecta tu vida o te preocupa, busca apoyo de una persona de confianza y de un profesional cualificado.",
                     sugerencias: [
-                        "<li>• <strong>Detención inmediata:</strong> Pide apoyo externo y evalúa licencias o espacios de desconexión total.</li>",
-                        "<li>• <strong>Acompañamiento profesional:</strong> Es altamente recomendable contar con guía especializada para sanar el desgaste crónico.</li>",
-                        "<li>• <strong>Compasión contigo mismo/a:</strong> Suelta la autoexigencia; tu salud mental es hoy la única prioridad válida.</li>"
+                        "<li>• <strong>Busca apoyo:</strong> Considera conversar con alguien de confianza y consultar con un profesional cualificado.</li>",
+                        "<li>• <strong>Cuida tus necesidades inmediatas:</strong> Revisa si puedes pedir ayuda con una tarea o tomar una pausa segura.</li>",
+                        "<li>• <strong>Avanza paso a paso:</strong> No tienes que resolver todo en este momento.</li>"
                     ],
-                    servicio: "<strong>Recomendación Psique Lab:</strong> Agenda una <em>Sesión de Orientación Prioritaria y Acompañamiento Terapéutico</em> para trazar una ruta de recuperación segura."
+                    servicio: "Este puntaje no determina qué servicio necesitas. Si deseas, puedes solicitar información general sobre las opciones disponibles. Si estás en peligro inmediato, contacta los servicios de emergencia de tu localidad."
                 };
             }
-
-            resultadoActualTexto = `${nivelInfo.tag} (Puntaje total: ${puntajeTotal}/40 - ${nivelInfo.titulo})`;
 
             document.getElementById('res-nivel-tag').innerText = nivelInfo.tag;
             document.getElementById('res-nivel-tag').className = `text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider ${nivelInfo.tagBg}`;
@@ -438,10 +443,9 @@
             document.getElementById('vista-intro').classList.remove('hidden');
         }
 
-        // WhatsApp configurado con el resultado dinámico para mejor cierre de ventas
         function contactarAsesoria() {
             const numeroWhatsApp = "573114951646"; 
-            const mensaje = `Hola equipo de Psique Lab. Acabo de realizar el Test de Carga Emocional en su web. Mi resultado fue: *${resultadoActualTexto}*. Me gustaría recibir más información y asesoría sobre los servicios adecuados para mi situación.`;
+            const mensaje = "Hola, equipo de Renova Institute. Realicé el autochequeo orientativo de carga emocional y quisiera recibir información general sobre las opciones de acompañamiento. No deseo compartir mis respuestas ni un resultado personal.";
             const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
             window.open(url, '_blank');
         }

@@ -1,6 +1,6 @@
 {
-  "name": "Renova Institute - Test de Carga Emocional",
-  "short_name": "Test Renova",
+  "name": "Renova Institute - Autochequeo de Bienestar",
+  "short_name": "Autochequeo",
   "start_url": "Test-bienestar.html",
   "display": "standalone",
   "background_color": "#FDFBFA",

@@ -63,7 +63,7 @@
             <div class="text-center mb-5">
                 <h1 class="text-xl font-bold text-[#54463C] mb-1">Guía de Respiración Reguladora</h1>
                 <p class="text-gray-500 text-xs max-w-md mx-auto">
-                    Selecciona una técnica, observa su guía rápida y regula tu sistema nervioso.
+                    Selecciona una técnica y prueba su guía a un ritmo cómodo para ti.
                 </p>
             </div>
 
@@ -95,12 +95,13 @@
             <!-- TARJETA COMPACTA DE INFORMACIÓN (DINÁMICA) -->
             <div id="info-tecnica" class="bg-amber-50/50 border border-amber-200/60 p-3.5 rounded-2xl mb-4 text-xs fade-in">
                 <div class="flex items-center justify-between mb-1">
-                    <span id="info-titulo" class="font-bold text-[#8C8660] uppercase">1. Técnica 4-7-8 (Calma Profunda y Sueño)</span>
-                    <span id="info-badge" class="bg-amber-200/70 text-amber-900 px-2 py-0.5 rounded text-[10px] font-bold">Crisis / Noche</span>
+                    <span id="info-titulo" class="font-bold text-[#8C8660] uppercase">1. Técnica 4-7-8 (Respiración pautada)</span>
+                        <span id="info-badge" class="bg-amber-200/70 text-amber-900 px-2 py-0.5 rounded text-[10px] font-bold">Práctica opcional</span>
                 </div>
-                <p id="info-sirve" class="text-gray-700 mb-1"><strong>Para qué sirve:</strong> Actúa como tranquilizante natural reduciendo la ansiedad y facilitando el sueño.</p>
+                <p id="info-sirve" class="text-gray-700 mb-1"><strong>Para qué sirve:</strong> Puede ayudar a algunas personas a relajarse; no es un tratamiento para la ansiedad ni garantiza mejorar el sueño.</p>
                 <p id="info-ejecuta" class="text-gray-500 italic"><strong>Cómo se realiza:</strong> Inhala en 4s, sostén 7s y exhala despacio haciendo soplido en 8s.</p>
             </div>
+            <p class="mb-4 text-[11px] leading-relaxed text-gray-500">No fuerces la respiración ni las pausas. Si sientes mareo o incomodidad, detente y respira con normalidad. Este ejercicio no sustituye atención profesional.</p>
 
             <!-- ANIMADOR VISUAL INTERACTIVO Y BOTÓN ÚNICO -->
             <div class="bg-gradient-to-b from-gray-50 to-amber-50/20 border border-gray-100 rounded-3xl p-5 mb-4 text-center relative overflow-hidden">
@@ -134,7 +135,7 @@
             
             <h3 class="text-lg font-bold text-[#54463C]">¡Excelente ejercicio de regulación!</h3>
             <p class="text-xs text-gray-600 leading-relaxed">
-                Has regalado un momento de paz a tu sistema nervioso. Para profundizar en tu bienestar emocional, te invitamos a conocer nuestras opciones:
+                Has completado un ejercicio de respiración. Si te resultó cómodo, puedes repetirlo a tu ritmo. Para conocer otros recursos:
             </p>
 
             <!-- Opciones de contacto y venta -->
@@ -163,7 +164,7 @@
             </div>
 
             <!-- Botón Ir a la Tienda -->
-            <a href="../../tienda.html" class="w-full bg-[#8C8660] text-white py-2.5 rounded-xl font-bold text-xs hover:bg-[#726d4e] transition-all flex justify-center items-center gap-1.5 shadow-sm">
+            <a href="../../Tienda.html" class="w-full bg-[#8C8660] text-white py-2.5 rounded-xl font-bold text-xs hover:bg-[#726d4e] transition-all flex justify-center items-center gap-1.5 shadow-sm">
                 <i class="ph ph-storefront text-sm"></i> Visitar Tienda Renova Institute
             </a>
 
@@ -181,9 +182,9 @@
 
         const datosTecnicas = {
             '478': {
-                titulo: '1. Técnica 4-7-8 (Calma Profunda y Sueño)',
-                badge: 'Crisis / Noche',
-                sirve: 'Actúa como tranquilizante natural reduciendo la ansiedad y facilitando el sueño.',
+                titulo: '1. Técnica 4-7-8 (Respiración pautada)',
+                badge: 'Práctica opcional',
+                sirve: 'Puede ayudar a algunas personas a relajarse; no es un tratamiento para la ansiedad ni garantiza mejorar el sueño.',
                 ejecuta: 'Inhala en 4s, sostén 7s y exhala despacio haciendo soplido en 8s.',
                 secuencia: [
                     { texto: 'Inhala', duracion: 4000, escala: 'scale-125' },
@@ -194,7 +195,7 @@
             'box': {
                 titulo: '2. Respiración Cuadrada / Box Breathing',
                 badge: 'Enfoque y Control',
-                sirve: 'Restaura la claridad mental y disminuye el impacto del estrés agudo.',
+                sirve: 'A algunas personas les resulta una pauta útil para hacer una pausa; la respuesta varía y no trata el estrés agudo.',
                 ejecuta: 'Inhala 4s, sostén lleno 4s, exhala 4s y mantén vacío 4s.',
                 secuencia: [
                     { texto: 'Inhala', duracion: 4000, escala: 'scale-125' },
@@ -205,8 +206,8 @@
             },
             'sigh': {
                 titulo: '3. Suspiro Fisiológico',
-                badge: 'Alivio Inmediato',
-                sirve: 'La forma más rápida comprobada científicamente para desinflamar el estrés.',
+                badge: 'Pauta opcional',
+                sirve: 'Algunas personas encuentran útil esta pauta para hacer una pausa; no es un tratamiento ni garantiza aliviar el estrés.',
                 ejecuta: 'Inhala hondo, toma un sorbo extra de aire y exhala largo por la boca.',
                 secuencia: [
                     { texto: 'Inhala hondo', duracion: 3000, escala: 'scale-125' },
@@ -217,7 +218,7 @@
             'dia': {
                 titulo: '4. Respiración Diafragmática',
                 badge: 'Anclaje Corporal',
-                sirve: 'Oxigena eficientemente los órganos y promueve seguridad corporal.',
+                sirve: 'Invita a observar el movimiento del abdomen al respirar, sin buscar un resultado específico.',
                 ejecuta: 'Inhala inflando el abdomen durante 4s y exhala suave durante 6s.',
                 secuencia: [
                     { texto: 'Inhala (Abdomen)', duracion: 4000, escala: 'scale-125' },
@@ -226,8 +227,8 @@
             },
             'coh': {
                 titulo: '5. Respiración Coherente (5-5)',
-                badge: 'Equilibrio Cardíaco',
-                sirve: 'Sincroniza el ritmo cardíaco induciendo calma y bienestar sostenido.',
+                badge: 'Ritmo pautado',
+                sirve: 'Propone un ritmo regular de respiración; las sensaciones y respuestas pueden variar.',
                 ejecuta: 'Inhala de forma fluida durante 5s y exhala de la misma manera 5s.',
                 secuencia: [
                     { texto: 'Inhala', duracion: 5000, escala: 'scale-125' },
@@ -236,8 +237,8 @@
             },
             'long': {
                 titulo: '6. Exhalación Prolongada (4-8)',
-                badge: 'Descarga Nerviosa',
-                sirve: 'Estimula fuertemente el nervio vago para frenar la taquicardia por ansiedad.',
+                badge: 'Pauta opcional',
+                sirve: 'Puede ayudar a algunas personas a regular el ritmo de la respiración. Si tienes palpitaciones o malestar persistente, consulta con un profesional de salud.',
                 ejecuta: 'Inhala con calma durante 4 segundos y exhala el doble de tiempo (8 segundos).',
                 secuencia: [
                     { texto: 'Inhala', duracion: 4000, escala: 'scale-125' },

@@ -43,7 +43,7 @@
 
             <!-- Botón de Tienda ("Para más recursos") -->
             <div class="flex items-center gap-2">
-                <a href="../../tienda.html" style="cursor: pointer;" class="bg-[#8C8660]/10 hover:bg-[#8C8660]/20 text-[#8C8660] px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 select-none">
+                <a href="../../Tienda.html" style="cursor: pointer;" class="bg-[#8C8660]/10 hover:bg-[#8C8660]/20 text-[#8C8660] px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 select-none">
                     <i class="ph ph-storefront text-base"></i> Para más recursos
                 </a>
             </div>
@@ -56,7 +56,7 @@
             <!-- DESCRIPCIÓN Y SELECTOR DE MONEDA -->
             <div class="text-center mb-6">
                 <h1 class="text-2xl md:text-3xl font-bold text-[#54463C] mb-2">Simulador de Estrés y Mayordomía Financiera</h1>
-                <p class="text-gray-500 text-xs md:text-sm max-w-xl mx-auto mb-4">Ajusta los controles deslizantes según tu realidad económica y observa en tiempo real cómo impactan tu sistema nervioso, tu paz mental y tu bienestar.</p>
+                <p class="text-gray-500 text-xs md:text-sm max-w-xl mx-auto mb-4">Ajusta los controles según tu realidad económica para revisar cómo se distribuye tu presupuesto. Este simulador es orientativo y no evalúa tu salud mental ni predice cómo te sentirás.</p>
                 
                 <!-- Selector de Moneda Interactivo -->
                 <div class="inline-flex bg-gray-100 p-1 rounded-2xl gap-1 text-xs font-bold">
@@ -113,7 +113,7 @@
                     <!-- Generosidad / Diezmos -->
                     <div>
                         <div class="flex justify-between items-center mb-1">
-                            <label class="text-xs font-bold text-gray-600">Generosidad / Propósito (Diezmos, Ayudas)</label>
+                            <label class="text-xs font-bold text-gray-600">Aportes voluntarios (diezmos, ayudas)</label>
                             <span id="val-dar" class="font-bold text-[#8C8660] text-sm"></span>
                         </div>
                         <input type="range" id="range-dar" class="w-full h-2 bg-gray-200 rounded-lg cursor-pointer" oninput="actualizarSimulador()">
@@ -236,7 +236,6 @@
             document.getElementById('val-dar').innerText = formatearMoneda(dar);
 
             const pctDeudas = (deudas / ingreso) * 100;
-            const pctDar = (dar / ingreso) * 100;
             const balanceRestante = ingreso - (gastos + deudas + dar);
 
             const cardAlerta = document.getElementById('card-alerta');
@@ -254,8 +253,8 @@
                 iconAlerta.className = "p-2 rounded-xl bg-emerald-100 text-emerald-700 font-bold text-lg";
                 iconAlerta.innerHTML = '<i class="ph ph-check-circle"></i>';
                 txtEstado.innerText = "Nivel 1: Mayordomía en Equilibrio";
-                txtExplicacion.innerText = "Tus finanzas poseen un excelente margen de resiliencia. Cuentas con espacio suficiente para ahorrar, dar con propósito y vivir con total tranquilidad.";
-                txtNeuro.innerHTML = "Un margen financiero saludable reduce drásticamente la inflamación neuronal por estrés y permite activar el pensamiento a largo plazo.";
+                txtExplicacion.innerText = "Según los datos ingresados, tus ingresos superan los gastos y pagos considerados. Puedes revisar cómo destinar ese margen a ahorro, objetivos personales o aportes voluntarios.";
+                txtNeuro.innerHTML = "Contar con un margen en el presupuesto puede facilitar la planificación; la situación y el nivel de estrés varían entre personas.";
                 txtFe.innerHTML = "«Bienaventurado el hombre que teme a Jehová, y en sus mandamientos deleita en gran manera... Bien le va al hombre que tiene misericordia y presta; gobierna sus asuntos con juicio.» (Salmo 112:1, 5)";
 
             } else if (balanceRestante >= 0 && balanceRestante < (ingreso * 0.15) && pctDeudas <= 40) {
@@ -265,8 +264,8 @@
                 iconAlerta.className = "p-2 rounded-xl bg-amber-100 text-amber-700 font-bold text-lg";
                 iconAlerta.innerHTML = '<i class="ph ph-sliders"></i>';
                 txtEstado.innerText = "Nivel 2: Margen Ajustado (Vulnerable)";
-                txtExplicacion.innerText = "Cubres tus gastos básicos al límite, pero posees un margen muy reducido para imprevistos. Cualquier alteración menor genera picos de ansiedad repentina.";
-                txtNeuro.innerHTML = "La ausencia de un colchón de ahorro preventivo activa una secreción sostenida de adrenalina, impidiendo que el cerebro alcance un descanso profundo y reparador.";
+                txtExplicacion.innerText = "Según los datos ingresados, el margen para imprevistos es reducido. Puedes revisar gastos y prioridades, teniendo en cuenta que el simulador no contempla todas las circunstancias.";
+                txtNeuro.innerHTML = "Un margen limitado puede generar preocupación en algunas personas. El simulador no mide respuestas hormonales ni predice efectos en la salud.";
                 txtFe.innerHTML = "«El prudente ve el mal y se esconde, mas los simples pasan y sufren el daño.» (Proverbios 22:3)";
 
             } else if (pctDeudas > 40 && balanceRestante >= 0) {
@@ -276,45 +275,28 @@
                 iconAlerta.className = "p-2 rounded-xl bg-orange-100 text-orange-600 font-bold text-lg";
                 iconAlerta.innerHTML = '<i class="ph ph-credit-card"></i>';
                 txtEstado.innerText = "Nivel 3: Sobrecarga Financiera";
-                txtExplicacion.innerText = "Destinas una porción considerable de tus ingresos al pago de compromisos adquiridos. Estás trabajando fuertemente para cubrir el pasado, lo que genera fatiga mental crónica y desgaste emocional.";
-                txtNeuro.innerHTML = "Cargar con deudas pesadas genera fatiga decisional constante; tu mente desperdicia energía valiosa calculando cómo cubrir compromisos semana a semana.";
+                txtExplicacion.innerText = "Según los datos ingresados, una parte importante de tus ingresos se destina al pago de deudas. Considera revisar opciones de organización o buscar orientación financiera confiable.";
+                txtNeuro.innerHTML = "La preocupación por las deudas puede ser estresante, aunque cada persona y situación es diferente. Este simulador no evalúa efectos emocionales o clínicos.";
                 txtFe.innerHTML = "«El rico se enseñorea de los pobres, y el que toma prestado es siervo del que presta.» (Proverbios 22:7)";
 
             } else {
-                // Nivel 4: Déficit Crítico (Incluye validación reflexiva y cálida del principio de dar)
+                // Nivel 4: Déficit presupuestario
                 estadoActual = "deficit";
                 cardAlerta.className = "p-5 rounded-2xl border transition-all duration-300 bg-red-50 border-red-200";
                 iconAlerta.className = "p-2 rounded-xl bg-red-100 text-red-600 font-bold text-lg";
                 iconAlerta.innerHTML = '<i class="ph ph-warning-octagon"></i>';
-                txtEstado.innerText = "Nivel 4: Déficit Crítico (Alerta Roja)";
+                txtEstado.innerText = "Nivel 4: Déficit presupuestario";
                 
-                if (pctDar < 10) {
-                    txtExplicacion.innerText = "Estás gastando más de lo que ingresas y notas que la generosidad ha quedado en un segundo plano. A veces, en medio de la escasez, nuestro instinto humano es retener por miedo; sin embargo, los tiempos difíciles son una invitación a pausar y reflexionar si estamos honrando a Dios con las primicias de nuestros recursos, recordando que hay más alegría y libertad en dar que en aferrarnos al control.";
-                    txtFe.innerHTML = "«Honra a Jehová con tus bienes, y con las primicias de todos tus frutos; y serán tus graneros llenos con abundancia...» (Proverbios 3:9-10). Recuerda las palabras del Señor Jesús: «Más bienaventurado es dar que recibir» (Hechos 20:35).";
-                } else {
-                    txtExplicacion.innerText = "Estás gastando más de lo que ingresas al mes. Esto mantiene tu sistema nervioso en alerta máxima permanente, agotando tu salud física y mental frente a los compromisos actuales.";
-                    txtFe.innerHTML = "«Los pensamientos del diligente ciertamente tienden a la abundancia; mas todo el que se apresura alocadamente, de cierto va a la pobreza.» (Proverbios 21:5)";
-                }
+                txtExplicacion.innerText = "Tus gastos superan tus ingresos según los datos que ingresaste. Esto no es un juicio sobre tu fe ni tu valor. Revisa primero tus necesidades básicas y las opciones de apoyo disponibles; cualquier decisión de generosidad es personal y debe considerar tus circunstancias.";
+                txtFe.innerHTML = "La Biblia anima a dar con libertad y sin presión: «Cada uno dé como propuso en su corazón: no con tristeza, ni por necesidad» (2 Corintios 9:7). La generosidad no compra el favor de Dios ni garantiza prosperidad material.";
                 
-                txtNeuro.innerHTML = "El cerebro detecta la escasez crónica como una amenaza física para la supervivencia, bloqueando la corteza prefrontal, la creatividad y la resolución lógica de problemas.";
+                txtNeuro.innerHTML = "La preocupación financiera puede aumentar el estrés y hacer más difícil tomar decisiones; su efecto varía entre personas y circunstancias.";
             }
         }
 
         function contactarAsesoria() {
             const numeroWhatsApp = "573114951646"; 
-            let mensaje = "Hola equipo de Renova Institute. Estuve probando el Simulador de Estrés y Mayordomía Financiera. ";
-            
-            if (estadoActual === "deficit") {
-                mensaje += "Me di cuenta de que estoy en déficit crítico y necesito orientación urgente para ordenar mis cuentas y finanzas. ";
-            } else if (estadoActual === "deudas_altas") {
-                mensaje += "El peso de las deudas me está generando sobrecarga mental y quiero aprender a salir de este ciclo. ";
-            } else if (estadoActual === "margen_ajustado") {
-                mensaje += "Mis finanzas están muy justas y quiero aprender principios efectivos de mayordomía. ";
-            } else {
-                mensaje += "Quiero llevar mis finanzas y mi paz mental al siguiente nivel con Renova Institute. ";
-            }
-            
-            mensaje += "Me interesa recibir información sobre sus programas y talleres.";
+            const mensaje = "Hola, equipo de Renova Institute. Probé el simulador financiero y quisiera información general sobre sus recursos. No deseo compartir mis datos ni mi resultado.";
             
             const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
             window.open(url, '_blank');

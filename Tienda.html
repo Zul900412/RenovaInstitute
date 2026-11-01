@@ -7,7 +7,7 @@
     <title>Renova Institute | Bienestar y Neurociencia</title>
     <link rel="icon" type="image/png" sizes="192x192" href="icono-192.png">
     
-    <meta name="description" content="Renova Institute: Tu laboratorio de bienestar integral. Potenciamos tu salud mental, desempeño cognitivo y propósito de vida mediante herramientas neuropsicológicas y coaching personalizado.">
+    <meta name="description" content="Renova Institute ofrece acompañamiento y recursos de bienestar desde una perspectiva profesional y cristiana.">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -32,7 +32,7 @@
 {
   "activo": true,
   "titulo": "¿CÓMO SANAR CUANDO EL TIEMPO NO ARREGLÓ NADA?",
-  "desc": "Descubre un libro que te cambiará la vida para siempre",
+  "desc": "Una lectura para reflexionar y acompañar tu proceso personal.",
   "imagen": "images/Portada Ebook.jpg",
   "link1Nombre": "Amazon",
   "link1Url": "https://a.co/d/089ODs73",
@@ -60,6 +60,7 @@
             <div class="hidden lg:flex items-center gap-6 flex-1 justify-end px-8">
                 <a href="index.html" class="text-sm text-gray-800 hover:text-[#AA5238] font-bold transition-colors">Inicio</a>
                 <a href="#filtros-cat" class="text-sm text-gray-600 hover:text-[#AA5238] font-medium transition-colors">Explorar catálogo</a>
+                <a href="Privacidad.html" class="text-sm text-gray-600 hover:text-[#AA5238] font-medium transition-colors">Privacidad</a>
             </div>
 
             <div class="flex items-center gap-4">
@@ -77,6 +78,7 @@
         <div x-show="mobileMenuOpen" style="display: none;" class="lg:hidden bg-white/95 backdrop-blur-xl border-b absolute w-full shadow-lg p-4 z-[140]">
             <a href="index.html" class="block py-3 border-b text-gray-800 font-bold">Inicio</a>
             <a href="#filtros-cat" @click="mobileMenuOpen = false" class="block py-3 text-gray-800 font-bold">Explorar catálogo</a>
+            <a href="Privacidad.html" @click="mobileMenuOpen = false" class="block py-3 text-gray-800 font-bold">Privacidad</a>
         </div>
     </header>
 
@@ -155,7 +157,7 @@
             <button onclick="toggleCarrito(false)" aria-label="Cerrar carrito" class="p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200"><i class="ph ph-x text-xl"></i></button>
         </div>
         <div id="carrito-items" class="flex-1 overflow-y-auto p-6 custom-scrollbar"></div>
-        <div class="p-6 border-t border-gray-100 bg-[#FDFBFA]"><div class="flex justify-between items-center mb-4 text-lg font-bold text-[#54463C]"><span>Total</span><span id="carrito-total">$ 0</span></div><button onclick="solicitarCarrito()" class="w-full bg-[#54463C] text-white py-3 rounded-xl font-bold hover:bg-[#AA5238] transition flex items-center justify-center gap-2"><i class="ph ph-whatsapp-logo text-xl"></i> Solicitar por WhatsApp</button></div>
+        <div class="p-6 border-t border-gray-100 bg-[#FDFBFA]"><div class="flex justify-between items-center mb-2 text-lg font-bold text-[#54463C]"><span>Total</span><span id="carrito-total">$ 0</span></div><p class="mb-4 text-xs leading-relaxed text-gray-500">Enviar la solicitud por WhatsApp no confirma una reserva ni un pago. Te contactaremos para confirmar disponibilidad.</p><button onclick="solicitarCarrito()" class="w-full bg-[#54463C] text-white py-3 rounded-xl font-bold hover:bg-[#AA5238] transition flex items-center justify-center gap-2"><i class="ph ph-whatsapp-logo text-xl"></i> Solicitar por WhatsApp</button></div>
     </aside>
 
     <!-- BANNER MODAL PARA LA TIENDA (Idéntico al de Index) -->
@@ -229,20 +231,20 @@
           {
                     "id": "I-001",
                     "cat": "Personalizados",
-                    "nombre": "Sana tu pasado y restaura tu identidad",
+                    "nombre": "Acompañamiento para trabajar experiencias del pasado",
                     "grupoEtario": "Jóvenes y Adultos (18-60 años)",
-                    "enfoque": "Sanidad Integral",
+                    "enfoque": "Bienestar emocional",
                     "paraQuien": "Para quienes cargamos heridas del pasado, traumas no resueltos o una identidad fracturada que nos impide vivir en plenitud.",
-                    "aprenderemos": "Aprenderemos a identificar y reprocesar nuestras heridas emocionales desde la neurociencia, integrando principios bíblicos de restauración y perdón para sanar de raíz.",
-                    "lograremos": "Lograremos liberarnos del peso del pasado, sanar nuestras heridas más profundas y reconstruir una identidad firme y segura en Cristo.",
-                    "desc": "Lograr una sanación profunda abordando traumas desde una perspectiva Neurocientífica y Restauración Bíblica.",
+                    "aprenderemos": "Exploraremos formas de comprender y trabajar experiencias difíciles con herramientas psicológicas y principios bíblicos, respetando el ritmo y las necesidades de cada persona.",
+                    "lograremos": "Buscaremos reconocer recursos personales y avanzar en objetivos acordados durante el acompañamiento; cada proceso y resultado es diferente.",
+                    "desc": "Acompañamiento para explorar experiencias difíciles con herramientas psicológicas y una perspectiva cristiana, sin prometer resultados específicos.",
                     "incluye": [
                               "Evaluación inicial",
                               "Plan de plasticidad neuronal",
                               "Técnicas de reprocesamiento",
                               "Ejercicios cotidianos prácticos"
                     ],
-                    "metodologia": ".",
+                    "metodologia": "Sesiones individuales con objetivos acordados, herramientas prácticas y espacio para integrar, si la persona lo desea, principios bíblicos.",
                     "duracion": "12 Sesiones (2 veces por semana)",
                     "modalidad": "Híbrido",
                     "precioFull": 150000,
@@ -286,8 +288,8 @@
                     "nombre": "Del estancamiento a tu propósito",
                     "grupoEtario": "Adultos (25-45 años)",
                     "enfoque": "Propósito de Vida",
-                    "paraQuien": "Para quienes sentimos que estamos estancados, sin dirección clara, y anhelamos descubrir y caminar hacia el propósito que Dios tiene para nuestra vida.",
-                    "aprenderemos": "Aprenderemos a identificar nuestros dones y talentos, articulando una visión de vida clara alineada con nuestros valores y la voluntad de Dios.",
+                    "paraQuien": "Para quienes sienten que están estancados o sin dirección clara y desean reflexionar sobre sus valores, intereses y próximos pasos desde su fe.",
+                    "aprenderemos": "Exploraremos dones, talentos y valores para formular metas personales. El acompañamiento no pretende declarar cuál es la voluntad específica de Dios para cada persona.",
                     "lograremos": "Lograremos superar el estancamiento, definir un plan de vida detallado y avanzar con claridad y determinación hacia nuestro propósito.",
                     "desc": "Articular una visión de vida clara y definida, alineando dones y metas.",
                     "incluye": [
@@ -365,13 +367,13 @@
           {
                     "id": "I-006",
                     "cat": "Personalizados",
-                    "nombre": "Reconciliados: terapia de pareja para sanar y volver a empezar",
+                    "nombre": "Reconciliados: acompañamiento para fortalecer la relación de pareja",
                     "grupoEtario": "Parejas (25-60 años)",
                     "enfoque": "Restauración Relacional",
-                    "paraQuien": "Para las parejas que atravesamos heridas profundas, distanciamiento o crisis, y deseamos sanar y reconstruir nuestra relación sobre una base sólida.",
-                    "aprenderemos": "Aprenderemos a sanar heridas del pasado, restaurar la confianza y re-diseñar nuestro futuro juntos bajo principios bíblicos de perdón y reconciliación.",
-                    "lograremos": "Lograremos una relación resistente a las crisis, con el compromiso reavivado y herramientas reales para seguir creciendo juntos.",
-                    "desc": "Espacio para sanar heridas y re-diseñar el futuro como matrimonio desde el coaching y la neurociencia, bajo principios bíblicos.",
+                    "paraQuien": "Para parejas que atraviesan heridas, distanciamiento o crisis y desean explorar formas de comprender su relación y trabajar objetivos compartidos.",
+                    "aprenderemos": "Exploraremos patrones de comunicación, necesidades individuales y acuerdos posibles, integrando principios bíblicos si la pareja así lo desea.",
+                    "lograremos": "Trabajaremos en comunicación, comprensión mutua y acuerdos; cada pareja y proceso son distintos.",
+                    "desc": "Acompañamiento para que las parejas exploren su relación y trabajen objetivos compartidos desde una perspectiva profesional y cristiana.",
                     "incluye": [
                               "Evaluación de pareja",
                               "Sesiones de terapia conjunta",
@@ -410,7 +412,7 @@
                     "modalidad": "Presencial",
                     "precioFull": 800000,
                     "precio": 640000,
-                    "fechaInicio": "Fecha de inicio: 25 de julio",
+                    "fechaInicio": "Por definir",
                     "horario": "Sábados 11:00 am"
           },
           {
@@ -457,19 +459,19 @@
                     "modalidad": "Virtual",
                     "precioFull": 640000,
                     "precio": 464000,
-                    "fechaInicio": "Fecha de inicio: 27 de julio",
+                    "fechaInicio": "Por definir",
                     "horario": "Lunes y Jueves 5:00 pm"
           },
           {
                     "id": "G-004",
                     "cat": "Grupales",
-                    "nombre": "Encuentra tu propósito y vence la ansiedad",
+                    "nombre": "Encuentra tu propósito y aprende a gestionar la ansiedad",
                     "grupoEtario": "Jóvenes adultos (17-25 años)",
                     "enfoque": "Gestión de Ansiedad",
                     "paraQuien": "Para nosotros, los jóvenes que experimentamos ansiedad, incertidumbre o falta de dirección frente al futuro.",
-                    "aprenderemos": "Integraremos estrategias para gestionar nuestra ansiedad, fortalecer el enfoque, descubrir fortalezas y encontrar dirección desde la voluntad de Dios.",
-                    "lograremos": "Alcanzaremos claridad para tomar decisiones, mayor paz interior y un plan de vida alineado con nuestro propósito.",
-                    "desc": "Acompañamos a los jóvenes a gestionar la ansiedad y encontrar dirección desde la voluntad de Dios.",
+                    "aprenderemos": "Integraremos estrategias para gestionar la ansiedad y fortalecer el enfoque, explorando fortalezas, valores y posibles metas personales desde una perspectiva cristiana.",
+                    "lograremos": "Trabajaremos en claridad para tomar decisiones y en un plan de vida coherente con los valores y propósitos personales.",
+                    "desc": "Ofrecemos herramientas para gestionar la ansiedad y reflexionar sobre el futuro desde una perspectiva cristiana, sin afirmar conocer una voluntad específica de Dios para cada participante.",
                     "incluye": [
                               "Material de apoyo",
                               "Ejercicios prácticos",
@@ -480,7 +482,7 @@
                     "modalidad": "Híbrido",
                     "precioFull": 880000,
                     "precio": 680000,
-                    "fechaInicio": "Fecha de inicio: 27 de julio",
+                    "fechaInicio": "Por definir",
                     "horario": "Lunes 7:00 am (Virtual) - Jueves 7:00 pm (Presencial)"
           },
           {
@@ -527,7 +529,7 @@
                     "modalidad": "Híbrido",
                     "precioFull": 880000,
                     "precio": 680000,
-                    "fechaInicio": "Fecha de inicio: 27 de julio",
+                    "fechaInicio": "Por definir",
                     "horario": "Lunes 7:00 pm (presencial) y Miércoles 7:00 am (virtual)"
           },
           {
@@ -716,7 +718,7 @@
                     "modalidad": "Presencial",
                     "precioFull": 1000000,
                     "precio": 640000,
-                    "fechaInicio": "Fecha de inicio: 25 de julio",
+                    "fechaInicio": "Por definir",
                     "horario": "Sábados 5:00 pm",
                     "visible": false
           },
@@ -855,10 +857,10 @@
           {
                     "id": "P-003",
                     "cat": "Productos",
-                    "nombre": "Masterclass:",
+                    "nombre": "Masterclass: Bienestar mental, neurociencia y fe",
                     "grupoEtario": "Jóvenes y Adultos (18-55 años)",
                     "enfoque": "Bienestar Mental",
-                    "paraQuien": "Para quienes deseamos comprender cómo alcanzar mayor paz mental desde la neurociencia y la fe.",
+                    "paraQuien": "Para quienes desean explorar herramientas de bienestar desde la psicología y la fe, sin prometer un resultado específico.",
                     "desc": "Acceso a la grabación de la conferencia completa.",
                     "incluye": [
                               "Acceso a la grabación completa",
@@ -890,15 +892,15 @@
                     "grupoEtario": "Jóvenes y Adultos (18-55 años)",
                     "enfoque": "Finanzas",
                     "paraQuien": "Para quienes experimentan ansiedad económica y desean evaluar su salud financiera bajo principios de orden, neurociencia y fe.",
-                    "desc": "Ajusta tus ingresos, gastos y deudas para observar en tiempo real cómo impactan tu paz mental, tu mayordomía y tu sistema nervioso.",
+                    "desc": "Organiza ingresos, gastos y deudas en un presupuesto orientativo. No evalúa la salud mental ni el sistema nervioso.",
                     "incluye": [
                               "Simulador interactivo en tiempo real",
-                              "Análisis de impacto neuronal y principios de fe"
+                              "Reflexiones sobre planificación financiera y principios de fe"
                     ],
                     "modalidad": "Descargable",
                     "precio": 0,
-                    "aprenderemos": "A identificar cómo la presión financiera activa alertas de supervivencia en el cerebro y cómo planificar con mayor sabiduría.",
-                    "lograremos": "Obtener claridad sobre el margen real de tranquilidad, reducir la fatiga por decisiones económicas y estructurar un plan de mayordomía.",
+                    "aprenderemos": "A revisar ingresos, gastos y deudas para identificar posibles ajustes de presupuesto.",
+                    "lograremos": "Obtener una vista orientativa de los datos ingresados y considerar próximos pasos según las circunstancias personales.",
                     "metodologia": "Simulador interactivo con controles deslizantes dinámicos, selector de moneda (COP, USD, EUR) y análisis de semáforo financiero."
           },
           {
@@ -938,21 +940,21 @@
           {
                     "id": "R-005",
                     "cat": "Gratuitos",
-                    "nombre": "Test de Bienestar Emocional",
+                    "nombre": "Autochequeo orientativo de bienestar emocional",
                     "grupoEtario": "Jóvenes y Adultos (18-55 años)",
                     "enfoque": "Evaluación",
-                    "paraQuien": "Para quienes sienten sobrecarga mental, estrés cotidiano o desean evaluar su nivel de carga emocional actual de forma objetiva.",
-                    "desc": "Descubre el estado de tu sistema nervioso y tu nivel de desgaste mental actual mediante una evaluación interactiva y consciente.",
+                    "paraQuien": "Para quienes desean reflexionar sobre su carga emocional y el estrés cotidiano.",
+                    "desc": "Autochequeo orientativo para reflexionar sobre la carga emocional. No es un diagnóstico, no mide hormonas ni sustituye una evaluación profesional.",
                     "incluye": [
                               "Test interactivo de 10 preguntas",
-                              "Diagnóstico de carga emocional en vivo",
-                              "Estrategias y recomendaciones personalizadas"
+                              "Puntaje orientativo basado en las respuestas",
+                              "Ideas generales de autocuidado"
                     ],
                     "modalidad": "Descargable",
                     "precio": 0,
-                    "aprenderemos": "A identificar los signos tempranos de saturación emocional y los factores que influyen en nuestra tensión nerviosa diaria.",
-                    "lograremos": "Obtener un diagnóstico claro del momento actual y recibir orientaciones prácticas y humanas para recuperar el equilibrio.",
-                    "metodologia": "Cuestionario estructurado de 10 preguntas con retroalimentación inmediata, puntaje ponderado y recomendaciones a medida."
+                    "aprenderemos": "A observar respuestas personales sobre carga emocional y estrés cotidiano.",
+                    "lograremos": "Obtener un punto de partida para la reflexión personal; el cuestionario no determina una condición de salud.",
+                    "metodologia": "Cuestionario orientativo de 10 preguntas con retroalimentación general. No es una prueba clínica."
           },
           {
                     "id": "R-006",
@@ -961,11 +963,11 @@
                     "grupoEtario": "Jóvenes y Adultos (18-55 años)",
                     "enfoque": "Bienestar Mental",
                     "paraQuien": "Para quienes terminan el día con la mente saturada y buscan un ritual nocturno de escritura para liberar tensiones.",
-                    "desc": "Un formato guiado para soltar las cargas del día, procesar emociones y preparar tu mente para un descanso profundo y reparador.",
+                    "desc": "Un formato de escritura guiada para reflexionar sobre el día y prepararte para descansar, sin prometer efectos específicos.",
                     "incluye": [
                               "Formato interactivo de 5 preguntas de descompresión",
                               "Opción de exportación e impresión en PDF de una página",
-                              "Espacio para notas de gratitud y promesas"
+                              "Espacio para notas de gratitud y pasajes bíblicos"
                     ],
                     "modalidad": "Descargable",
                     "precio": 0,
@@ -980,7 +982,7 @@
                     "grupoEtario": "Jóvenes y Adultos (18-55 años)",
                     "enfoque": "Regulación",
                     "paraQuien": "Para quienes experimentan picos de ansiedad, estrés agudo o dificultad para dormir y necesitan herramientas prácticas de regulación.",
-                    "desc": "Seis técnicas científicamente probadas con guías visuales y animador interactivo para regular tu sistema nervioso en momentos de crisis.",
+                    "desc": "Seis pautas de respiración con guía visual para probar a un ritmo cómodo. No son un tratamiento para crisis ni garantizan un efecto específico.",
                     "incluye": [
                               "6 técnicas de respiración reguladora",
                               "Animador visual interactivo de inhalación y exhalación",
@@ -989,7 +991,7 @@
                     "modalidad": "App para descargar",
                     "precio": 0,
                     "aprenderemos": "El funcionamiento y la aplicación correcta de métodos como la respiración 4-7-8, caja, suspiro fisiológico y coherente.",
-                    "lograremos": "Frenar la activación del sistema nervioso simpático, disminuir la taquicardia por estrés y recuperar el control corporal en minutos.",
+                    "lograremos": "Practicar pautas de respiración como pausa personal; cada persona puede responder de forma diferente.",
                     "metodologia": "Selector de 6 técnicas especializadas con fichas descriptivas y un círculo animado táctil de guía rítmica."
           },
           {
@@ -1048,16 +1050,16 @@
                     "nombre": "Bitácora Bíblica",
                     "grupoEtario": "Jóvenes y Adultos (18-55 años)",
                     "enfoque": "Espiritualidad",
-                    "paraQuien": "Para quienes desean profundizar en su tiempo devocional, organizar sus notas de estudio y conservar las promesas de Dios.",
-                    "desc": "Una bitácora privada y segura para registrar tus lecturas, aprendizajes y promesas bíblicas diarias en un solo lugar.",
+                    "paraQuien": "Para quienes desean profundizar en su tiempo devocional y organizar sus notas de estudio bíblico.",
+                    "desc": "Una bitácora que guarda localmente lecturas y aprendizajes bíblicos. Los registros pueden ser vistos por otras personas con acceso al mismo dispositivo o navegador.",
                     "incluye": [
                               "Bitácora interactiva de estudio diario",
-                              "Módulo de almacenamiento de promesas bíblicas"
+                              "Espacio para guardar pasajes bíblicos y sus referencias"
                     ],
                     "modalidad": "App para descargar",
                     "precio": 0,
                     "aprenderemos": "A meditar de forma estructurada en las Escrituras, conectar la lectura diaria con reflexiones personales y mantener un registro devocional constante.",
-                    "lograremos": "Consolidar un hábito de lectura bíblica significativo, ordenar pensamientos espirituales y crear un archivo personal de promesas para meditar en cualquier momento.",
+                    "lograremos": "Organizar lecturas y reflexiones personales; el recurso no presenta versículos como promesas individuales de resultados específicos.",
                     "metodologia": "Registro diario guiado por pasajes, capítulos estudiados y notas de aprendizaje con respaldo local privado en tu dispositivo."
           },
           {
@@ -1086,9 +1088,9 @@
                     "grupoEtario": "Jóvenes y Adultos (18-55 años)",
                     "enfoque": "Terapia Individual",
                     "paraQuien": "Para quienes necesitan trabajar un objetivo focalizado o un reto emocional concreto que requiere constancia a corto plazo.",
-                    "desc": "Proceso estructurado de 5 sesiones (45-60 min c/u), comenzando con una fase de diagnóstico para abordar objetivos específicos de bienestar.",
+                    "desc": "Proceso de 5 sesiones (45-60 min cada una), con una valoración inicial y objetivos acordados para el acompañamiento.",
                     "incluye": [
-                              "Sesión inicial de diagnóstico y estructuración del plan",
+                              "Valoración inicial y definición de objetivos",
                               "4 sesiones individuales de seguimiento (45-60 min)",
                               "Herramientas y ejercicios prácticos entre sesiones"
                     ],
@@ -1101,19 +1103,19 @@
                     },
                     "precioFull": 150000,
                     "aprenderemos": "A reconocer patrones de conducta, adquirir herramientas prácticas de regulación emocional y avanzar hacia metas terapéuticas claras.",
-                    "lograremos": "Superar un obstáculo puntual, estabilizar el sistema nervioso y desarrollar estrategias de afrontamiento sostenibles.",
-                    "metodologia": "Incluye sesión inicial de diagnóstico y 4 sesiones de seguimiento clínico individualizado (de 45 a 60 minutos por sesión)."
+                    "lograremos": "Trabajaremos un objetivo acordado y exploraremos estrategias de afrontamiento; los avances dependen de cada proceso.",
+                    "metodologia": "Incluye una valoración inicial y 4 sesiones de seguimiento individualizado (de 45 a 60 minutos por sesión)."
           },
           {
                     "id": "S-004",
                     "cat": "Servicios",
-                    "nombre": "Pack 10 Sesiones Personalizadas (Transformación Profunda)",
+                    "nombre": "Pack de 10 sesiones personalizadas",
                     "grupoEtario": "Jóvenes y Adultos (18-55 años)",
                     "enfoque": "Terapia Individual",
-                    "paraQuien": "Para quienes buscan un proceso de transformación más profundo, trabajar patrones recurrentes o superar episodios de ansiedad y estrés crónico.",
-                    "desc": "Proceso terapéutico profundo de 10 sesiones (45-60 min c/u), precedido por un diagnóstico integral para sanar raíces y consolidar cambios.",
+                    "paraQuien": "Para quienes desean trabajar patrones recurrentes o desarrollar herramientas para afrontar ansiedad y estrés, junto con apoyo profesional.",
+                    "desc": "Proceso de acompañamiento de 10 sesiones (45-60 min cada una), con una valoración inicial y objetivos acordados con la persona.",
                     "incluye": [
-                              "Diagnóstico integral y ruta terapéutica personalizada",
+                              "Valoración inicial y objetivos acordados",
                               "9 sesiones de psicoterapia individual (45-60 min)",
                               "Seguimiento continuo de objetivos y progreso emocional"
                     ],
@@ -1125,9 +1127,9 @@
                               "texto": "Horario personalizado según disponibilidad"
                     },
                     "precioFull": 150000,
-                    "aprenderemos": "A desentrañar creencias limitantes, reestructurar respuestas emocionales y consolidar hábitos saludables a mediano plazo.",
-                    "lograremos": "Una mejora significativa en la estabilidad emocional, herramientas de autogestión consolidadas y una profunda reestructuración personal.",
-                    "metodologia": "Evaluación diagnóstica inicial seguida de 9 sesiones de psicoterapia clínica y acompañamiento estructurado (de 45 a 60 minutos)."
+                    "aprenderemos": "Exploraremos patrones de pensamiento y respuestas emocionales, y practicaremos herramientas de autogestión.",
+                    "lograremos": "Trabajaremos objetivos acordados y recursos personales; los avances y tiempos varían en cada proceso.",
+                    "metodologia": "Valoración inicial seguida de sesiones de psicoterapia y acompañamiento estructurado (de 45 a 60 minutos)."
           },
           {
                     "id": "S-005",
@@ -1136,10 +1138,10 @@
                     "grupoEtario": "Jóvenes y Adultos (18-55 años)",
                     "enfoque": "Terapia Individual",
                     "paraQuien": "Para quienes requieren un proceso de sanidad emocional, reestructuración profunda de vida o acompañamiento en crisis complejas.",
-                    "desc": "Programa de restauración integral y acompañamiento a largo plazo (45-60 min por sesión), con diagnóstico inicial y plan a la medida.",
+                    "desc": "Programa de acompañamiento a largo plazo (45-60 min por sesión), con una valoración inicial y un plan acordado según las necesidades de la persona.",
                     "incluye": [
-                              "Sesión exhaustiva de diagnóstico y diseño de plan maestro",
-                              "14 o más sesiones de psicoterapia profunda (45-60 min)",
+                              "Valoración inicial y definición de objetivos",
+                              "14 o más sesiones de psicoterapia (45-60 min)",
                               "Acompañamiento prioritario y plan de prevención de recaídas"
                     ],
                     "modalidad": "Híbrido",
@@ -1151,9 +1153,9 @@
                               "texto": "Horario personalizado según disponibilidad"
                     },
                     "precioFull": 150000,
-                    "aprenderemos": "A integrar de forma definitiva recursos de neurociencia y fe, transformando la historia personal y los vínculos relacionales.",
-                    "lograremos": "Sanación profunda de heridas, autonomía emocional duradera y una transformación integral en la calidad de vida.",
-                    "metodologia": "Proceso clínico extendido que inicia con un diagnóstico riguroso y se despliega en sesiones periódicas de 45 a 60 minutos."
+                    "aprenderemos": "A explorar recursos de bienestar y, si la persona lo desea, integrar su fe en el proceso.",
+                    "lograremos": "Trabajaremos recursos de autogestión y objetivos de bienestar; los avances y tiempos varían en cada proceso.",
+                    "metodologia": "Proceso clínico con valoración inicial y sesiones periódicas de 45 a 60 minutos."
           },
           {
                     "id": "S-006",
@@ -1186,9 +1188,9 @@
                     "grupoEtario": "Jóvenes y Adultos (25-55 años)",
                     "enfoque": "Terapia Pareja",
                     "paraQuien": "Para parejas que atraviesan crisis de comunicación, distancia emocional, conflictos recurrentes o desean sanar bases relacionales.",
-                    "desc": "Proceso terapéutico profundo de 10 sesiones (45-60 min c/u) que incluye diagnóstico en pareja, espacios individuales 1:1 y herramientas de conexión.",
+                    "desc": "Proceso de acompañamiento de 10 sesiones (45-60 min cada una), con valoración inicial, espacios individuales y objetivos acordados en pareja.",
                     "incluye": [
-                              "Sesión inicial de diagnóstico en pareja",
+                              "Valoración inicial de la dinámica de pareja",
                               "Sesión individual 1:1 con el hombre y sesión individual 1:1 con la mujer",
                               "7 sesiones de psicoterapia de pareja conjuntas (45-60 min)",
                               "Ejercicios y guías prácticas para la relación entre sesiones"
@@ -1201,23 +1203,23 @@
                               "texto": "Horario personalizado según disponibilidad"
                     },
                     "precioFull": 200000,
-                    "aprenderemos": "A identificar los patrones ocultos de discusión, comprender las necesidades individuales de cada uno y restaurar el vínculo seguro.",
-                    "lograremos": "Reducir la escalada de conflictos, mejorar la empatía mutua y establecer acuerdos de convivencia y afecto sólidos.",
-                    "metodologia": "Incluye sesión inicial de diagnóstico en pareja, sesiones individuales 1:1 (una con el hombre y una con la mujer) y sesiones conjuntas de seguimiento (45 a 60 min c/u)."
+                    "aprenderemos": "Exploraremos patrones de comunicación, necesidades individuales y opciones para fortalecer la relación.",
+                    "lograremos": "Trabajaremos en comunicación y acuerdos posibles; cada pareja y proceso son distintos.",
+                    "metodologia": "Incluye una valoración inicial, sesiones individuales y sesiones conjuntas de seguimiento (45 a 60 minutos cada una)."
           },
           {
                     "id": "S-008",
                     "cat": "Servicios",
-                    "nombre": "Pack 15 + Sesiones Pareja (Renovación con Propósito)",
+                    "nombre": "Acompañamiento extendido para parejas",
                     "grupoEtario": "Jóvenes y Adultos (25-55 años)",
                     "enfoque": "Terapia Pareja",
-                    "paraQuien": "Para parejas en momentos de crisis complejas, procesos de reconstrucción por ejemplo después de infidelidades o estancamiento prolongado.",
-                    "desc": "Programa integral de 15 sesiones (45-60 min c/u) diseñado para parejas que necesitan un proceso exhaustivo de reconciliación y reestructuración.",
+                    "paraQuien": "Para parejas que desean explorar objetivos de acompañamiento en momentos complejos o de conflicto persistente.",
+                    "desc": "Programa de 15 sesiones (45-60 min cada una), con valoración inicial y objetivos acordados según las necesidades de la pareja.",
                     "incluye": [
-                              "Sesión inicial exhaustiva de diagnóstico en pareja",
+                              "Valoración inicial de la relación y definición de objetivos",
                               "Espacios 1:1 individuales (hombre y mujer)",
                               "12 sesiones profundas de terapia de pareja conjuntas (45-60 min)",
-                              "Plan maestro de reestructuración vincular y prevención de recaídas"
+                              "Herramientas para continuar trabajando los objetivos acordados"
                     ],
                     "modalidad": "Híbrido",
                     "precio": 130000,
@@ -1228,9 +1230,9 @@
                               "texto": "Horario personalizado según disponibilidad"
                     },
                     "precioFull": 180000,
-                    "aprenderemos": "A sanar heridas profundas del pasado que afectan el presente conyugal, perdonar con herramientas clínicas y alinear el proyecto de vida en común.",
-                    "lograremos": "Una transformación profunda en la dinámica afectiva, madurez relacional y una comunicación transparente y duradera.",
-                    "metodologia": "Diagnóstico riguroso en pareja, espacios individuales 1:1 (hombre y mujer) para historia clínica y un ciclo extendido de sesiones conjuntas (45 a 60 minutos)."
+                    "aprenderemos": "Exploraremos experiencias, comunicación y acuerdos posibles; la reconciliación no se presupone ni se garantiza.",
+                    "lograremos": "Trabajaremos objetivos de comunicación y relación acordados por la pareja; cada proceso es diferente.",
+                    "metodologia": "Valoración inicial, espacios individuales para conocer las necesidades de cada persona y sesiones conjuntas (45 a 60 minutos)."
           },
           {
                     "id": "P-005",
@@ -1538,7 +1540,7 @@
                         
                         ${p.aprenderemos ? `<div><h4 class="text-lg font-bold text-gray-800 mb-2 flex items-center gap-2"><i class="ph ph-brain text-[#AA5238]"></i> ¿Qué aprenderemos?</h4><p class="text-gray-600 leading-relaxed">${p.aprenderemos}</p></div>` : ''}
                         
-                        ${p.lograremos ? `<div><h4 class="text-lg font-bold text-gray-800 mb-2 flex items-center gap-2"><i class="ph ph-target text-[#AA5238]"></i> ¿Qué lograremos?</h4><p class="text-gray-600 leading-relaxed">${p.lograremos}</p></div>` : ''}
+                        ${p.lograremos ? `<div><h4 class="text-lg font-bold text-gray-800 mb-2 flex items-center gap-2"><i class="ph ph-target text-[#AA5238]"></i> Objetivos posibles</h4><p class="text-gray-600 leading-relaxed">${p.lograremos}</p><p class="mt-2 text-xs leading-relaxed text-gray-500">Son objetivos orientativos, no resultados garantizados. Cada proceso depende de la persona y sus circunstancias.</p></div>` : ''}
                         
                         ${p.metodologia ? `<div><h4 class="text-lg font-bold text-gray-800 mb-2 flex items-center gap-2"><i class="ph ph-gear text-[#AA5238]"></i> Metodología</h4><p class="text-gray-600 leading-relaxed">${p.metodologia}</p></div>` : ''}
                         
@@ -1648,7 +1650,7 @@
         function solicitarCarrito() {
             if (!carrito.length) return alert('Agrega al menos un producto al carrito.');
             const nombres = carrito.map(producto => `${producto.nombre}${producto.id ? ` (Código: ${producto.id})` : ''}`).join(', ');
-            const url = `https://wa.me/573114951646?text=${encodeURIComponent(`Hola, me interesan: ${nombres}.`)}`;
+            const url = `https://wa.me/573114951646?text=${encodeURIComponent(`Hola, me interesan: ${nombres}. Esta solicitud no confirma una reserva ni un pago.`)}`;
             window.open(url, '_blank');
         }
 

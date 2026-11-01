@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bitácora Bíblica | Renova Institute</title>
-    <meta name="description" content="Una bitácora privada para registrar tus lecturas, aprendizajes y promesas bíblicas.">
+    <meta name="description" content="Una bitácora para registrar lecturas y aprendizajes bíblicos, guardados localmente en tu dispositivo.">
     <meta name="theme-color" content="#8c8660">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -94,6 +94,10 @@
                 <div class="w-10 h-10 rounded-2xl bg-[#8C8660]/10 flex items-center justify-center text-[#8C8660] shadow-sm">
                     <i class="fa-solid fa-brain text-lg"></i>
                 </div>
+                <div class="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <p class="text-xs text-[#756b64]">Para borrar tus registros de este navegador, usa el botón. Eliminar los datos del sitio en el navegador también los borra.</p>
+                    <button type="button" onclick="app.clearLocalData()" class="shrink-0 rounded-xl border border-red-200 px-4 py-2 text-xs font-bold text-red-700 transition hover:bg-red-50">Borrar mis datos locales</button>
+                </div>
                 <div>
                     <h1 class="font-bold text-[#8C8660] text-sm tracking-wider leading-tight">RENOVA INSTITUTE</h1>
                     <p class="text-[9px] text-[#54463C] italic font-medium">Centro de salud mental cristiano</p>
@@ -107,8 +111,8 @@
                 <button id="installAppBtn" onclick="app.installApp()" class="hidden inline-flex items-center px-3 py-2 border border-[#8C8660]/30 text-xs font-semibold rounded-xl text-[#8C8660] bg-[#8C8660]/10 hover:bg-[#8C8660]/20 transition" title="Instalar bitácora">
                     <i class="fa-solid fa-mobile-screen-button mr-1.5"></i> Instalar
                 </button>
-                <button aria-label="Ver promesas guardadas" onclick="app.openPromisesModal()" class="inline-flex items-center px-3.5 py-2 border border-[#8C8660]/30 text-xs font-semibold rounded-xl text-[#706B4C] bg-[#8C8660]/10 hover:bg-[#8C8660]/20 transition shadow-xs cursor-pointer">
-                    <i class="fa-solid fa-heart mr-1.5 text-[#8C8660]"></i> Promesas <span id="promisesBadge" class="ml-1.5 bg-[#8C8660] text-white px-1.5 py-0.5 rounded-full text-[10px]">0</span>
+                <button aria-label="Ver pasajes bíblicos guardados" onclick="app.openPromisesModal()" class="inline-flex items-center px-3.5 py-2 border border-[#8C8660]/30 text-xs font-semibold rounded-xl text-[#706B4C] bg-[#8C8660]/10 hover:bg-[#8C8660]/20 transition shadow-xs cursor-pointer">
+                    <i class="fa-solid fa-heart mr-1.5 text-[#8C8660]"></i> Pasajes <span id="promisesBadge" class="ml-1.5 bg-[#8C8660] text-white px-1.5 py-0.5 rounded-full text-[10px]">0</span>
                 </button>
                 <button onclick="app.exportData()" class="inline-flex items-center px-3 py-1.5 border border-slate-200 text-xs font-medium rounded-lg text-slate-700 bg-white hover:bg-slate-50 transition shadow-xs cursor-pointer" title="Respaldar datos">
                     <i class="fa-solid fa-download mr-1.5 text-slate-400"></i> Exportar
@@ -125,9 +129,9 @@
         <div class="bg-white/90 rounded-2xl border border-[#d9d4bd] shadow-sm p-5 sm:p-6">
             <p class="text-[10px] uppercase tracking-widest text-[#8C8660] font-bold mb-2">Cómo usar esta bitácora</p>
             <h2 class="text-2xl font-bold text-[#54463C] mb-2">Lee, escucha y guarda lo que Dios pone en tu corazón</h2>
-            <p class="text-sm text-[#756b64] leading-relaxed max-w-4xl">Registra la fecha, los capítulos que estudiaste y el aprendizaje principal de tu tiempo devocional. También puedes guardar las promesas bíblicas que Dios te va dando para volver a ellas cuando necesites recordar su fidelidad. Escribir lo aprendido te ayuda a ordenar tus pensamientos, reconocer procesos y convertir una lectura en una práctica de meditación y obediencia.</p>
+            <p class="text-sm text-[#756b64] leading-relaxed max-w-4xl">Registra la fecha, los capítulos que estudiaste y el aprendizaje principal de tu tiempo devocional. También puedes guardar pasajes que te recuerden la fidelidad de Dios, considerando su contexto y sus destinatarios. Escribir lo aprendido te ayuda a ordenar tus pensamientos y convertir una lectura en una práctica de meditación y obediencia.</p>
             <div class="mt-4 grid gap-3 sm:grid-cols-2">
-                <div class="flex gap-2 text-xs text-[#756b64]"><i class="fa-solid fa-lock mt-0.5 text-[#8C8660]"></i><span>Tus registros se guardan solamente en el dispositivo donde usas esta bitácora.</span></div>
+                <div class="flex gap-2 text-xs text-[#756b64]"><i class="fa-solid fa-lock mt-0.5 text-[#8C8660]"></i><span>Tus registros se guardan en este navegador y no se envían a nuestros servidores. Cualquier persona con acceso a este dispositivo o navegador podría verlos.</span></div>
                 <div class="flex gap-2 text-xs text-[#756b64]"><i class="fa-solid fa-download mt-0.5 text-[#8C8660]"></i><span>Usa <strong>Exportar</strong> para descargar un archivo de respaldo antes de cambiar de dispositivo o formatearlo; luego podrás usar <strong>Importar</strong> para recuperar tus registros.</span></div>
             </div>
         </div>
@@ -143,7 +147,7 @@
                     <i class="fa-solid fa-pen-to-square mr-1"></i> Estudio Diario
                 </button>
                 <button type="button" id="tabPromiseBtn" onclick="app.switchTab('promise')" class="flex-1 py-2 text-xs font-semibold rounded-lg transition text-slate-600 hover:text-rose-700 cursor-pointer">
-                    <i class="fa-solid fa-heart mr-1"></i> Guardar Promesa
+                    <i class="fa-solid fa-heart mr-1"></i> Guardar pasaje
                 </button>
             </div>
 
@@ -193,7 +197,7 @@
             <form id="promiseForm" onsubmit="app.handlePromiseSubmit(event)" class="space-y-4 hidden">
                 <div class="flex items-center justify-between pb-2 border-b border-rose-100">
                     <h2 id="promiseFormTitle" class="font-semibold text-slate-900 text-sm flex items-center">
-                        <i class="fa-solid fa-heart text-rose-500 mr-2"></i> Guardar Promesa Bíblica
+                        <i class="fa-solid fa-heart text-rose-500 mr-2"></i> Guardar pasaje bíblico
                     </h2>
                     <button id="cancelPromiseEditBtn" type="button" onclick="app.resetPromiseForm()" class="hidden text-xs text-rose-600 font-medium hover:underline cursor-pointer">
                         Cancelar
@@ -227,16 +231,16 @@
 
                 <div>
                     <div class="flex items-center justify-between mb-1">
-                        <label class="block text-[11px] font-medium text-slate-500">Texto de la Promesa (Versión Reina-Valera)</label>
+                        <label class="block text-[11px] font-medium text-slate-500">Texto del pasaje (Versión Reina-Valera)</label>
                     </div>
-                    <textarea id="promiseText" required rows="3" placeholder="Escribe o edita aquí el texto de tu promesa..."
+                    <textarea id="promiseText" required rows="3" placeholder="Escribe o edita aquí el texto bíblico..."
                         class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition"></textarea>
-                    <p class="text-[10px] text-slate-400 mt-1">Escribe la promesa que recibiste en tu tiempo con Dios para conservarla y volver a ella.</p>
+                    <p class="text-[10px] text-slate-400 mt-1">Registra el pasaje y su referencia en contexto. Puedes anotar tus reflexiones en el estudio diario; guardar un versículo no implica una promesa personal de un resultado específico.</p>
                 </div>
 
                 <div class="pt-2">
                     <button type="submit" id="submitPromiseBtn" class="w-full bg-gradient-to-r from-rose-600 to-pink-500 hover:from-rose-700 hover:to-pink-600 text-white font-medium py-2.5 px-4 rounded-xl text-sm transition shadow-md shadow-rose-600/20 flex items-center justify-center cursor-pointer">
-                        <i class="fa-solid fa-heart mr-2"></i> Guardar Promesa
+                        <i class="fa-solid fa-heart mr-2"></i> Guardar pasaje
                     </button>
                 </div>
             </form>
@@ -303,7 +307,7 @@
                         <i class="fa-solid fa-heart"></i>
                     </div>
                     <div>
-                        <h3 class="font-bold text-base">Mis Promesas Bíblicas Guardadas</h3>
+                        <h3 class="font-bold text-base">Mis pasajes bíblicos guardados</h3>
                         <p class="text-xs text-rose-100">Versículos seleccionados para meditación diaria</p>
                     </div>
                 </div>
@@ -317,7 +321,7 @@
             </div>
             <!-- Modal Footer -->
             <div class="px-6 py-3 bg-white border-t border-slate-100 flex justify-between items-center">
-                <span id="modalPromisesCount" class="text-xs text-slate-500">0 promesas guardadas</span>
+                <span id="modalPromisesCount" class="text-xs text-slate-500">0 pasajes guardados</span>
                 <button onclick="app.closePromisesModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition cursor-pointer">
                     Cerrar
                 </button>
@@ -622,7 +626,7 @@
                     const index = this.promises.findIndex(p => p.id === this.editingPromiseId);
                     if (index !== -1) {
                         this.promises[index] = { id: this.editingPromiseId, date, book, verse, text };
-                        this.showToast("Promesa actualizada correctamente");
+                        this.showToast("Pasaje actualizado correctamente");
                     }
                     this.resetPromiseForm();
                 } else {
@@ -634,7 +638,7 @@
                         text
                     };
                     this.promises.unshift(newPromise);
-                    this.showToast("¡Promesa bíblica guardada con éxito!");
+                    this.showToast("¡Pasaje bíblico guardado con éxito!");
                     this.resetPromiseForm();
                     this.setupDefaultDates();
                 }
@@ -675,9 +679,9 @@
                 document.getElementById('promiseVerse').value = promise.verse;
                 document.getElementById('promiseText').value = promise.text;
 
-                document.getElementById('promiseFormTitle').innerHTML = `<i class="fa-solid fa-pen-to-square text-rose-500 mr-2"></i> Editando Promesa`;
+                document.getElementById('promiseFormTitle').innerHTML = `<i class="fa-solid fa-pen-to-square text-rose-500 mr-2"></i> Editando pasaje`;
                 document.getElementById('cancelPromiseEditBtn').classList.remove('hidden');
-                document.getElementById('submitPromiseBtn').innerHTML = `<i class="fa-solid fa-check mr-2"></i> Actualizar Promesa`;
+                document.getElementById('submitPromiseBtn').innerHTML = `<i class="fa-solid fa-check mr-2"></i> Actualizar pasaje`;
 
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
@@ -692,12 +696,19 @@
             }
 
             deletePromiseEntry(id) {
-                if (window.confirm('¿Estás seguro de eliminar esta promesa guardada?')) {
+                if (window.confirm('¿Estás seguro de eliminar este pasaje guardado?')) {
                     this.promises = this.promises.filter(p => String(p.id) !== String(id));
                     this.saveToStorage();
                     this.renderEntries();
-                    this.showToast("Promesa eliminada");
+                    this.showToast("Pasaje eliminado");
                 }
+            }
+
+            clearLocalData() {
+                if (!window.confirm('Esto eliminará del navegador todos tus registros de estudio y pasajes guardados. ¿Deseas continuar?')) return;
+                localStorage.removeItem('bible_study_entries');
+                localStorage.removeItem('bible_study_promises');
+                window.location.reload();
             }
 
             resetStudyForm() {
@@ -716,9 +727,9 @@
             resetPromiseForm() {
                 this.editingPromiseId = null;
                 document.getElementById('promiseForm').reset();
-                document.getElementById('promiseFormTitle').innerHTML = `<i class="fa-solid fa-heart text-rose-500 mr-2"></i> Guardar Promesa Bíblica`;
+                document.getElementById('promiseFormTitle').innerHTML = `<i class="fa-solid fa-heart text-rose-500 mr-2"></i> Guardar pasaje bíblico`;
                 document.getElementById('cancelPromiseEditBtn').classList.add('hidden');
-                document.getElementById('submitPromiseBtn').innerHTML = `<i class="fa-solid fa-heart mr-2"></i> Guardar Promesa`;
+                document.getElementById('submitPromiseBtn').innerHTML = `<i class="fa-solid fa-heart mr-2"></i> Guardar pasaje`;
                 this.setupDefaultDates();
             }
 
@@ -777,7 +788,7 @@
                 }
 
                 const totalItems = filteredEntries.length + filteredPromises.length;
-                if(countLabel) countLabel.textContent = `Mostrando ${totalItems} elementos (${filteredEntries.length} estudios, ${filteredPromises.length} promesas)`;
+                if(countLabel) countLabel.textContent = `Mostrando ${totalItems} elementos (${filteredEntries.length} estudios, ${filteredPromises.length} pasajes)`;
 
                 if (totalItems === 0) {
                     container.innerHTML = `
@@ -786,7 +797,7 @@
                                 <i class="fa-solid fa-search"></i>
                             </div>
                             <h3 class="font-semibold text-slate-800 text-base">No se encontraron registros</h3>
-                            <p class="text-xs text-slate-500 max-w-sm mx-auto">Prueba buscando con otros términos o registra tu estudio diario o promesa bíblica usando el formulario de la izquierda.</p>
+                            <p class="text-xs text-slate-500 max-w-sm mx-auto">Prueba buscando con otros términos o registra tu estudio diario o un pasaje bíblico usando el formulario de la izquierda.</p>
                         </div>
                     `;
                     return;
@@ -805,15 +816,15 @@
                                         <i class="fa-solid fa-heart"></i>
                                     </span>
                                     <div>
-                                        <h3 class="font-bold text-sm">Promesa Bíblica</h3>
+                                        <h3 class="font-bold text-sm">Pasaje bíblico</h3>
                                         <p class="text-[11px] text-rose-100 capitalize">${readableDate}</p>
                                     </div>
                                 </div>
                                 <div class="flex items-center space-x-1">
-                                    <button type="button" onclick="app.editPromiseEntry('${p.id}')" title="Editar promesa" class="p-1.5 text-white/80 hover:text-white hover:bg-white/15 rounded-lg transition cursor-pointer">
+                                    <button type="button" onclick="app.editPromiseEntry('${p.id}')" title="Editar pasaje" class="p-1.5 text-white/80 hover:text-white hover:bg-white/15 rounded-lg transition cursor-pointer">
                                         <i class="fa-solid fa-pen text-xs"></i>
                                     </button>
-                                    <button type="button" onclick="app.deletePromiseEntry('${p.id}')" title="Eliminar promesa" class="p-1.5 text-white/80 hover:text-white hover:bg-white/15 rounded-lg transition cursor-pointer">
+                                    <button type="button" onclick="app.deletePromiseEntry('${p.id}')" title="Eliminar pasaje" class="p-1.5 text-white/80 hover:text-white hover:bg-white/15 rounded-lg transition cursor-pointer">
                                         <i class="fa-solid fa-trash-can text-xs"></i>
                                     </button>
                                 </div>
@@ -1112,7 +1123,7 @@
                 const content = document.getElementById('promisesModalContent');
                 const countBadge = document.getElementById('modalPromisesCount');
 
-                if(countBadge) countBadge.textContent = `${this.promises.length} promesas guardadas en total`;
+                if(countBadge) countBadge.textContent = `${this.promises.length} pasajes guardados en total`;
 
                 if (this.promises.length === 0) {
                     content.innerHTML = `
@@ -1120,8 +1131,8 @@
                             <div class="w-12 h-12 bg-rose-100 text-rose-500 rounded-full flex items-center justify-center mx-auto text-xl">
                                 <i class="fa-solid fa-heart-crack"></i>
                             </div>
-                            <h4 class="font-semibold text-slate-800 text-sm">Aún no hay promesas guardadas</h4>
-                            <p class="text-xs text-slate-500 max-w-xs mx-auto">Selecciona la pestaña "Guardar Promesa" en el formulario de la izquierda para registrar tus versículos promesa favoritos.</p>
+                            <h4 class="font-semibold text-slate-800 text-sm">Aún no hay pasajes guardados</h4>
+                            <p class="text-xs text-slate-500 max-w-xs mx-auto">Selecciona la pestaña "Guardar pasaje" en el formulario de la izquierda para registrar versículos que quieras estudiar o recordar.</p>
                         </div>
                     `;
                 } else {
