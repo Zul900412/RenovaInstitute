@@ -55,8 +55,8 @@
             
             <!-- DESCRIPCIÓN Y SELECTOR DE MONEDA -->
             <div class="text-center mb-6">
-                <h1 class="text-2xl md:text-3xl font-bold text-[#54463C] mb-2">Simulador de Estrés y Mayordomía Financiera</h1>
-                <p class="text-gray-500 text-xs md:text-sm max-w-xl mx-auto mb-4">Ajusta los controles según tu realidad económica para revisar cómo se distribuye tu presupuesto. Este simulador es orientativo y no evalúa tu salud mental ni predice cómo te sentirás.</p>
+                <h1 class="text-2xl md:text-3xl font-bold text-[#54463C] mb-2">Simulador de Presupuesto Mensual</h1>
+                <p class="text-gray-500 text-xs md:text-sm max-w-xl mx-auto mb-4">Ajusta los controles según tu realidad económica para revisar cómo se distribuye tu presupuesto. Es una herramienta orientativa, no una evaluación de tu salud mental ni asesoría financiera personalizada.</p>
                 
                 <!-- Selector de Moneda Interactivo -->
                 <div class="inline-flex bg-gray-100 p-1 rounded-2xl gap-1 text-xs font-bold">
@@ -110,46 +110,40 @@
                         <input type="range" id="range-deudas" class="w-full h-2 bg-gray-200 rounded-lg cursor-pointer" oninput="actualizarSimulador()">
                     </div>
 
-                    <!-- Generosidad / Diezmos -->
+                    <!-- Ayudas y donaciones voluntarias -->
                     <div>
                         <div class="flex justify-between items-center mb-1">
-                            <label class="text-xs font-bold text-gray-600">Aportes voluntarios (diezmos, ayudas)</label>
+                            <label class="text-xs font-bold text-gray-600">Ayudas o donaciones voluntarias</label>
                             <span id="val-dar" class="font-bold text-[#8C8660] text-sm"></span>
                         </div>
                         <input type="range" id="range-dar" class="w-full h-2 bg-gray-200 rounded-lg cursor-pointer" oninput="actualizarSimulador()">
                     </div>
                 </div>
 
-                <!-- COLUMNA DERECHA: DIAGNÓSTICO DINÁMICO EN VIVO (6 Cols) -->
+                <!-- COLUMNA DERECHA: RESUMEN DINÁMICO EN VIVO (6 Cols) -->
                 <div class="lg:col-span-6 flex flex-col justify-between space-y-5">
                     
-                    <!-- Tarjeta de Semáforo Cerebral -->
+                    <!-- Resumen presupuestario -->
                     <div id="card-alerta" class="p-5 rounded-2xl border transition-all duration-300 bg-amber-50/50 border-amber-200">
                         <div class="flex items-center gap-3 mb-2">
                             <div id="icon-alerta" class="p-2 rounded-xl bg-amber-100 text-amber-700 font-bold text-lg"><i class="ph ph-warning"></i></div>
                             <div>
-                                <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">Nivel de Carga Mental y Estrés</span>
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">Resumen de los valores ingresados</span>
                                 <h4 id="txt-estado" class="font-bold text-base text-gray-800">Evaluando...</h4>
                             </div>
                         </div>
                         <p id="txt-explicacion" class="text-xs text-gray-600 leading-relaxed mt-2"></p>
                     </div>
 
-                    <!-- Principio Bíblico y Neurociencia -->
+                    <!-- Aclaración sobre el alcance del simulador -->
                     <div class="bg-gray-50 p-4 md:p-5 rounded-2xl border border-gray-100 space-y-3">
-                        <div>
-                            <span class="text-[10px] font-bold text-[#8C8660] uppercase tracking-wider block mb-0.5"><i class="ph ph-brain"></i> Perspectiva Neuronal</span>
-                            <p id="txt-neuro" class="text-xs text-gray-600 leading-relaxed"></p>
-                        </div>
-                        <div class="border-t border-gray-200 pt-2">
-                            <span class="text-[10px] font-bold text-amber-700 uppercase tracking-wider block mb-0.5"><i class="ph ph-book-open"></i> Sabiduría Financiera y Fe</span>
-                            <p id="txt-fe" class="text-xs text-gray-700 italic leading-relaxed"></p>
-                        </div>
+                        <span class="text-[10px] font-bold text-gray-600 uppercase tracking-wider block mb-0.5">Aclaración importante</span>
+                        <p class="text-xs text-gray-700 leading-relaxed">Este resultado solo refleja los valores ingresados; no mide tu fe, tu valor ni tu fidelidad. Las donaciones son voluntarias, no compran la bendición de Dios y deben considerar tus necesidades y circunstancias.</p>
                     </div>
 
                     <!-- Botón de Conversión WhatsApp -->
                     <button onclick="contactarAsesoria()" style="cursor: pointer;" class="w-full bg-[#25D366] text-white px-6 py-3.5 rounded-xl font-bold shadow-lg shadow-[#25D366]/20 hover:bg-[#128C7E] transition-all flex justify-center items-center gap-2 text-xs select-none">
-                        <i class="ph ph-whatsapp-logo text-lg pointer-events-none"></i> <span class="pointer-events-none">Quiero sanar mis finanzas con Renova</span>
+                        <i class="ph ph-whatsapp-logo text-lg pointer-events-none"></i> <span class="pointer-events-none">Quiero orientación sobre mis finanzas</span>
                     </button>
 
                 </div>
@@ -170,7 +164,7 @@
                 ingreso: { min: 1300000, max: 15000000, step: 100000, val: 3500000 },
                 gastos: { min: 500000, max: 10000000, step: 50000, val: 1800000 },
                 deudas: { min: 0, max: 6000000, step: 50000, val: 900000 },
-                dar: { min: 0, max: 2000000, step: 25000, val: 350000 }
+                dar: { min: 0, max: 2000000, step: 25000, val: 0 }
             },
             USD: {
                 simbolo: 'USD',
@@ -178,7 +172,7 @@
                 ingreso: { min: 400, max: 5000, step: 50, val: 1200 },
                 gastos: { min: 200, max: 3500, step: 25, val: 650 },
                 deudas: { min: 0, max: 2000, step: 25, val: 300 },
-                dar: { min: 0, max: 800, step: 10, val: 120 }
+                dar: { min: 0, max: 800, step: 10, val: 0 }
             },
             EUR: {
                 simbolo: 'EUR',
@@ -186,7 +180,7 @@
                 ingreso: { min: 400, max: 5000, step: 50, val: 1300 },
                 gastos: { min: 200, max: 3500, step: 25, val: 700 },
                 deudas: { min: 0, max: 2000, step: 25, val: 250 },
-                dar: { min: 0, max: 800, step: 10, val: 130 }
+                dar: { min: 0, max: 800, step: 10, val: 0 }
             }
         };
 
@@ -242,20 +236,15 @@
             const iconAlerta = document.getElementById('icon-alerta');
             const txtEstado = document.getElementById('txt-estado');
             const txtExplicacion = document.getElementById('txt-explicacion');
-            const txtNeuro = document.getElementById('txt-neuro');
-            const txtFe = document.getElementById('txt-fe');
-
             // ESCALA DE NIVELES EVALUADA EN ORDEN RIGUROSO (1, 2, 3, 4)
             if (balanceRestante >= (ingreso * 0.15) && pctDeudas <= 40) {
-                // Nivel 1: Saludable
+                // Nivel 1: Margen disponible
                 estadoActual = "saludable";
                 cardAlerta.className = "p-5 rounded-2xl border transition-all duration-300 bg-emerald-50 border-emerald-200";
                 iconAlerta.className = "p-2 rounded-xl bg-emerald-100 text-emerald-700 font-bold text-lg";
                 iconAlerta.innerHTML = '<i class="ph ph-check-circle"></i>';
-                txtEstado.innerText = "Nivel 1: Mayordomía en Equilibrio";
-                txtExplicacion.innerText = "Según los datos ingresados, tus ingresos superan los gastos y pagos considerados. Puedes revisar cómo destinar ese margen a ahorro, objetivos personales o aportes voluntarios.";
-                txtNeuro.innerHTML = "Contar con un margen en el presupuesto puede facilitar la planificación; la situación y el nivel de estrés varían entre personas.";
-                txtFe.innerHTML = "«Bienaventurado el hombre que teme a Jehová, y en sus mandamientos deleita en gran manera... Bien le va al hombre que tiene misericordia y presta; gobierna sus asuntos con juicio.» (Salmo 112:1, 5)";
+                txtEstado.innerText = "Nivel 1: Margen disponible";
+                txtExplicacion.innerText = "Según los datos ingresados, queda un margen después de los gastos y pagos considerados. Puedes evaluar cómo priorizarlo según tus necesidades y objetivos.";
 
             } else if (balanceRestante >= 0 && balanceRestante < (ingreso * 0.15) && pctDeudas <= 40) {
                 // Nivel 2: Margen Ajustado
@@ -263,10 +252,8 @@
                 cardAlerta.className = "p-5 rounded-2xl border transition-all duration-300 bg-amber-50 border-amber-200";
                 iconAlerta.className = "p-2 rounded-xl bg-amber-100 text-amber-700 font-bold text-lg";
                 iconAlerta.innerHTML = '<i class="ph ph-sliders"></i>';
-                txtEstado.innerText = "Nivel 2: Margen Ajustado (Vulnerable)";
+                txtEstado.innerText = "Nivel 2: Margen ajustado";
                 txtExplicacion.innerText = "Según los datos ingresados, el margen para imprevistos es reducido. Puedes revisar gastos y prioridades, teniendo en cuenta que el simulador no contempla todas las circunstancias.";
-                txtNeuro.innerHTML = "Un margen limitado puede generar preocupación en algunas personas. El simulador no mide respuestas hormonales ni predice efectos en la salud.";
-                txtFe.innerHTML = "«El prudente ve el mal y se esconde, mas los simples pasan y sufren el daño.» (Proverbios 22:3)";
 
             } else if (pctDeudas > 40 && balanceRestante >= 0) {
                 // Nivel 3: Sobrecarga por Deudas
@@ -274,10 +261,8 @@
                 cardAlerta.className = "p-5 rounded-2xl border transition-all duration-300 bg-orange-50 border-orange-200";
                 iconAlerta.className = "p-2 rounded-xl bg-orange-100 text-orange-600 font-bold text-lg";
                 iconAlerta.innerHTML = '<i class="ph ph-credit-card"></i>';
-                txtEstado.innerText = "Nivel 3: Sobrecarga Financiera";
+                txtEstado.innerText = "Nivel 3: Alta proporción de ingresos destinada a deudas";
                 txtExplicacion.innerText = "Según los datos ingresados, una parte importante de tus ingresos se destina al pago de deudas. Considera revisar opciones de organización o buscar orientación financiera confiable.";
-                txtNeuro.innerHTML = "La preocupación por las deudas puede ser estresante, aunque cada persona y situación es diferente. Este simulador no evalúa efectos emocionales o clínicos.";
-                txtFe.innerHTML = "«El rico se enseñorea de los pobres, y el que toma prestado es siervo del que presta.» (Proverbios 22:7)";
 
             } else {
                 // Nivel 4: Déficit presupuestario
@@ -288,15 +273,12 @@
                 txtEstado.innerText = "Nivel 4: Déficit presupuestario";
                 
                 txtExplicacion.innerText = "Tus gastos superan tus ingresos según los datos que ingresaste. Esto no es un juicio sobre tu fe ni tu valor. Revisa primero tus necesidades básicas y las opciones de apoyo disponibles; cualquier decisión de generosidad es personal y debe considerar tus circunstancias.";
-                txtFe.innerHTML = "La Biblia anima a dar con libertad y sin presión: «Cada uno dé como propuso en su corazón: no con tristeza, ni por necesidad» (2 Corintios 9:7). La generosidad no compra el favor de Dios ni garantiza prosperidad material.";
-                
-                txtNeuro.innerHTML = "La preocupación financiera puede aumentar el estrés y hacer más difícil tomar decisiones; su efecto varía entre personas y circunstancias.";
             }
         }
 
         function contactarAsesoria() {
             const numeroWhatsApp = "573114951646"; 
-            const mensaje = "Hola, equipo de Renova Institute. Probé el simulador financiero y quisiera información general sobre sus recursos. No deseo compartir mis datos ni mi resultado.";
+            const mensaje = "Hola, equipo de Renova Institute. Probé el simulador financiero y quisiera información general sobre orientación financiera. No deseo compartir mis datos ni mi resultado.";
             
             const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
             window.open(url, '_blank');

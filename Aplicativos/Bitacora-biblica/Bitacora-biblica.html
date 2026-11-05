@@ -927,7 +927,7 @@
                                 </div>
                                 <div>
                                     <h3 class="font-bold text-base">Asistente de Estudio Bíblico IA</h3>
-                                    <p class="text-xs text-rose-100">Pregunta sobre pasajes, contexto histórico o doctrina con Gemini</p>
+                                    <p class="text-xs text-rose-100">Preguntas sobre pasajes y contexto bíblico con un asistente de IA</p>
                                 </div>
                             </div>
                             <button onclick="app.closeAiAssistant()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition cursor-pointer">
@@ -938,7 +938,7 @@
                             <div class="flex items-start space-x-3">
                                 <div class="w-8 h-8 rounded-full bg-rose-500 text-white flex items-center justify-center shrink-0 text-xs font-bold">IA</div>
                                 <div class="bg-white border border-rose-100 p-3.5 rounded-2xl shadow-xs text-sm text-slate-800 max-w-[85%]">
-                                            ¡Hola! Puedo ayudarte a formular preguntas de estudio, explorar el contexto de un pasaje y convertir tus notas en una reflexión. Recuerda contrastar cualquier respuesta con las Escrituras y fuentes confiables.
+                                            ¡Hola! Soy una herramienta automatizada de apoyo al estudio bíblico: puedo equivocarme y no soy pastor ni autoridad doctrinal. Puedo ayudarte a formular preguntas y explorar el contexto; contrasta las respuestas con las Escrituras, fuentes confiables y tu comunidad de fe.
                                 </div>
                             </div>
                         </div>
@@ -991,14 +991,14 @@
                         <div class="w-8 h-8 rounded-full bg-rose-500 text-white flex items-center justify-center shrink-0 text-xs font-bold">IA</div>
                         <div class="bg-white border border-rose-100 p-3.5 rounded-2xl shadow-xs text-sm text-slate-500 flex items-center space-x-2">
                             <i class="fa-solid fa-spinner animate-spin text-rose-500"></i>
-                            <span>Buscando en las Escrituras y consultando Gemini...</span>
+                            <span>Preparando una respuesta automatizada con Gemini...</span>
                         </div>
                     </div>
                 `;
                 container.scrollTop = container.scrollHeight;
 
                 try {
-                    const systemPrompt = "Eres un respetado teólogo cristiano y erudito bíblico empático y profundo. Respondes con rigor bíblico, doctrina sana y un tono edificante, útil para la devoción personal y el estudio.";
+                    const systemPrompt = "Eres una herramienta automatizada de apoyo al estudio bíblico, no un teólogo, pastor ni autoridad doctrinal. Responde con humildad, distingue lo que el texto dice de las posibles aplicaciones, señala incertidumbres o interpretaciones cristianas diferentes cuando sea pertinente y no presentes una aplicación personal como promesa o mandato de Dios. Anima a contrastar la respuesta con el texto bíblico y fuentes confiables.";
                     const apiKey = "";
                     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
 
@@ -1054,20 +1054,20 @@
                 if (!containerId) return;
 
                 if (!this.aiEndpoint) {
-                    containerId.innerHTML = '<div class="bg-rose-50 border border-rose-200 rounded-xl p-3 text-xs text-rose-700">La exégesis automática requiere un backend seguro. Puedes profundizar este pasaje manualmente desde tu estudio.</div>';
+                    containerId.innerHTML = '<div class="bg-rose-50 border border-rose-200 rounded-xl p-3 text-xs text-rose-700">El análisis automatizado requiere un backend seguro. Puedes estudiar este pasaje directamente y consultar fuentes confiables.</div>';
                     return;
                 }
 
                 containerId.innerHTML = `
                     <div class="bg-rose-50/60 border border-rose-200 rounded-xl p-4 text-xs text-rose-700 flex items-center space-x-2.5 animate-pulse">
                         <i class="fa-solid fa-wand-magic-sparkles text-rose-500 text-sm"></i>
-                        <span>Generando exégesis detallada y reflexión pastoral con Gemini para ${book} ${chapter}...</span>
+                        <span>Preparando observaciones automatizadas sobre ${book} ${chapter}...</span>
                     </div>
                 `;
 
                 try {
-                    const prompt = `Analiza el pasaje bíblico ${book} ${chapter} teniendo en cuenta esta nota de estudio personal: "${learning}". Proporciona una exégesis breve y una aplicación práctica para la vida cristiana (en formato HTML estructurado con subtítulos en negrita).`;
-                    const systemPrompt = "Eres un erudito bíblico y pastor experto en exégesis bíblica. Proporciona análisis profundos, claros y edificantes.";
+                    const prompt = `Ofrece observaciones preliminares sobre ${book} ${chapter}, considerando esta nota personal: "${learning}". Resume el contexto literario e histórico solo cuando puedas hacerlo con confianza; distingue el sentido del pasaje de una posible aplicación actual y señala límites o interpretaciones diferentes cuando sean relevantes. No presentes la aplicación como una promesa personal ni como una instrucción directa de Dios. Responde en texto claro con subtítulos.`;
+                    const systemPrompt = "Eres una herramienta automatizada de apoyo al estudio bíblico, no un erudito, pastor ni autoridad doctrinal. Sé transparente sobre incertidumbres, evita afirmar más de lo que permite el texto y recuerda que tus observaciones deben contrastarse con la Biblia y fuentes confiables.";
                     const apiKey = "";
                     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
 
@@ -1091,12 +1091,13 @@
                             <div class="bg-gradient-to-br from-rose-50/60 via-white to-pink-50/40 border border-rose-200 rounded-xl p-4 space-y-2 text-slate-800 text-xs shadow-xs relative">
                                 <div class="flex items-center justify-between border-b border-rose-100 pb-2">
                                     <span class="font-bold text-rose-700 flex items-center">
-                                        <i class="fa-solid fa-wand-magic-sparkles mr-1.5 text-rose-500"></i> Exégesis y Aplicación Pastoral (${book} ${chapter})
+                                        <i class="fa-solid fa-wand-magic-sparkles mr-1.5 text-rose-500"></i> Observaciones automatizadas sobre ${book} ${chapter}
                                     </span>
                                     <button onclick="this.closest('div').parentElement.innerHTML=''" class="text-slate-400 hover:text-slate-600 cursor-pointer">
                                         <i class="fa-solid fa-xmark"></i>
                                     </button>
                                 </div>
+                                <p class="text-[11px] text-slate-500">Respuesta preliminar generada por IA; puede contener errores y no sustituye el estudio bíblico, fuentes confiables ni el acompañamiento pastoral.</p>
                                 <div class="leading-relaxed space-y-1.5 pt-1">
                                     ${this.escapeHtml(exegesisText).replace(/\n/g, '<br>')}
                                 </div>
@@ -1108,7 +1109,7 @@
                 } catch (e) {
                     containerId.innerHTML = `
                         <div class="bg-rose-50 border border-rose-200 rounded-xl p-3 text-xs text-rose-700 flex items-center justify-between">
-                            <span>No se pudo generar la exégesis en este momento.</span>
+                            <span>No se pudieron generar las observaciones automatizadas en este momento.</span>
                             <button onclick="this.closest('div').remove()" class="underline">Cerrar</button>
                         </div>
                     `;

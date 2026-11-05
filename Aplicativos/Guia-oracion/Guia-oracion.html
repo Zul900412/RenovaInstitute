@@ -81,7 +81,7 @@
 
                 <div class="text-center mb-8">
                     <h1 class="text-3xl font-bold mb-3 text-[#54463C]">Bienvenido a tu espacio seguro</h1>
-                    <p class="text-gray-500 text-sm">Antes de orar y reflexionar, identifiquemos qué hay en tu corazón hoy. ¿Cuál es la carga principal que necesitas soltar?</p>
+                    <p class="text-gray-500 text-sm">Antes de orar y reflexionar, identifiquemos qué hay en tu corazón hoy. ¿Qué te gustaría atender en este momento?</p>
                 </div>
 
                 <div class="space-y-3">
@@ -114,7 +114,7 @@
             <!-- PASO 2: EJERCICIO DE REGULACIÓN -->
             <div id="paso-2" class="hidden p-8 md:p-12 text-center fade-in flex-col justify-center items-center h-full min-h-[500px]">
                 <h2 class="text-2xl font-bold text-[#54463C] mb-2">Preparando un momento de pausa</h2>
-                <p class="text-gray-500 text-sm mb-12">No podemos orar con claridad si el cuerpo está en alerta. Sigue el círculo con tu respiración por unos segundos.</p>
+                <p class="text-gray-500 text-sm mb-12">Si te resulta útil, puedes seguir el ritmo de la respiración por unos segundos. Es opcional: puedes continuar con la reflexión sin hacer este ejercicio.</p>
                 
                 <div class="relative w-48 h-48 mx-auto flex items-center justify-center mb-12">
                     <div class="absolute w-full h-full bg-[#8C8660]/20 rounded-full breath-circle"></div>
@@ -125,7 +125,7 @@
                 </div>
 
                 <button onclick="pasarAReflexion()" style="cursor: pointer;" class="bg-[#8C8660] text-white px-8 py-3 rounded-xl font-bold shadow-md hover:bg-[#726d4e] transition-colors select-none">
-                    Ya me siento más tranquilo(a)
+                    Continuar a la reflexión
                 </button>
             </div>
 
@@ -138,7 +138,7 @@
 
                 <div class="bg-amber-50/70 border border-amber-100 rounded-2xl p-5 mb-6 text-sm text-gray-700 leading-relaxed relative">
                     <div class="absolute left-0 top-0 w-1 h-full bg-amber-400 rounded-l-2xl"></div>
-                    <span class="block font-bold text-amber-700 mb-1">La Promesa:</span>
+                    <span class="block font-bold text-amber-700 mb-1">Texto bíblico para reflexionar:</span>
                     <span id="ref-fe" class="italic"></span>
                 </div>
 
@@ -151,7 +151,7 @@
                 </div>
 
                 <button onclick="finalizarExperiencia()" style="cursor: pointer;" class="w-full bg-[#54463C] text-white px-6 py-4 rounded-xl font-bold shadow-md hover:bg-[#3a3029] transition-colors flex justify-center items-center gap-2 select-none">
-                    <i class="ph ph-hands-praying text-xl pointer-events-none"></i> <span class="pointer-events-none">Soltar esta carga y finalizar</span>
+                    <i class="ph ph-hands-praying text-xl pointer-events-none"></i> <span class="pointer-events-none">Finalizar reflexión</span>
                 </button>
             </div>
 
@@ -184,10 +184,10 @@
     <script>
         const baseDatos = {
             ansiedad: {
-                titulo: "Entregando la Ansiedad",
+                titulo: "Oración y reflexión sobre la ansiedad",
                 icono: "ph-wind",
                 fe: "«Por nada estéis afanosos, sino sean conocidas vuestras peticiones delante de Dios en toda oración... Y la paz de Dios guardará vuestros corazones y pensamientos.» (Filipenses 4:6-7). Sentir ansiedad no significa que te falte fe; este pasaje no reemplaza la atención profesional.",
-                programaTitulo: "Programa: Recupera tu Paz Interior",
+                programaTitulo: "Programa: Herramientas para el bienestar emocional",
                 programaDesc: "Un acompañamiento para explorar herramientas de regulación emocional desde la psicología y, si lo deseas, integrar tu fe. No sustituye una evaluación profesional ni garantiza eliminar la ansiedad.",
                 mensajeWa: "Hola, equipo de Renova Institute. Usé la Guía Interactiva y quisiera información general sobre las opciones de acompañamiento. No deseo compartir respuestas personales."
             },
@@ -200,7 +200,7 @@
                 mensajeWa: "Hola, equipo de Renova Institute. Usé la Guía Interactiva y quisiera información general sobre las opciones de acompañamiento. No deseo compartir respuestas personales."
             },
             agotamiento: {
-                titulo: "Encontrando Descanso Profundo",
+                titulo: "Pausa y reflexión ante el agotamiento",
                 icono: "ph-battery-warning-vertical",
                 fe: "«Venid a mí todos los que estáis trabajados y cargados, y yo os haré descansar.» (Mateo 11:28). Este pasaje ofrece consuelo espiritual; no es una promesa de resultado clínico ni reemplaza la atención profesional.",
                 programaTitulo: "Programa de Alto Rendimiento y Hábitos",
