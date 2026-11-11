@@ -70,8 +70,20 @@
         ::-webkit-scrollbar-track { background: #f4f1e6; }
         ::-webkit-scrollbar-thumb, ::-webkit-scrollbar-thumb:hover { background: #cfc6a6; }
         @media (max-width: 640px) {
+            header > div.h-16 {
+                height: auto;
+                min-height: 4rem;
+                flex-wrap: wrap;
+                gap: .5rem;
+                padding-top: .5rem;
+                padding-bottom: .5rem;
+            }
+            header > div > div:first-child,
             header > div > div:last-child {
-                max-width: 170px;
+                flex: 1 1 100%;
+            }
+            header > div > div:last-child {
+                max-width: none;
                 flex-wrap: wrap;
                 justify-content: flex-end;
             }
@@ -90,15 +102,11 @@
 
     <header class="bg-white/90 backdrop-blur-md border-b border-rose-100 sticky top-0 z-30 shadow-xs">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
+            <div class="flex min-w-0 items-center space-x-3">
                 <div class="w-10 h-10 rounded-2xl bg-[#8C8660]/10 flex items-center justify-center text-[#8C8660] shadow-sm">
                     <i class="fa-solid fa-brain text-lg"></i>
                 </div>
-                <div class="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <p class="text-xs text-[#756b64]">Para borrar tus registros de este navegador, usa el botón. Eliminar los datos del sitio en el navegador también los borra.</p>
-                    <button type="button" onclick="app.clearLocalData()" class="shrink-0 rounded-xl border border-red-200 px-4 py-2 text-xs font-bold text-red-700 transition hover:bg-red-50">Borrar mis datos locales</button>
-                </div>
-                <div>
+                <div class="min-w-0">
                     <h1 class="font-bold text-[#8C8660] text-sm tracking-wider leading-tight">RENOVA INSTITUTE</h1>
                     <p class="text-[9px] text-[#54463C] italic font-medium">Centro de salud mental cristiano</p>
                     <p class="text-xs text-[#706B4C] font-medium">Bitácora Bíblica</p>
@@ -125,15 +133,19 @@
         </div>
     </header>
 
+    <aside class="no-print max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-3" aria-label="Aviso sobre tus datos">
+        <div class="flex flex-col gap-3 rounded-xl border border-[#d9d4bd] bg-white/90 p-3 text-xs leading-relaxed text-[#756b64] sm:flex-row sm:items-center sm:justify-between">
+            <p class="flex items-start gap-2"><i class="fa-solid fa-lock mt-0.5 text-[#8C8660]"></i><span>Tus registros y pasajes se guardan en este navegador; no se envían a Renova. Quien tenga acceso a este dispositivo o perfil podría verlos. Usa <strong>Exportar</strong> para conservar una copia antes de borrarlos; el botón los elimina de este navegador.</span></p>
+            <button type="button" onclick="app.clearLocalData()" class="shrink-0 rounded-xl border border-red-200 px-4 py-2 font-bold text-red-700 transition hover:bg-red-50">Borrar mis datos</button>
+        </div>
+    </aside>
+
     <section class="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-7">
         <div class="bg-white/90 rounded-2xl border border-[#d9d4bd] shadow-sm p-5 sm:p-6">
             <p class="text-[10px] uppercase tracking-widest text-[#8C8660] font-bold mb-2">Cómo usar esta bitácora</p>
             <h2 class="text-2xl font-bold text-[#54463C] mb-2">Lee, escucha y guarda lo que Dios pone en tu corazón</h2>
             <p class="text-sm text-[#756b64] leading-relaxed max-w-4xl">Registra la fecha, los capítulos que estudiaste y el aprendizaje principal de tu tiempo devocional. También puedes guardar pasajes que te recuerden la fidelidad de Dios, considerando su contexto y sus destinatarios. Escribir lo aprendido te ayuda a ordenar tus pensamientos y convertir una lectura en una práctica de meditación y obediencia.</p>
-            <div class="mt-4 grid gap-3 sm:grid-cols-2">
-                <div class="flex gap-2 text-xs text-[#756b64]"><i class="fa-solid fa-lock mt-0.5 text-[#8C8660]"></i><span>Tus registros se guardan en este navegador y no se envían a nuestros servidores. Cualquier persona con acceso a este dispositivo o navegador podría verlos.</span></div>
-                <div class="flex gap-2 text-xs text-[#756b64]"><i class="fa-solid fa-download mt-0.5 text-[#8C8660]"></i><span>Usa <strong>Exportar</strong> para descargar un archivo de respaldo antes de cambiar de dispositivo o formatearlo; luego podrás usar <strong>Importar</strong> para recuperar tus registros.</span></div>
-            </div>
+            <div class="mt-4 flex gap-2 text-xs text-[#756b64]"><i class="fa-solid fa-download mt-0.5 text-[#8C8660]"></i><span>Descarga un respaldo con <strong>Exportar</strong> antes de cambiar de dispositivo o formatearlo; luego usa <strong>Importar</strong> para recuperar tus registros.</span></div>
         </div>
     </section>
 

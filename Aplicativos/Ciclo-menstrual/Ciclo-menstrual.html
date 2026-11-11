@@ -72,6 +72,7 @@
                 .privacy-note {
                     display: flex;
                     align-items: flex-start;
+                    flex-wrap: wrap;
                     gap: .55rem;
                     padding: .75rem .9rem;
                     border: 1px solid #e8ded9;
@@ -82,6 +83,9 @@
                     line-height: 1.5;
                 }
                 .privacy-note i { flex: 0 0 auto; color: #a66b5e; font-size: 1rem; }
+                .privacy-note > div { flex: 1 1 16rem; }
+                .privacy-note > button { border-color: #e8ded9; background: #fff; color: #756762; }
+                .privacy-note > button:hover { background: #f4ebe8; }
                 .setup-message { display: none; }
                 .setup-message.visible { display: block; }
                 .cycle-content.hidden { display: none; }
@@ -129,6 +133,8 @@
             </div>
         </header>
 
+        <div class="privacy-note mt-3"><div class="flex items-start gap-2"><i class="ph ph-lock-key"></i><span>La fecha, duración y registros de tu ciclo se guardan en este navegador; no se envían a Renova. Quien tenga acceso a este dispositivo o perfil podría verlos. Usa el botón para eliminarlos de este navegador. Es una herramienta educativa y no reemplaza una consulta médica.</span></div><button type="button" onclick="borrarDatosLocales()" class="self-start rounded-lg border px-3 py-2 text-xs font-bold">Borrar mis datos</button></div>
+
         <!-- CONFIGURACIÓN DE FECHA -->
         <div class="bg-white p-5 rounded-3xl shadow-sm border border-[#EFECE6] flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
@@ -148,8 +154,6 @@
             <div class="flex items-center gap-3"><i class="ph ph-calendar-heart text-2xl text-[#E4C8C2]"></i><h2 class="text-xl font-bold">Comencemos con tus datos</h2></div>
             <p class="text-sm text-[#EAD5D0]">Elige la fecha de inicio de tu último periodo y la duración habitual de tu ciclo. No mostraremos una fase hasta que tú decidas configurarlo.</p>
         </div>
-
-        <div class="privacy-note"><div class="flex items-start gap-2"><i class="ph ph-lock-key"></i><span>Tus registros se guardan en este navegador y no se envían a nuestros servidores. Cualquier persona con acceso a este dispositivo o navegador podría verlos. Esta herramienta es educativa y no reemplaza una consulta médica.</span></div><button type="button" onclick="borrarDatosLocales()" class="self-start rounded-lg border border-white/30 px-3 py-2 text-xs font-bold hover:bg-white/10">Borrar mis datos</button></div>
 
             <!-- REGISTRO DIARIO -->
             <section data-cycle-content class="bg-[#3B302A] text-white p-6 rounded-3xl shadow-sm space-y-5">
@@ -211,7 +215,7 @@
                     <span id="contadorPreparacion" class="text-xs bg-[#F4EBE8] px-3 py-1 rounded-full font-bold text-[#8C6D62]">0 / 3</span>
                 </div>
                 <div id="listaPreparacion" class="space-y-2"></div>
-                <p class="text-[11px] text-gray-400">Los datos se guardan en este navegador. Puedes borrarlos desde el aviso de privacidad. Esta app es orientativa y no sustituye una consulta médica.</p>
+                <p class="text-[11px] text-gray-400">Esta app es orientativa y no sustituye una consulta médica.</p>
             </section>
 
         <!-- TARJETA PRINCIPAL: FASE ACTUAL -->
